@@ -1,0 +1,31 @@
+Projeto Integra:
+    ☐ O sistema deve funcionar Online
+    ☐ O sistema fará uso do Domínio atual já utilizado pelo sistema (integracps.com.br)
+    ☐ Para o desenvolvimento haverá migração da hospedagem do sistema.
+    ☐ O sistema será colaborativo e automatizado pelo cliente, tendo acesso a edição por parte do Administrador
+    ☐ O sistema deve possuir uma autenticação (login e senha cadastrados via e-mail)
+    ☐ Somente o administrador pode registrar novos clientes
+    ☐ Um potencial cliente pode entrar em contato e solicitar cadastro pelo site.
+    ☐ O sistema deve ser capaz de agendar horas fixas disponíveis.
+    ☐ O sistema deve ser rigoroso em relação a tratamentos de erros e evitar inconsistências de dados.
+    ☐ O administrador poderá bloquear salas e dias para agendamento.
+    ☐ O limite para o agendamento é de 2 semanas após a data atual.
+    ☐ O cliente poderá cancelar o agendamento
+    ☐ Deve haver planos de Hora Avulsa, por Turno e Mensal
+    ☐ O sistema deverá ter um histórico do cliente e de utilização de todos os clientes para o administrador.
+    ☐ O profissional e o administrador podem acompanhar seu uso da plataforma e indicadores-chave utilizando uma dashboard
+    ☐ O sistema deverá possibilitar o agendamento e a visualização de agendamentos
+    ☐ O Sistema deve ter 2 estados financeiros (pago e pendente) e 2 estados de execução. (executado e não executado)
+    ☐ O sistema deve possuir um timer para saber o tempo de uso do cliente para visualização de minutos extras.
+    ☐ O administrador pode ter um acesso de logs de todas transações dentro do sistema
+    ☐ Deve ser possível um cliente entrar em contato com um profissional pelo sistema e notificá-lo mediante mídia social
+    ☐ O sistema deve ser responsivo para celulares e tablets.
+    ☐ O sistema pode fixar no topo da lista a sala preferida para cada cliente.
+    ☐ Deve haver uma pré-visualização das salas para que possam ver por meio de fotos e descrição.
+    ☐ O sistema deve entender os modelos de turno e mensais.
+    ☐ O aluguel por turno é de uma duração de 4 horas, e pode ser das 9h até as 13h, das 14h às 18h e das 15h às 19h e das 16h às 20h
+    ☐ O aluguel mensal funciona um aluguel da sala, todos os dias da semana das 9h às 19h e das 8h até as 12h do sábado
+    ☐ O estabelecimento não funciona nos sábados a tarde, noite e aos domingos.
+    ☐ Não há aluguéis com horas não-exatas. Por exemplo, não há um aluguel das 9h30 até às 10h45.
+    ☐ O sistema deve disponibilizar um mês gratuito para todos novos usuários (caso opte pelo plano conjunto).
+    ☐ O sistema deve mostrar um relatório ao administrador de forma que ele possa ver indicadores-chave importantes da empresa.
