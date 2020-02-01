@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+import { Stitch, RemoteMongoClient} from 'mongodb-stitch-browser-sdk';
 import {Provider} from 'react-redux';
 import Store from "./redux/store";
 import Actions from "./redux/actions/actions";

@@ -1,28 +1,41 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 import Actions from "../../redux/actions/actions";
+import administradorDAO from "../../DAO/administradorDAO";
+import './styles.sass';
+import InputText from "../../assets/component/inputText/input";
+import Button from "../../assets/component/button/button";
+import CheckBox from "../../assets/component/checkbox/checkbox";
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
-    React.useEffect(() => {
-        //Anonymous Login
+    const login = async () => {
         if (mongoClient) {
-            mongoClient.auth.loginWithCredential(new AnonymousCredential())
-                .then(user => {
-                    setUserLogged(user);
-                    console.log(user);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            const user = await administradorDAO.anonymousLogin(mongoClient);
+            setUserLogged(user);
         }
+    }
+
+    React.useEffect(() => {
+        login();
     });
 
     return (
-        <div>
+        <div className={'login_container'}>
+            <div className={'ball'} />
             <h1>Hello World!</h1>
             <p>User Logged: {userLogged ? userLogged.id : 'none'}</p>
+            <div className={'login'}>
+                <h1>Login</h1>
+                <div className={'card'}>
+                    <form>
+                        <InputText label={'E-mail'} placeholder={'Ex: joao@example.com'} />
+                        <InputText label={'Senha'} type={'password'} placeholder={'Informe sua senha'} />
+                        <CheckBox label={'Manter-me Conectado'} />
+                        <Button text={'Confirmar'}/>
+                    </form>
+                </div>
+            </div>
         </div>
     )
 };
