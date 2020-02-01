@@ -2,15 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import "./style.sass";
 
-const CheckBox = (props) => {
+const CheckBox = ({onCheck = () => {}, label}) => {
 
     const [checked, setChecked] = React.useState(false);
 
     return (
         <div className={'checkbox_container'}>
-            <div className={checked ? 'checkbox checked' : 'checkbox'} onClick={() => { setChecked(!checked) }}>
+            <div className={checked ? 'checkbox checked' : 'checkbox'} onClick={() => {
+                setChecked(!checked);
+                onCheck(checked);
+            }}>
             </div>
-            <label>{props.label}</label>
+            <label>{label}</label>
         </div>
     )
 };

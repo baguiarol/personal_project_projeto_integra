@@ -23,8 +23,10 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
     return (
         <div className={'login_container'}>
             <div className={'ball'} />
-            <h1>Hello World!</h1>
-            <p>User Logged: {userLogged ? userLogged.id : 'none'}</p>
+            <div className={'logo_container'}>
+                <img src={require('../../assets/integra_logo.png')} />
+                <p>Sistema de Gerenciamento</p>
+            </div>
             <div className={'login'}>
                 <h1>Login</h1>
                 <div className={'card'}>
