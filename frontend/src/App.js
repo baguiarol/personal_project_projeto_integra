@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 import AdministradorDAO from './DAO/administradorDAO';
-
+import {Provider} from 'react-redux';
 function App() {
 
     React.useEffect(() => {
