@@ -1,7 +1,24 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+
 function App() {
+
+    React.useEffect(() => {
+        const client = Stitch.initializeDefaultAppClient('integra-rhnuz');
+
+        const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db('Integra');
+
+        client.auth.loginWithCredential(new AnonymousCredential())
+            .then(async user => {
+                // Teste seu código aqui
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
+
   return (
     <div className="App">
       <header className="App-header">
