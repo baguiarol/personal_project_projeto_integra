@@ -1,0 +1,21 @@
+@import "./src/assets/variables"
+
+.button
+  width: 100%
+  padding: 13px 0
+  color: #FFFFFF
+  background-color: $primaryBlue
+  box-shadow: 0 3px 9px rgba(0,0,0,0.3)
+  border: none
+  cursor: pointer
+  border-radius: 5px
+  @include putTransition(.15s)
+  letter-spacing: 1.8px
+  font-weight: 700
+  font-size: 16px
+  text-transform: uppercase
+  &:hover
+    box-shadow: 0 5px 10px rgba(0,0,0,0.34)
+  &:active
+    transform: translateY(3px)
+    box-shadow: 0 3px 7px rgba(0,0,0,0.3)
