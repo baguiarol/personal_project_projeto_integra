@@ -1,15 +1,20 @@
+const COLLECTION = 'sala_bloqueio'
+
 const sala_bloqueioDAO = {
-    create(sala_bloqueio){
+    create(db, salaBloqueio){
+        return db.collection(COLLECTION).insertOne(salaBloqueio);
 
     },
-    update(sala_bloqueio){
+    update(db, query){
+        return db.collection(COLLECTION).updateMany(query, {$set: changes})
 
     },
-    delete(id_sala_bloqueio){
+    delete(db, query){
+        return db.collection(COLLECTION).deleteMany(query);
         
     },
-    findAll(){
-        
+    findAll(db){
+        return db.collection(COLLECTION).find({}).toArray();
     }
 };
 export default sala_bloqueioDAO;
