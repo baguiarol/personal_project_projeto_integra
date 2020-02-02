@@ -1,41 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import {Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+import { Stitch, RemoteMongoClient} from 'mongodb-stitch-browser-sdk';
+import {Provider} from 'react-redux';
+import Store from "./redux/store";
+import Actions from "./redux/actions/actions";
+import {HashRouter as Router, Route} from 'react-router-dom';
+import LoginPage from "./pages/login";
 
 function App() {
 
     React.useEffect(() => {
+        //Inicializa o Banco de Dados.
         const client = Stitch.initializeDefaultAppClient('integra-rhnuz');
-
         const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db('Integra');
 
-        client.auth.loginWithCredential(new AnonymousCredential())
-            .then(async user => {
-                // Teste seu código aqui
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        //Coloca ambos dentro da Store.
+        Store.dispatch({type: Actions.setMongoClient, payload: client});
+        Store.dispatch({type: Actions.setDatabase, payload: db});
     }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Provider store={Store}>
+          <Router>
+              <Route path={'/'} exact={true} component={LoginPage} />
+          </Router>
+      </Provider>
   );
 }
 

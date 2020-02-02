@@ -1,0 +1,26 @@
+@import "./src/assets/variables"
+
+*
+  outline: none
+
+.input_text
+  display: flex
+  flex-direction: column
+  .label
+    font-size: 15px
+    order: -1
+    color: darken($grey, 30)
+    font-weight: 600
+    @include putTransition()
+    margin-bottom: 0px
+  input
+    border: none
+    width: 100%
+    padding: 10px 0px
+    margin: 0 0 1em 0
+    border-bottom: 2px solid $grey
+    @include putTransition()
+    &:focus
+      border-bottom: 2px solid $primaryBlue
+      & + .label
+        color: $primaryBlue

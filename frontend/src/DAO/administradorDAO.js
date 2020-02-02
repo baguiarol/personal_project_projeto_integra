@@ -1,3 +1,5 @@
+import {AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+
 const COLLECTION = 'administradores';
 
 const administradorDAO = {
@@ -12,6 +14,10 @@ const administradorDAO = {
     },
     findAll(db) {
         return db.collection(COLLECTION).find({}).toArray();
+    },
+    anonymousLogin(client) {
+        return client.auth.loginWithCredential(new AnonymousCredential());
     }
 };
+
 export default administradorDAO;

@@ -1,0 +1,20 @@
+@import "./src/assets/variables"
+
+.checkbox_container
+  display: flex
+  margin-bottom: 15px
+  .checkbox
+    position: relative
+    border: 2px solid $grey
+    width: 15px
+    cursor: pointer
+    margin: auto 0
+    border-radius: .3em
+    height: 15px
+    margin-right: 9px
+    @include putTransition()
+    &.checked
+      border-color: $darkerBlue
+      box-shadow: inset 15px 0 0 0 $primaryBlue
+  label
+    color: darken($grey, 30)
