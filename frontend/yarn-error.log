@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-redux-dom
+C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add mongodb-stitck-browser-sdk
 
 PATH: 
   C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\MongoDB\Server\4.0\bin;C:\Program Files\AdoptOpenJDK\jdk-11.0.3.7-hotspot\bin;C:\Program Files\AdoptOpenJDK\jdk-8.0.212.03-hotspot\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Users\Brian\AppData\Roaming\npm\;;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Amazon\SessionManagerPlugin\bin\;C:\Users\Brian\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\Brian\AppData\Local\Programs\Python\Python38-32\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\ProgramData\Brian\hyper\app-3.0.2\resources\bin;C:\Users\Brian\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Brian\AppData\Local\GitHubDesktop\bin;C:\Users\Brian\AppData\Local\atom-nightly\bin;C:\Program Files\JetBrains\CLion 2019.2.1\bin;C:\Users\Brian\AppData\Local\atom\bin;C:\Program Files\JetBrains\PhpStorm 2019.2.3\bin;;C:\Users\Brian\AppData\Local\Microsoft\WindowsApps;
@@ -14,7 +14,6 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/react-redux-dom: Not found
       at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65200:18)
       at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129590:22)
       at Request.emit (events.js:198:13)
@@ -35,7 +34,6 @@ npm manifest:
       "@testing-library/jest-dom": "^4.2.4",
       "@testing-library/react": "^9.3.2",
       "@testing-library/user-event": "^7.1.2",
-      "mongodb-stitch-browser-sdk": "^4.8.0",
       "react": "^16.12.0",
       "react-dom": "^16.12.0",
       "react-scripts": "3.3.0"
@@ -2507,19 +2505,6 @@ Lockfile:
     integrity sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==
     dependencies:
       node-int64 "^0.4.0"
-  
-  bson@4.0.2:
-    version "4.0.2"
-    resolved "https://registry.yarnpkg.com/bson/-/bson-4.0.2.tgz#2929fdfed1a145b1c361908a2b950a6cf4bed2c2"
-    integrity sha512-rBdCxMBCg2aR420e1oKUejjcuPZLTibA7zEhWAlliFWEwzuBCC9Dkp5r7VFFIQB2t1WVsvTbohry575mc7Xw5A==
-    dependencies:
-      buffer "^5.1.0"
-      long "^4.0.0"
-  
-  buffer-equal-constant-time@1.0.1:
-    version "1.0.1"
-    resolved "https://registry.yarnpkg.com/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
-    integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
   
   buffer-from@^1.0.0:
     version "1.1.1"
@@ -6214,22 +6199,6 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
     integrity sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
   
-  jsonwebtoken@8.2.1:
-    version "8.2.1"
-    resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.2.1.tgz#333ee39aa8f238f32fa41693e7a2fb7e42f82b31"
-    integrity sha512-l8rUBr0fqYYwPc8/ZGrue7GiW7vWdZtZqelxo4Sd5lMvuEeCK8/wS54sEo6tJhdZ6hqfutsj6COgC0d1XdbHGw==
-    dependencies:
-      jws "^3.1.4"
-      lodash.includes "^4.3.0"
-      lodash.isboolean "^3.0.3"
-      lodash.isinteger "^4.0.4"
-      lodash.isnumber "^3.0.3"
-      lodash.isplainobject "^4.0.6"
-      lodash.isstring "^4.0.1"
-      lodash.once "^4.0.0"
-      ms "^2.1.1"
-      xtend "^4.0.1"
-  
   jsprim@^1.2.2:
     version "1.4.1"
     resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -6247,23 +6216,6 @@ Lockfile:
     dependencies:
       array-includes "^3.0.3"
       object.assign "^4.1.0"
-  
-  jwa@^1.4.1:
-    version "1.4.1"
-    resolved "https://registry.yarnpkg.com/jwa/-/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"
-    integrity sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==
-    dependencies:
-      buffer-equal-constant-time "1.0.1"
-      ecdsa-sig-formatter "1.0.11"
-      safe-buffer "^5.0.1"
-  
-  jws@^3.1.4:
-    version "3.2.2"
-    resolved "https://registry.yarnpkg.com/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
-    integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
-    dependencies:
-      jwa "^1.4.1"
-      safe-buffer "^5.0.1"
   
   killable@^1.0.1:
     version "1.0.1"
@@ -6424,45 +6376,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
     integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
   
-  lodash.includes@^4.3.0:
-    version "4.3.0"
-    resolved "https://registry.yarnpkg.com/lodash.includes/-/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
-    integrity sha1-YLuYqHy5I8aMoeUTJUgzFISfVT8=
-  
-  lodash.isboolean@^3.0.3:
-    version "3.0.3"
-    resolved "https://registry.yarnpkg.com/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
-    integrity sha1-bC4XHbKiV82WgC/UOwGyDV9YcPY=
-  
-  lodash.isinteger@^4.0.4:
-    version "4.0.4"
-    resolved "https://registry.yarnpkg.com/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
-    integrity sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=
-  
-  lodash.isnumber@^3.0.3:
-    version "3.0.3"
-    resolved "https://registry.yarnpkg.com/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz#3ce76810c5928d03352301ac287317f11c0b1ffc"
-    integrity sha1-POdoEMWSjQM1IwGsKHMX8RwLH/w=
-  
-  lodash.isplainobject@^4.0.6:
-    version "4.0.6"
-    resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
-    integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
-  
-  lodash.isstring@^4.0.1:
-    version "4.0.1"
-    resolved "https://registry.yarnpkg.com/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
-    integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
-  
   lodash.memoize@^4.1.2:
     version "4.1.2"
     resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
     integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
-  
-  lodash.once@^4.0.0:
-    version "4.1.1"
-    resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
-    integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
   
   lodash.sortby@^4.7.0:
     version "4.7.0"
@@ -6503,11 +6420,6 @@ Lockfile:
     version "1.6.6"
     resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.6.tgz#0ee6300cc058db6b3551fa1c4bf73b83bb771312"
     integrity sha512-Sgr5lbboAUBo3eXCSPL4/KoVz3ROKquOjcctxmHIt+vol2DrqTQe3SwkKKuYhEiWB5kYa13YyopJ69deJ1irzQ==
-  
-  long@^4.0.0:
-    version "4.0.0"
-    resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
-    integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
   
   loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
     version "1.4.0"
@@ -6839,49 +6751,6 @@ Lockfile:
     integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
     dependencies:
       minimist "0.0.8"
-  
-  mongodb-stitch-browser-core@^4.8.0:
-    version "4.8.0"
-    resolved "https://registry.yarnpkg.com/mongodb-stitch-browser-core/-/mongodb-stitch-browser-core-4.8.0.tgz#5c1fba924c05835812fac65e5749eca476cb0ab9"
-    integrity sha512-tKzNW+w6VFQOS+opbC8lPjmgJx8H+/4s8qIwM2fcH+GUti+J6hcj3b8Eei7VcyHiWYNsS8S0cx+BypOmILhfeg==
-    dependencies:
-      bson "4.0.2"
-      detect-browser "^3.0.0"
-      mongodb-stitch-core-sdk "^4.8.0"
-      whatwg-fetch "^3.0.0"
-  
-  mongodb-stitch-browser-sdk@^4.8.0:
-    version "4.8.0"
-    resolved "https://registry.yarnpkg.com/mongodb-stitch-browser-sdk/-/mongodb-stitch-browser-sdk-4.8.0.tgz#a70d456024f815db76b2853bc68b7c21c48981bc"
-    integrity sha512-+u5OOwxhGFee2JiS/ocVqR4OQw5wEKCH99w0CJz9l5NqNpQeR1VZRt9HmMLk7k9fn4/LaL5QcdalzA9YA+T8eA==
-    dependencies:
-      mongodb-stitch-browser-core "^4.8.0"
-      mongodb-stitch-browser-services-mongodb-remote "^4.8.0"
-  
-  mongodb-stitch-browser-services-mongodb-remote@^4.8.0:
-    version "4.8.0"
-    resolved "https://registry.yarnpkg.com/mongodb-stitch-browser-services-mongodb-remote/-/mongodb-stitch-browser-services-mongodb-remote-4.8.0.tgz#3f985a6f347b863d59250dd81c9530a3d4856959"
-    integrity sha512-LPtuOufHKzrATNJB+DAdK0LYRvoVaAI+3Oobqx9FI9WAjNY22lwHiJQ7FBFejSEz1YL7Nap6f7Z2P2DlYr0WsA==
-    dependencies:
-      mongodb-stitch-browser-core "^4.8.0"
-      mongodb-stitch-core-services-mongodb-remote "^4.8.0"
-  
-  mongodb-stitch-core-sdk@^4.8.0:
-    version "4.8.0"
-    resolved "https://registry.yarnpkg.com/mongodb-stitch-core-sdk/-/mongodb-stitch-core-sdk-4.8.0.tgz#3fbb5a9c46f8af5837aa9d71f4def79850df9d58"
-    integrity sha512-IK6Yh8mGsX7zzgbk6l/4xt8lxYORpEc/rWSaZoNo70h+u0gBcNlOes6TdlqYgzi5Q/mT0gqWI9jhInrg0IvnGQ==
-    dependencies:
-      base64-js "^1.3.0"
-      bson "4.0.2"
-      jsonwebtoken "8.2.1"
-  
-  mongodb-stitch-core-services-mongodb-remote@^4.8.0:
-    version "4.8.0"
-    resolved "https://registry.yarnpkg.com/mongodb-stitch-core-services-mongodb-remote/-/mongodb-stitch-core-services-mongodb-remote-4.8.0.tgz#a0c6a7552819fcb902b51ad44ac9277c94835b74"
-    integrity sha512-sxhmUqXlcn5152vqyoN7tQnowNKMSHUVms0rXOWXMVoHGf5eK+kqhtuT4haz/daa0pwR9L50NKYBRxOLt3phRg==
-    dependencies:
-      bson "4.0.2"
-      mongodb-stitch-core-sdk "^4.8.0"
   
   move-concurrently@^1.0.1:
     version "1.0.1"
@@ -10896,7 +10765,6 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
     integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
   
-  xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
     version "4.0.2"
     resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
     integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==

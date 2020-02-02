@@ -19,4 +19,5 @@ const administradorDAO = {
         return client.auth.loginWithCredential(new AnonymousCredential());
     }
 };
+
 export default administradorDAO;

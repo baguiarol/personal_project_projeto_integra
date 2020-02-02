@@ -1,6 +1,7 @@
 Projeto Integra:
+    Link do Diagrama de Classes / ER : https://www.lucidchart.com/invitations/accept/715208e5-d0f9-4243-83cb-b6f8bb18cba2
     Link dos specs do Design -> xd.adobe.com/spec/81044b20-060e-46e6-520a-020d489ab8e9-f735/
-    ☐ O sistema deve funcionar online
+    ✔ O sistema deve funcionar online @done(20-01-30 11:17)
     Assim que for dado um push deve haver um ambiente de testes para os pushes.
     trabalhar com branches.
     ☐ O sistema fará uso do Domínio atual já utilizado pelo sistema (integracps.com.br).
@@ -9,22 +10,30 @@ Projeto Integra:
     ☐ O sistema deve possuir uma autenticação (login e senha cadastrados via e-mail).
     Utilizar o banco de dados da MongoDB.
     ☐ Somente o administrador pode registrar novos clientes
+        ☐ Colocar isso no protótipo @started(20-01-30 11:19)
     ☐ Um potencial cliente pode entrar em contato e solicitar cadastro pelo site.
     ☐ O sistema deve ser capaz de agendar horas fixas disponíveis.
     ☐ O sistema deve ser rigoroso em relação a tratamentos de erros e evitar inconsistências de dados.
     ☐ O administrador poderá bloquear salas e dias para agendamento.
+        ✔ Colocar isso no protótipo @done(20-01-30 11:17) @done(Brian)
     ☐ O limite para o agendamento é de 2 semanas após a data atual.
+        ✔ Colocar isso no protótipo @done(20-01-31 23:34)
+        ☐ Implantar isso no sistema real
     ☐ O cliente poderá cancelar o agendamento
+        ✔ Colocar isso fixo no Protótipo @done(20-01-30 11:17) @done(Brian)
     ☐ Deve haver planos de Hora Avulsa, por Turno e Mensal
     ☐ O sistema deverá ter um histórico do cliente e de utilização de todos os clientes para o administrador.
     ☐ O profissional e o administrador podem acompanhar seu uso da plataforma e indicadores-chave utilizando uma dashboard
     ☐ O sistema deverá possibilitar o agendamento e a visualização de agendamentos
-    ☐ O Sistema deve ter 2 estados financeiros (pago e pendente) e 2 estados de execução. (executado e não executado)
+    ☐ O Sistema deve ter 2 estados financeiros (pago e pendente) e 2 estados de execução. (executado e não executado) @started(20-01-30 11:18)
+        ✔ Colocar isso no Diagrama ER @done(20-01-30 11:16) @done(Brian)
+        ✔ Colocar isso no BD @started(20-01-30 11:18 Brenda) @done(20-01-31 23:33) @lasted(1d12h15m52s)
     ☐ O sistema deve possuir um timer para saber o tempo de uso do cliente para visualização de minutos extras.
     ☐ O administrador pode ter um acesso de logs de todas transações dentro do sistema
     ☐ Deve ser possível um cliente entrar em contato com um profissional pelo sistema e notificá-lo mediante mídia social
     Usar Twilio para resolver isso.
     ☐ O sistema deve ser responsivo para celulares e tablets.
+        ☐ Colocar isso dentro do protótipo
     ☐ O sistema pode fixar no topo da lista a sala preferida para cada cliente.
     ☐ Deve haver uma pré-visualização das salas para que possam ver por meio de fotos e descrição.
     Usar o Firebase Storage para servir de armazenamento de fotos.
