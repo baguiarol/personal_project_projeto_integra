@@ -6,6 +6,7 @@ import Store from "./redux/store";
 import Actions from "./redux/actions/actions";
 import {HashRouter as Router, Route} from 'react-router-dom';
 import LoginPage from "./pages/login";
+import ClienteAgendamentos from "./pages/cliente/agendamentos";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Provider store={Store}>
           <Router>
               <Route path={'/'} exact={true} component={LoginPage} />
+              <Route path={'/agendamentos'} component={ClienteAgendamentos} />
           </Router>
       </Provider>
   );
