@@ -7,6 +7,7 @@ import Actions from "./redux/actions/actions";
 import {HashRouter as Router, Route} from 'react-router-dom';
 import LoginPage from "./pages/login";
 import ClienteAgendamentos from "./pages/cliente/agendamentos";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 function App() {
 
