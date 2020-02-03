@@ -2,6 +2,7 @@ import React from 'react';
 import Button from "../button/button";
 import "./styles.sass";
 import WeekCalendar from "../week_calendar/calendar";
+import PropTypes from 'prop-types';
 
 const Sala = props => {
     return (
@@ -15,10 +16,14 @@ const Sala = props => {
                 <Button width={'25%'} text={'Detalhes'} />
             </div>
             </div>
-            <WeekCalendar />
+            <WeekCalendar addReservaListener={props.addReservaListener}/>
 
         </div>
     )
 };
+
+Sala.propTypes = {
+    addReservaListener: PropTypes.func,
+}
 
 export default Sala;

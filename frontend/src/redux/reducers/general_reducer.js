@@ -4,6 +4,7 @@ const initialState = {
     database: null,
     mongoClient: null,
     userLogged: null,
+    showModal: false,
 };
 
 const GeneralReducer = (state = initialState, action) => {
@@ -14,6 +15,8 @@ const GeneralReducer = (state = initialState, action) => {
             return {...state, database: action.payload};
         case Actions.setUserLogged:
             return {...state, userLogged: action.payload};
+        case Actions.showModal:
+            return {...state, showModal: action.payload};
         default:
             return state;
     }

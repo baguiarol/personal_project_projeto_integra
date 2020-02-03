@@ -1,5 +1,6 @@
 import React from 'react';
 import "./styles.sass";
+import PropTypes from 'prop-types';
 
 const days = new Array(7).fill(0);
 
@@ -17,16 +18,27 @@ const WeekCalendar = props => {
         <div className={'container_week'}>
             <div className={'chevron'}><p><i className={'fas fa-chevron-left'}/></p></div>
             {days.map(day => (
-                <div className={'week_day'}>
+                <div
+                    onClick={props.addReservaListener}
+                    className={'week_day'}>
                     <h1>Seg</h1>
                     <h3>29/Jan</h3>
                     <Reserva/>
                     <div className={'add'}><span>+</span></div>
                 </div>
             ))}
-            <div className={'chevron'}><p><i className={'fas fa-chevron-right'}/></p></div>
+            <div
+                className={'chevron'}>
+                <p>
+                    <i className={'fas fa-chevron-right'}/>
+                </p>
+            </div>
         </div>
     )
+}
+
+WeekCalendar.propTypes = {
+    addReservaListener: PropTypes.func,
 }
 
 export default WeekCalendar;
