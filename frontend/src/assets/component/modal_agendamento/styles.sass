@@ -2,86 +2,77 @@
 
 $modalWidth: 45%
 
-.modal_agendamento_container
-  position: fixed
-  top: 5%
-  z-index: 1001
-  padding: .5% 2%
-  left: (100% - $modalWidth) / 2
-  width: $modalWidth
-  background-color: #FFF
-  border-radius: 10px
-  @include putTransition(.3s)
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3)
-  &.hidden
-    top: -85%
-  header
-    margin: 2% 0 4% 0
-    display: flex
-    h1
-      color: $darkGrey
-      margin: 0
-    h3
-      color: $grey
-      margin: 0
-    div
-      width: 100%
-    .close_container
-      display: flex
-      justify-content: flex-end
-      i
-        color: $grey
-        font-size: 1.5em
-        cursor: pointer
-        @include putTransition()
+header
+  margin: 2% 0 4% 0
+  display: flex
+
+  h1
+    color: $darkGrey
+    margin: 0
+
+  h3
+    color: $grey
+    margin: 0
+
+.horas_intervalo
+  display: flex
+  justify-content: center
+  div
+    margin: 0 3%
+  h2
+    color: $darkGrey
+.options
+  display: flex
+  justify-content: center
+
+  .option
+    border: 1px solid $primaryBlue
+    width: 20%
+    @include putTransition()
+    cursor: pointer
+    text-align: center
+
+    p
+      color: $primaryBlue
+      font-weight: 500
+
+    &:first-child
+      border-radius: 100px 0 0 100px
+
+    &:last-child
+      border-radius: 0 100px 100px 0
+
     &:hover
-      i
-        color: $darkGrey
-  .horas_intervalo
-    display: flex
-    justify-content: center
-    div
-      margin: 0 3%
-    h2
-      color: $darkGrey
-  .options
-    display: flex
-    justify-content: center
-    .option
-      border: 1px solid $primaryBlue
-      width: 20%
-      @include putTransition()
-      cursor: pointer
-      text-align: center
+      background-color: $lightGrey
+
+    &.selected
+      background-color: $primaryBlue
+
       p
-        color: $primaryBlue
-        font-weight: 500
-      &:first-child
-        border-radius: 100px 0 0 100px
-      &:last-child
-        border-radius: 0 100px 100px 0
-      &:hover
-        background-color: $lightGrey
-      &.selected
-        background-color: $primaryBlue
-        p
-          color: #FFF
-  .resume_container
-    display: flex
-    margin: 5% 0
-    justify-content: center
-    h2, h3
-      margin: 0
-    h2
-      color: $darkGrey
-    h3
-      color: $grey
-    div
-      margin: 0 3%
-      &:first-child
-        text-align: right
-  .footer
-    display: flex
-    float: right
-    width: 30%
-    margin-bottom: 2%
+        color: #FFF
+
+.resume_container
+  display: flex
+  margin: 5% 0
+  justify-content: center
+
+  h2, h3
+    margin: 0
+
+  h2
+    color: $darkGrey
+
+  h3
+    color: $grey
+
+  div
+    margin: 0 3%
+
+    &:first-child
+      text-align: right
+
+.footer
+  display: flex
+  float: right
+  width: 30%
+  margin-bottom: 2%

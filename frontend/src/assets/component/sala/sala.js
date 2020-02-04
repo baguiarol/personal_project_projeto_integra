@@ -13,7 +13,10 @@ const Sala = props => {
                  <p>Horários Reservados</p>
             </div>
             <div>
-                <Button width={'25%'} text={'Detalhes'} />
+                <Button
+                    width={'25%'}
+                    text={'Detalhes'}
+                    onClick={props.onClickDetalhesListener} />
             </div>
             </div>
             <WeekCalendar addReservaListener={props.addReservaListener}/>
@@ -24,6 +27,7 @@ const Sala = props => {
 
 Sala.propTypes = {
     addReservaListener: PropTypes.func,
+    onClickDetalhesListener: PropTypes.func,
 }
 
 export default Sala;
