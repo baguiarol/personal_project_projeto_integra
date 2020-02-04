@@ -1,0 +1,24 @@
+@import "../../variables"
+
+.alternating_tabs
+  display: flex
+  margin-left: 5%
+  margin: 3% 5%
+  width: 30%
+  background: #FFFFFF
+  border-radius: 500px
+  box-shadow: 0 5px 7px rgba(0,0,0,0.1)
+  div
+    width: 100%
+    display: flex
+    cursor: pointer
+    padding: 1vw 0
+    @include putTransition(.4s)
+    &.selected
+      background: transparent linear-gradient(269deg, #1FEBF1 0%, #0EB6BB 100%) 0% 0% no-repeat padding-box
+      color: #FFFFFF
+      border-radius: 300px
+    h2
+      margin: auto
+      font-size: 16px
+      font-weight: 400
