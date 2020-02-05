@@ -9,6 +9,7 @@ import LoginPage from "./pages/login";
 import ClienteAgendamentos from "./pages/cliente/agendamentos";
 import "@fortawesome/fontawesome-free/css/all.css";
 import MinhasReservasPage from "./pages/cliente/reservas";
+import AgendamentosAdministrador from "./pages/administrador/agendamentos";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
               <Route path={'/'} exact={true} component={LoginPage} />
               <Route path={'/agendamentos'} component={ClienteAgendamentos} />
               <Route path={'/minhas_reservas'} component={MinhasReservasPage} />
+              <Route path={'/agendamento_adm'} component={AgendamentosAdministrador} />
           </Router>
       </Provider>
   );

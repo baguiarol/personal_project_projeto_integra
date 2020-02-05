@@ -11,6 +11,7 @@ import {Redirect} from "react-router";
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     const [logged, setLogged] = React.useState(false);
+    const [loggedAdm, setLoggedAdm] = React.useState(false);
 
     const login = async () => {
         if (mongoClient) {
@@ -36,7 +37,11 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                     <form onSubmit={e => {
                         e.preventDefault();
                         const form = e.target;
-                        setLogged(true);
+                        if (form.email.value === 'adm') {
+                            setLoggedAdm(true);
+                        } else {
+                            setLogged(true);
+                        }
                     }}>
                         <InputText
                             name={'email'}
@@ -51,6 +56,7 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                         <Button type="submit" text={'Confirmar'}/>
                     </form>
                     {logged && <Redirect to={'/agendamentos'} />}
+                    {loggedAdm && <Redirect to={'/agendamento_adm'} />}
                 </div>
             </div>
         </div>
