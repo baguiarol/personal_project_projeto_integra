@@ -8,6 +8,7 @@ import {HashRouter as Router, Route} from 'react-router-dom';
 import LoginPage from "./pages/login";
 import ClienteAgendamentos from "./pages/cliente/agendamentos";
 import "@fortawesome/fontawesome-free/css/all.css";
+import MinhasReservasPage from "./pages/cliente/reservas";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Router>
               <Route path={'/'} exact={true} component={LoginPage} />
               <Route path={'/agendamentos'} component={ClienteAgendamentos} />
+              <Route path={'/minhas_reservas'} component={MinhasReservasPage} />
           </Router>
       </Provider>
   );

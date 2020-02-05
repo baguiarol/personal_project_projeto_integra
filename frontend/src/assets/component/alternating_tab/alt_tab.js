@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import "./styles.sass";
+import Redirect from "react-router-dom/Redirect";
 
 const AlternatingTab = props => {
     return (
@@ -14,6 +15,8 @@ const AlternatingTab = props => {
                     </div>
                 ))
             }
+            {(props.selectedIndex === 0) ? <Redirect to='agendamentos' /> : <></>}
+            {(props.selectedIndex === 1) ? <Redirect to='minhas_reservas' /> : <></>}
         </div>
     )
 }

@@ -9,10 +9,12 @@ import ModalTypes from "../../../assets/modal_types";
 import ModalDetalhesSala from "../../../assets/component/modal_detalhes_sala/detalhesSala";
 import AlternatingTab from "../../../assets/component/alternating_tab/alt_tab";
 import Snack from "../../../assets/component/Snack/snack";
+import Redirect from 'react-router-dom/Redirect';
 
 const ClienteAgendamentos = props => {
 
     const [selectedTab, selectTab] = React.useState(0);
+
 
     return (
         <div>
@@ -32,7 +34,7 @@ const ClienteAgendamentos = props => {
                     onClick: () => selectTab(0),
                 }, {
                     name: 'Minhas Reservas',
-                    onClick: () => selectTab(1),
+                    onClick: () => { selectTab(1) },
                 }]}/>
                 <Snack/>
             </div>
