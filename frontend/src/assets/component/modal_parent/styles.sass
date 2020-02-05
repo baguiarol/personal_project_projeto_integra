@@ -1,0 +1,41 @@
+@import "../../variables"
+
+$modalWidth: 45%
+
+.modal_container
+  position: fixed
+  top: 5%
+  z-index: 1001
+  padding: .5% 2%
+  left: (100% - $modalWidth) / 2
+  width: $modalWidth
+  background-color: #FFF
+  border-radius: 10px
+  @include putTransition(.3s)
+  flex-direction: column
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3)
+  &.hidden
+    top: -85%
+  header
+    margin: 2% 0 4% 0
+    display: flex
+    h1
+      color: $darkGrey
+      margin: 0
+    h3
+      color: $grey
+      margin: 0
+    div
+      flex-grow: 3
+  .close_container
+    display: flex
+    justify-content: flex-end
+    flex-grow: 1
+    i
+      color: $grey
+      font-size: 1.5em
+      cursor: pointer
+      @include putTransition()
+  &:hover
+    i
+      color: $darkGrey

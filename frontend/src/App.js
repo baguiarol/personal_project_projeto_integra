@@ -6,6 +6,10 @@ import Store from "./redux/store";
 import Actions from "./redux/actions/actions";
 import {HashRouter as Router, Route} from 'react-router-dom';
 import LoginPage from "./pages/login";
+import ClienteAgendamentos from "./pages/cliente/agendamentos";
+import "@fortawesome/fontawesome-free/css/all.css";
+import MinhasReservasPage from "./pages/cliente/reservas";
+import AgendamentosAdministrador from "./pages/administrador/agendamentos";
 
 function App() {
 
@@ -23,6 +27,9 @@ function App() {
       <Provider store={Store}>
           <Router>
               <Route path={'/'} exact={true} component={LoginPage} />
+              <Route path={'/agendamentos'} component={ClienteAgendamentos} />
+              <Route path={'/minhas_reservas'} component={MinhasReservasPage} />
+              <Route path={'/agendamento_adm'} component={AgendamentosAdministrador} />
           </Router>
       </Provider>
   );
