@@ -19,7 +19,11 @@ const AdministradorTopbar = props => {
             <div className={'tabs'}>
                 <Tab>Dashboard</Tab>
                 <Tab selected>Agendamentos</Tab>
+                <Tab>Profissionais</Tab>
                 <Tab>Salas</Tab>
+                <Tab>Administrativo</Tab>
+                <Tab>Salas</Tab>
+                <Tab>Logs</Tab>
             </div>
             <div className={'user_data'}>
                 <div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import "./styles.sass";
 import PropTypes from 'prop-types';
+import ReservaCliente from "../reserva_cliente/reserva_cliente";
 
 const days = new Array(7).fill(0);
 
@@ -8,6 +9,16 @@ const Reserva = props => {
     return (
         <div className={'reserva'}>
             <i><h2>Reservado</h2></i>
+            <h4>15:00 ~ 16:00</h4>
+        </div>
+    )
+}
+
+const ReservaAdm = props => {
+    return (
+        <div className={'reserva'}>
+            <i><h4>Reservado</h4></i>
+            <h3>Igor Nogueira</h3>
             <h4>15:00 ~ 16:00</h4>
         </div>
     )
@@ -23,7 +34,7 @@ const WeekCalendar = props => {
                     className={'week_day'}>
                     <h1>Seg</h1>
                     <h3>29/Jan</h3>
-                    <Reserva/>
+                    {!props.isAdm ? <Reserva /> : <ReservaAdm /> }
                     <div className={'add'}><span>+</span></div>
                 </div>
             ))}
@@ -38,6 +49,7 @@ const WeekCalendar = props => {
 }
 
 WeekCalendar.propTypes = {
+    isAdm: PropTypes.bool,
     addReservaListener: PropTypes.func,
 }
 
