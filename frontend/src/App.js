@@ -10,6 +10,7 @@ import ClienteAgendamentos from "./pages/cliente/agendamentos";
 import "@fortawesome/fontawesome-free/css/all.css";
 import MinhasReservasPage from "./pages/cliente/reservas";
 import AgendamentosAdministrador from "./pages/administrador/agendamentos";
+import DashboardPage from "./pages/administrador/dashboard";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
               <Route path={'/agendamentos'} component={ClienteAgendamentos} />
               <Route path={'/minhas_reservas'} component={MinhasReservasPage} />
               <Route path={'/agendamento_adm'} component={AgendamentosAdministrador} />
+              <Route path={'/dashboard'} component={DashboardPage} />
           </Router>
       </Provider>
   );
