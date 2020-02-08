@@ -7,10 +7,10 @@ import ModalTypes from "../../../assets/modal_types";
 const AgendamentosAdministrador = props => {
     return (
         <div>
-            <AdministradorTopbar />
+            <AdministradorTopbar pageSelected={'agendamentos'} />
             <div className={'container_salas'}>
                 <Sala isAdm={true} />
-                <Sala />
+                <Sala isAdm={true} />
             </div>
         </div>
     )

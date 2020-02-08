@@ -2,6 +2,8 @@ import React from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import "./styles.sass";
+import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 
 const DashboardPage = props => {
 
@@ -46,12 +48,20 @@ const DashboardPage = props => {
 
     return (
         <div>
+            <AdministradorTopbar pageSelected={'dashboard'}/>
             <div className={'indicators_container'}>
-                <div><h2>25 novos clientes</h2></div>
-                <div><h2>35 cancelamentos</h2></div>
+                <div>
+                    <h5>5,25% <i className={'fa fa-arrow-up'}/> &nbsp; que no mês anterior</h5>
+                    <h2>25 reservas no mês</h2>
+                </div>
+                <div>
+                    <h2>35 reservas canceladas</h2>
+                    <h5>5,25% <i className={'fa fa-arrow-up'}/> &nbsp; que no mês anterior</h5>
+                </div>
             </div>
-            <div>
+            <div className={'bottom_column'}>
                 <div className={'agendamentos_chart_container'}>
+                    <h2>Agendamentos</h2>
                     <div id={'chart_agendamentos'}/>
                 </div>
                 <div className={'quickdetails_container'}>
