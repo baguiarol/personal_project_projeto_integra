@@ -2,6 +2,7 @@ import React from 'react';
 import "./styles.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 import Button from "../../../assets/component/button/button";
+import CardSala from "../../../assets/component/card_sala/cardSala";
 
 const SalasPage = props => {
     return (
@@ -16,6 +17,11 @@ const SalasPage = props => {
                     <div>
                         <Button width={'50%'} text={'Nova Sala'}/>
                     </div>
+                </div>
+                <div className={'salas'}>
+                    <CardSala />
+                    <CardSala />
+                    <CardSala />
                 </div>
             </div>
         </div>
