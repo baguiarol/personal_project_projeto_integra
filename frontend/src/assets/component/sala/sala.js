@@ -19,13 +19,14 @@ const Sala = props => {
                     onClick={props.onClickDetalhesListener} />
             </div>
             </div>
-            <WeekCalendar addReservaListener={props.addReservaListener}/>
+            <WeekCalendar isAdm={props.isAdm} addReservaListener={props.addReservaListener}/>
 
         </div>
     )
 };
 
 Sala.propTypes = {
+    isAdm: PropTypes.bool,
     addReservaListener: PropTypes.func,
     onClickDetalhesListener: PropTypes.func,
 }

@@ -10,6 +10,11 @@ import ClienteAgendamentos from "./pages/cliente/agendamentos";
 import "@fortawesome/fontawesome-free/css/all.css";
 import MinhasReservasPage from "./pages/cliente/reservas";
 import AgendamentosAdministrador from "./pages/administrador/agendamentos";
+import DashboardPage from "./pages/administrador/dashboard";
+import LogsPage from "./pages/administrador/logs";
+import ProfissionaisPage from "./pages/administrador/profissionais";
+import AdministrativoPage from "./pages/administrador/administrativo";
+import SalasPage from "./pages/administrador/salas";
 
 function App() {
 
@@ -30,6 +35,11 @@ function App() {
               <Route path={'/agendamentos'} component={ClienteAgendamentos} />
               <Route path={'/minhas_reservas'} component={MinhasReservasPage} />
               <Route path={'/agendamento_adm'} component={AgendamentosAdministrador} />
+              <Route path={'/dashboard'} component={DashboardPage} />
+              <Route path={'/administrativo'} component={AdministrativoPage} />
+              <Route path={'/profissionais'} component={ProfissionaisPage} />
+              <Route path={'/salas'} component={SalasPage} />
+              <Route path={'/logs'} component={LogsPage} />
           </Router>
       </Provider>
   );
