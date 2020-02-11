@@ -1,0 +1,43 @@
+@import "../../../assets/variables.sass"
+
+.topbar_container
+  display: flex
+  box-shadow: 0 5px 6px rgba(0,0,0,0.1)
+  .titulo
+    padding-left: 20px
+    flex-grow: 1
+  h2
+    color: $darkGrey
+  h4
+    color: $grey
+  h2, h3, h4
+    margin: 0
+    font-weight: 400
+  .img_container
+    background-color: $primaryBlue
+    width: 13%
+    display: flex
+    padding-right: 15px
+    justify-content: center
+    border-radius: 0 500px 500px 0
+    img
+      margin: auto
+      width: 75%
+  .user_data, .profile_pic
+    margin: auto 0
+  .profile_pic
+    border-radius: 500px
+    width: 53px
+    height: 53px
+    margin: 15px 0
+    margin-right: 35px
+  .user_data
+    padding-right: 25px
+    h3, h4
+      text-align: right
+
+//Para celulares
+@media (max-width: 641px)
+  .titulo, .user_data, img
+    display: none
+

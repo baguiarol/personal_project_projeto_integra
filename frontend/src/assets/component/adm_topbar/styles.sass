@@ -1,0 +1,21 @@
+@import "../../variables"
+
+.topbar_container
+  .tabs
+    flex-grow: 1
+    display: flex
+    justify-content: center
+    .tab
+      display: flex
+      padding: 0 3%
+      color: $grey
+      cursor: pointer
+      @include putTransition()
+      border-bottom: 2px solid transparent
+      p
+        margin: auto 0
+      &.selected
+        color: $primaryBlue
+        border-bottom: 2px solid $primaryBlue
+      &:hover:not(.selected)
+        border-bottom: 2px solid $grey

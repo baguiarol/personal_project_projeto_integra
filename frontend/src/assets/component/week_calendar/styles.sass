@@ -1,0 +1,62 @@
+@import "../../variables"
+
+.container_week
+  display: flex
+  width: 95%
+  margin-left: 2.5%
+  .chevron
+    display: flex
+    justify-content: center
+    p
+      font-size: 40px
+      cursor: pointer
+      color: $grey
+      @include putTransition()
+      padding: 10px 25px
+      margin: auto
+      &:hover
+        color: $darkGrey
+  .week_day
+    width: 100%
+    margin: 10px
+    h1, h3
+      text-align: center
+      margin: 0
+      font-weight: 400
+    h1
+      margin-top: 15px
+      color: $darkGrey
+    h3
+      color: $grey
+      margin-bottom: 15px
+    div
+      background-color: $lightGrey
+      border-radius: 10px
+      display: flex
+      height: 150px
+      &.add
+        @include putTransition(.1s)
+        cursor: pointer
+        &:hover
+          box-shadow: 0 3px 10px rgba(0,0,0,0.2)
+        &:active
+          box-shadow: 0 1.5px 5px rgba(0,0,0,0.2)
+          transform: translateY(3px)
+      span
+        margin: auto
+        color: $grey
+        font-size: 50px
+        font-weight: 600
+    .reserva
+      background: transparent linear-gradient(180deg, #98EEF0 0%, #02BAC0 100%) 0% 0% no-repeat padding-box
+      color: #FFFFFF
+      justify-content: center
+      flex-direction: column
+      margin-bottom: 10px
+      box-shadow: 0 3px 7px rgba(0,0,0,0.2)
+      h2,h3, h4
+        margin: 0
+        text-align: center
+        font-weight: 400
+        color: #FFF
+

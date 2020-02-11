@@ -1,0 +1,58 @@
+@import "../../../assets/variables"
+
+.indicators_container
+  display: flex
+  width: 90%
+  margin-top: 2%
+  margin-left: 5%
+  div
+    color: #FFF
+    width: 90%
+    padding: 1% 2%
+    border-radius: 7px
+    display: flex
+    font-weight: 400
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.2)
+    background-color: $primaryBlue
+    &:first-child
+      margin-right: 2%
+      h2
+        text-align: right
+    h2
+      font-weight: 400
+      font-size: 36px
+      margin: 0
+      flex-grow: 1
+    h5
+      font-weight: 500
+      margin: 0
+      align-self: flex-end
+      flex-grow: 3
+    &:nth-child(2)
+      background-color: $darkerBlue
+      margin-left: 2%
+      h5
+        text-align: right
+.bottom_column
+  display: flex
+  margin-top: 2%
+  margin-left: 5%
+  .agendamentos_chart_container
+    width: 55%
+    border-radius: 10px
+    margin-right: 2%
+    padding: 1% 2%
+    box-shadow: 0px 5px 12px rgba(0,0,0,0.2)
+    h2
+      margin: 2%
+    #chart_agendamentos
+      height: 80%
+  .quickdetails_container
+    width: 30%
+    border-radius: 10px
+    padding: 1% 2%
+    box-shadow: 0px 5px 12px rgba(0,0,0,0.2)
+    h3
+      margin: 8.5% 2%
+      font-weight: 400
+      color: $darkGrey
