@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import Actions from "../../redux/actions/actions";
 import administradorDAO from "../../DAO/administradorDAO";
-import './styles.sass';
+import './login.sass';
 import InputText from "../../assets/component/inputText/input";
 import Button from "../../assets/component/button/button";
 import CheckBox from "../../assets/component/checkbox/checkbox";

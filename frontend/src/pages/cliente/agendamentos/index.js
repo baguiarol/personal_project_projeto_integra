@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import ClienteTopbar from "../../../assets/component/cliente_topbar/topbar";
 import Sala from "../../../assets/component/sala/sala";
-import "./styles.sass";
+import "./agenda.sass";
 import ModalAgendamento from "../../../assets/component/modal_agendamento/modalAgendamento";
 import Actions from "../../../redux/actions/actions";
 import ModalTypes from "../../../assets/modal_types";

@@ -1,5 +1,5 @@
 import React from 'react';
-import "./styles.sass";
+import "./salas.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 import Button from "../../../assets/component/button/button";
 import CardSala from "../../../assets/component/card_sala/cardSala";

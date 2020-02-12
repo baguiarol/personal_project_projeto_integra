@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.sass';
+import './reservas.sass';
 import {connect} from "react-redux";
 import ClienteTopbar from "../../../assets/component/cliente_topbar/topbar";
 import AlternatingTab from "../../../assets/component/alternating_tab/alt_tab";

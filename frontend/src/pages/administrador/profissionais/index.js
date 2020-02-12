@@ -1,7 +1,7 @@
 import React from 'react';
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 import CardProfissional from "../../../assets/component/card_profissional/cardProfissional";
-import "./styles.sass";
+import "./profissionais.sass";
 
 const ProfissionaisPage = props => {
     return (
