@@ -38,12 +38,12 @@ const CalendarAgendamentos = props => {
                             { salas.map(sala => {
                                 if (Math.round(Math.random())) {
                                     return (
-                                        <td>
+                                        <td className={'free'}>
                                         <i className={'fa fa-plus'}/>
                                         </td>
                                     )
                                 } else {
-                                    return (<td>
+                                    return (<td className={'occupied'}>
                                         Igor Nogueira
                                     </td>)
                                 }

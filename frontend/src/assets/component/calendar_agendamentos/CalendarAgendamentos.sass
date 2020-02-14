@@ -6,7 +6,31 @@
     margin: auto
     padding: 2% 3%
   .calendar_table
-    width: 95%
-    margin-left: 2.5%
+    width: 98%
+    border-spacing: 5px
+    margin-left: 1%
     text-align: center
     padding-bottom: 5%
+    thead
+      td
+        padding-bottom: 1.5%
+    tbody
+      tr
+       td:not(:first-child)
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2)
+        cursor: pointer
+        @include putTransition()
+        &:hover
+          box-shadow: 0 3px 4px rgba(0,0,0,0.2)
+      td:first-child
+        color: $grey
+    .free
+      color: $grey
+      background-color: $lightGrey
+      &:hover
+        background-color: darken($lightGrey, 2)
+    .occupied
+      color: #FFFFFF
+      padding: 2% 0
+      border-radius: 5px
+      background: transparent linear-gradient(180deg, darken(#98EEF0, 5) 0%, #02BAC0 100%) 0% 0% no-repeat padding-box
