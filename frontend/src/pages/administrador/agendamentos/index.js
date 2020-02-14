@@ -9,8 +9,7 @@ const AgendamentosAdministrador = props => {
         <div>
             <AdministradorTopbar pageSelected={'agendamentos'} />
             <div className={'container_salas'}>
-                <Sala isAdm={true} />
-                <Sala isAdm={true} />
+
             </div>
         </div>
     )
