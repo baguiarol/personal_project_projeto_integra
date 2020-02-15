@@ -8,6 +8,7 @@ import ModalTypes from "../../../assets/modal_types";
 import ModalNewAdministrativo
     from "../../../assets/component/modals/administrativo/modal_new_administrativo/modal_new_administrativo";
 import {connect} from "react-redux";
+import ResponsiveMenu from "../../../assets/component/responsiveMenu/responsiveMenu";
 
 const AdministrativoPage = props => {
     return (

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import "./styles.sass";
 import {useHistory} from 'react-router-dom';
+import HamburgerMenu from "../hamburgerMenu/hamburgerMenu";
+import ResponsiveMenu from "../responsiveMenu/responsiveMenu";
 
 const Tab = props => {
     const story = useHistory();
@@ -17,8 +19,13 @@ const Tab = props => {
 };
 
 const AdministradorTopbar = ({pageSelected}) => {
+
+    const [hambOpen, setHambOpen] = React.useState(false);
+
     return (
         <div className={'topbar_container topbar_container_adm'}>
+            <HamburgerMenu onClick={() => setHambOpen(true)}/>
+            <ResponsiveMenu open={hambOpen} pageSelected={pageSelected} onClick={() => setHambOpen(false)}/>
             <div className={'img_container'}>
                 <img src={require('../../integra_logo.png')}/>
             </div>
