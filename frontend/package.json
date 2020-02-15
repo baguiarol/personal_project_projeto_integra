@@ -1,6 +1,7 @@
 {
   "name": "web",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@amcharts/amcharts4": "^4.8.8",

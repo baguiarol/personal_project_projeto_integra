@@ -4,9 +4,10 @@ Projeto Integra:
     ✔ O sistema deve funcionar online @done(20-01-30 11:17)
     Assim que for dado um push deve haver um ambiente de testes para os pushes.
     trabalhar com branches.
-    ☐ O sistema fará uso do Domínio atual já utilizado pelo sistema (integracps.com.br).
-    ☐ Para o desenvolvimento haverá migração da hospedagem do sistema.
-    ☐ O sistema será colaborativo e automatizado pelo cliente, tendo acesso a edição por parte do Administrador.
+    ✔ O sistema fará uso do Domínio atual já utilizado pelo sistema (integracps.com.br). @done(20-02-14 21:15)
+    ✘ Para o desenvolvimento haverá migração da hospedagem do sistema. @started(20-02-14 21:15) @cancelled(20-02-14 21:15) @wasted(27s)
+    ✔ A hospedagem do sistema será feita pelo Hostgator @started(20-02-14 21:15) @done(20-02-14 21:15) @lasted(43s)
+    ✔ O sistema será colaborativo e automatizado pelo cliente, tendo acesso a edição por parte do Administrador. @done(20-02-14 21:16)
     ☐ O sistema deve possuir uma autenticação (login e senha cadastrados via e-mail).
     Utilizar o banco de dados da MongoDB.
     ☐ Somente o administrador pode registrar novos clientes
@@ -21,7 +22,8 @@ Projeto Integra:
         ☐ Implantar isso no sistema real
     ☐ O cliente poderá cancelar o agendamento
         ✔ Colocar isso fixo no Protótipo @done(20-01-30 11:17) @done(Brian)
-    ☐ Deve haver planos de Hora Avulsa, por Turno e Mensal
+    ☐ Deve haver planos de Hora Avulsa, por Turno e Mensal @started(20-02-14 21:16)
+        ✔ Colocar isso no protótipo @done(20-02-14 21:16)
     ☐ O sistema deverá ter um histórico do cliente e de utilização de todos os clientes para o administrador.
     ☐ O profissional e o administrador podem acompanhar seu uso da plataforma e indicadores-chave utilizando uma dashboard
     ☐ O sistema deverá possibilitar o agendamento e a visualização de agendamentos
@@ -36,7 +38,7 @@ Projeto Integra:
         ☐ Colocar isso dentro do protótipo
     ☐ O sistema pode fixar no topo da lista a sala preferida para cada cliente.
     ☐ Deve haver uma pré-visualização das salas para que possam ver por meio de fotos e descrição.
-    Usar o Firebase Storage para servir de armazenamento de fotos.
+    Usar o Firebase Storage para servir de armazenamento de fotos. Ou o próprio PHPzão, né.
     ☐ O sistema deve entender os modelos de turno e mensais.
     ☐ O aluguel por turno é de uma duração de 4 horas, e pode ser das 9h até as 13h, das 14h às 18h e das 15h às 19h e das 16h às 20h
     ☐ O aluguel mensal funciona um aluguel da sala, todos os dias da semana das 9h às 20h e das 8h até as 12h do sábado

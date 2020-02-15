@@ -7,6 +7,7 @@ import InputText from "../../assets/component/inputText/input";
 import Button from "../../assets/component/button/button";
 import CheckBox from "../../assets/component/checkbox/checkbox";
 import {Redirect} from "react-router";
+import ModoPaisagem from "../../assets/component/modoPaisagem/modoPaisagem";
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
@@ -26,6 +27,7 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     return (
         <div className={'login_container'}>
+            <ModoPaisagem />
             <div className={'ball'} />
             <div className={'logo_container'}>
                 <img src={require('../../assets/integra_logo.png')} />
