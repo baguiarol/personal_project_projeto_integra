@@ -37,7 +37,7 @@ const AdministradorTopbar = ({pageSelected}) => {
                 </Tab>
                 <Tab
                     page={'agendamento_adm'}
-                    selected={pageSelected === 'agendamentos'}>
+                    selected={pageSelected === 'agendamento_adm'}>
                     Agendamentos
                 </Tab>
                 <Tab page={'profissionais'} selected={pageSelected === 'profissionais'}>Profissionais</Tab>

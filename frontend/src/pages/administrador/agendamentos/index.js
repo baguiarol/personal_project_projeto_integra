@@ -5,7 +5,7 @@ import CalendarAgendamentos from "../../../assets/component/calendar_agendamento
 const AgendamentosAdministrador = props => {
     return (
         <div>
-            <AdministradorTopbar pageSelected={'agendamentos'} />
+            <AdministradorTopbar pageSelected={'agendamento_adm'} />
             <div className={'container_salas'}>
                 <CalendarAgendamentos/>
             </div>
