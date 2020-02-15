@@ -3,6 +3,7 @@ import "./salas.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 import Button from "../../../assets/component/button/button";
 import CardSala from "../../../assets/component/card_sala/cardSala";
+import Fab from "../../../assets/component/Fab/Fab";
 
 const SalasPage = props => {
     return (
@@ -24,6 +25,7 @@ const SalasPage = props => {
                     <CardSala />
                 </div>
             </div>
+            <Fab onClick={() => alert('comeon')}/>
         </div>
     )
 }

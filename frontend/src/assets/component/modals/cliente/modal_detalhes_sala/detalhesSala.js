@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ModalParent from "../modal_parent/modal";
+import ModalParent from "../../modal_parent/modal";
 import "./styles.sass";
 
 const ModalDetalhesSala = props => {
@@ -16,7 +16,7 @@ const ModalDetalhesSala = props => {
             body={<div className={'modal_sala_body'}>
                 <div className={'carousel'}>
                     <i className={'fa fa-chevron-left'}/>
-                        <img alt={''} src={require('../../sala.png')} />
+                        <img alt={''} src={require('../../../../sala.png')} />
                     <i className={'fa fa-chevron-right'}/>
                 </div>
                 <div className={'sala_details'}>

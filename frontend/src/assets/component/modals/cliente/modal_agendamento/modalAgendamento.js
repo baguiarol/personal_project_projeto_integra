@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import "./styles.sass";
-import Button from "../button/button";
+import Button from "../../../button/button";
 import Select from 'react-select';
-import ModalParent from "../modal_parent/modal";
+import ModalParent from "../../modal_parent/modal";
 
 const selectOptions = [
     {label: '08:00', value: 8},
