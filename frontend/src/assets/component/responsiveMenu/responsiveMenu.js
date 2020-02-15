@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './responsiveMenu.sass';
+import {useHistory} from "react-router-dom";
 
 const pages = [{
     pageName: 'dashboard',
@@ -20,12 +21,17 @@ const pages = [{
 },];
 
 const ResponsiveMenu = ({pageSelected, onClick, open}) => {
+
+    const history = useHistory();
     return (
         <div className={'responsive_menu ' + (open ? 'open': '')}>
             <ul>
                 {pages.map(page => (
                     <li
-                        onClick={onClick}
+                        onClick={() => {
+                            onClick();
+                            history.push(page.pageName)
+                        }}
                         className={pageSelected === page.pageName ? 'selected' : ''}>
                         {page.pageLabel}
                     </li>
