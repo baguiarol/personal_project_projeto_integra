@@ -16,10 +16,11 @@ const CalendarAgendamentos = props => {
     return (
         <div className={'calendar_agendamentos_container'}>
             <h1>
-                <span style={{float: 'left'}}><i className={'fa fa-chevron-left'}/> </span>
+                <span style={{float: 'left', margin: 'auto'}}><i className={'fa fa-chevron-left'}/> </span>
                 17 de Fevereiro de 2020
-                <span style={{float: 'right'}}><i className={'fa fa-chevron-right'}/> </span>
+                <span style={{float: 'right', margin: 'auto'}}><i className={'fa fa-chevron-right'}/> </span>
             </h1>
+            <div className={'container_table'}>
             <table className={'calendar_table'}>
                 {/*aqui vai a numeracao das salas*/}
                 <thead>
@@ -53,6 +54,7 @@ const CalendarAgendamentos = props => {
                 }
                 </tbody>
             </table>
+            </div>
         </div>
     )
 }
