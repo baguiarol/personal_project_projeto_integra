@@ -31,6 +31,7 @@ $modalWidth: 45%
     display: flex
     justify-content: flex-end
     flex-grow: 1
+    margin: 15px
     i
       color: $grey
       font-size: 1.5em
@@ -39,3 +40,8 @@ $modalWidth: 45%
   &:hover
     i
       color: $darkGrey
+
+@media (max-width: 641px)
+  .modal_container
+    left: 2.5%
+    width: 90%

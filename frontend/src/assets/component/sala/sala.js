@@ -14,7 +14,7 @@ const Sala = props => {
             </div>
             <div>
                 <Button
-                    width={'25%'}
+                    className={'btn_detalhes'}
                     text={'Detalhes'}
                     onClick={props.onClickDetalhesListener} />
             </div>

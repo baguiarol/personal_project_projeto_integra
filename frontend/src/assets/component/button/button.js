@@ -8,7 +8,7 @@ const Button = props => {
             type={props.type}
             style={props.width ? {width: props.width} : {}}
             onClick={props.onClick}
-            className={'button'}>
+            className={'button '+props.className}>
             {props.text}
         </button>
     );
@@ -19,6 +19,7 @@ Button.propTypes = {
     onClick: PropTypes.func,
     type: PropTypes.string,
     width: PropTypes.string,
+    className: PropTypes.string,
 }
 
 export default Button;

@@ -18,7 +18,7 @@ const Tab = props => {
 
 const AdministradorTopbar = ({pageSelected}) => {
     return (
-        <div className={'topbar_container'}>
+        <div className={'topbar_container topbar_container_adm'}>
             <div className={'img_container'}>
                 <img src={require('../../integra_logo.png')}/>
             </div>

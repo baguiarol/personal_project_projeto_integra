@@ -12,13 +12,18 @@
     width: 100%
     display: flex
     cursor: pointer
-    padding: 1vw 0
     @include putTransition(.4s)
     &.selected
       background: transparent linear-gradient(269deg, #1FEBF1 0%, #0EB6BB 100%) 0% 0% no-repeat padding-box
       color: #FFFFFF
       border-radius: 300px
     h2
-      margin: auto
+      text-align: center
+      width: 100%
       font-size: 16px
       font-weight: 400
+
+@media (max-width: 641px)
+  .alternating_tabs
+    margin: 13px auto
+    width: 100%

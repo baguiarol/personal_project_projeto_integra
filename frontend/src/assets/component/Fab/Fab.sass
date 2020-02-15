@@ -1,0 +1,25 @@
+@import '../../variables'
+
+.Fab
+  position: fixed
+  background-color: $primaryBlue
+  color: #FFFFFF
+  bottom: 32px
+  cursor: pointer
+  right: 32px
+  padding: 13px
+  width: 42px
+  height: 42px
+  display: flex
+  border-radius: 500px
+  box-shadow: 0 5px 8px rgba(0,0,0,0.3)
+  @include putTransition()
+  i
+    margin: auto
+  &:hover
+    background-color: darken($primaryBlue, 10)
+  &:active
+    transform: translateY(3px)
+    box-shadow: 0 3px 3px rgba(0,0,0,0.3)
+  &.open
+    transform: rotate(45deg)
