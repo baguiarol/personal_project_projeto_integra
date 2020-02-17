@@ -6,10 +6,12 @@ const ModalParent = props => {
     return (
         <div className={props.show ? 'modal_container' : 'modal_container hidden'}>
                 {props.header}
+            <form onSubmit={props.onSubmit}>
             <div>
                 {props.body}
             </div>
                 {props.footer}
+            </form>
         </div>
     )
 }
@@ -20,6 +22,7 @@ ModalParent.propTypes = {
     header: PropTypes.element,
     body: PropTypes.element,
     footer: PropTypes.element,
+    onSubmit: PropTypes.func,
 }
 
 export default ModalParent;
