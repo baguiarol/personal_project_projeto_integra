@@ -9,7 +9,6 @@
     top: 35px
     z-index: 1001
     display: flex
-    justify-content: center
     p
       font-weight: 700
       color: #FFFFFF
@@ -18,6 +17,7 @@
       bottom: -50px
       text-shadow: 0 1.5px 3px rgba(0,0,0,0.3)
       text-transform: uppercase
+      margin-left: 15px
   .ball
     position: absolute
     width: 950px
@@ -62,15 +62,15 @@
         width: 80%
       p
         font-size: 2.7vw
+        margin-left: 0px
 
 //Para celulares
 @media (max-width: 641px)
   .login_container
     .logo_container
+      justify-content: center
       img
         margin-top: 50px
-      
-
     .ball
       left: -200px
       margin: auto
