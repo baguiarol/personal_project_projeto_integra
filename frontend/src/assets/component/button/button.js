@@ -8,8 +8,10 @@ const Button = props => {
             type={props.type}
             style={props.width ? {width: props.width} : {}}
             onClick={props.onClick}
-            className={'button '+props.className}>
-            {props.text}
+            disabled={props.loading}
+            className={props.loading ?
+                'button loading '+props.className : 'button '+props.className }>
+            { props.loading ? 'Carregando' : props.text}
         </button>
     );
 }
@@ -20,6 +22,7 @@ Button.propTypes = {
     type: PropTypes.string,
     width: PropTypes.string,
     className: PropTypes.string,
+    loading: PropTypes.bool,
 }
 
 export default Button;

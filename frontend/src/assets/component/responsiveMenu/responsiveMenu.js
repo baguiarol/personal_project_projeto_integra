@@ -16,6 +16,9 @@ const pages = [{
     pageName: 'logs',
     pageLabel: 'Logs'
 }, {
+  pageName: 'Salas',
+  pageLabel: 'Salas',
+}, {
     pageName: 'profissionais',
     pageLabel: 'Profissionais'
 },];

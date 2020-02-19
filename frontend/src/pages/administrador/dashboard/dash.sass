@@ -56,3 +56,30 @@
       margin: 8.5% 2%
       font-weight: 400
       color: $darkGrey
+
+@media(max-width: 641px)
+  .indicators_container
+    flex-wrap: wrap
+    div
+      width: 100%
+      margin-bottom: 2%
+      &:first-child
+        margin-right: 0
+        flex-direction: row-reverse
+        h2
+          text-align: left
+        h5
+          text-align: right
+      &:nth-child(2)
+        background-color: $darkerBlue
+        margin-left: 0
+        text-align: left
+  .bottom_column
+    flex-wrap: wrap
+    .agendamentos_chart_container
+      width: 90%
+      height: 450px
+    .quickdetails_container
+      width: 90%
+      margin-top: 5%
+      margin-bottom: 3%

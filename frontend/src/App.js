@@ -15,8 +15,13 @@ import LogsPage from "./pages/administrador/logs";
 import ProfissionaisPage from "./pages/administrador/profissionais";
 import AdministrativoPage from "./pages/administrador/administrativo";
 import SalasPage from "./pages/administrador/salas";
+import clienteDAO from "./DAO/clienteDAO";
 
 function App() {
+
+    const setDatabaseIntoDAOs = (db) => {
+        clienteDAO.setDb(db);
+    }
 
     React.useEffect(() => {
         //Inicializa o Banco de Dados.
@@ -26,6 +31,8 @@ function App() {
         //Coloca ambos dentro da Store.
         Store.dispatch({type: Actions.setMongoClient, payload: client});
         Store.dispatch({type: Actions.setDatabase, payload: db});
+
+        setDatabaseIntoDAOs(db);
     }, []);
 
   return (
