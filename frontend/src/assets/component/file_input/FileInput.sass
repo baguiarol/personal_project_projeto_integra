@@ -6,18 +6,22 @@
   .buttons
     margin-right: 25px
     display: flex
-    height: 60px
+    height: 45px
   .button_secondary
     background-color: transparent
     border: none
+    margin: auto
     color: $grey
     cursor: pointer
     padding: 10px 25px
+    text-transform: uppercase
+    letter-spacing: 2px
     @include putTransition()
-    border: 1px solid $darkGrey
     &.selected
-      color: #FFFFFF
-      background-color: $darkGrey
+      color: $primaryBlue
+      font-weight: 600
+    &:first-child
+      border-right: 1px solid $grey
   .arquivo_upload
     margin: auto
     display: flex
