@@ -23,9 +23,9 @@ const FileInput = props => {
     return (
         <div className={'preview_input_container'}>
             <div className={'file_input_container'}>
-                <img src={fileURL === '' ? require('../../preview.jpg') : fileURL} />
+                <img src={fileURL === '' ? require('../../preview.jpg') : fileURL}/>
                 <input type={'file'}
-                       name={'fileToUpload'}
+                       name={props.fileName}
                        id={'real_file'}
                        onChange={onChange}
                        hidden
@@ -52,9 +52,13 @@ const FileInput = props => {
                     </button>
                     <span>{fileName}</span>
                 </div>
-                <InputText style={!isURL ? {display: 'none'} : {width: '100%'}} label={'URL da foto'} onChange={e => {
-                    setFileURL(e.target.value);
-                }}/>
+                <InputText
+                    name={props.urlName}
+                    style={!isURL ? {display: 'none'} : {width: '100%'}}
+                    label={'URL da foto'}
+                    onChange={e => {
+                        setFileURL(e.target.value);
+                    }}/>
             </div>
         </div>
     )
@@ -63,6 +67,8 @@ const FileInput = props => {
 FileInput.propTypes = {
     data: PropTypes.any,
     setData: PropTypes.func,
+    fileName: PropTypes.string.isRequired,
+    urlName: PropTypes.string.isRequired,
 }
 
 

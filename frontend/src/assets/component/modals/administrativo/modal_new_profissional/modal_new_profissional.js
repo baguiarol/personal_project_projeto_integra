@@ -7,24 +7,35 @@ import clienteDAO from "../../../../../DAO/clienteDAO";
 import {connect} from "react-redux";
 import Actions from "../../../../../redux/actions/actions";
 import FileInput from "../../../file_input/FileInput";
+import {post} from 'axios';
 
 const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
 
     const [loading, setLoading] = React.useState(false);
+    const [file, setFile] = React.useState()
+
+    const fileUpload = async (file) => {
+        const url = 'https://teste.integracps.com.br/imageUpload.php';
+        const formData = new FormData();
+        formData.append('file', file);
+        const config = { headers: {'Content-Type': 'multipart/form-data'}};
+        return post(url, formData, config);
+    }
 
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
         const form = e.target;
         try {
-            await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-                nome: form.nome.value,
-                telefone: form.telefone.value,
-                ocupacao: form.ocupacao.value,
-                descricao: form.descricao.value,
-                foto_url: form.foto_url.value,
-                email: form.email.value,
-            });
+            alert(JSON.stringify(await fileUpload(form.fileToUpload.files[0])));
+            // await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+            //     nome: form.nome.value,
+            //     telefone: form.telefone.value,
+            //     ocupacao: form.ocupacao.value,
+            //     descricao: form.descricao.value,
+            //     foto_url: form.foto_url.value,
+            //     email: form.email.value,
+            // });
             alert('Profissional Adicionado com Sucesso!')
         } catch(err) {
             alert(err);
@@ -45,7 +56,9 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <FileInput />
+                         <FileInput
+                            urlName={'foto_url'}
+                            fileName={'fileToUpload'} />
                          <InputText name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
                              <InputText name={'telefone'} label={'Telefone'}/>

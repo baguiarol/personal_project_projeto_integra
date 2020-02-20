@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from "react-select";
 import ModalParent from "../../modal_parent/modal";
 import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
@@ -18,7 +17,9 @@ const ModalNewAdministrativo = ({show, close}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <FileInput />
+                         <FileInput
+                             urlName={'foto_url'}
+                                fileName={'fileToUpload'}/>
                          <InputText label={'Nome'} />
                          <InputText label={'Login'} />
                          <div className={'flex'}>
