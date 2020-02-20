@@ -6,6 +6,7 @@ import "./modal_new_profissional.sass";
 import clienteDAO from "../../../../../DAO/clienteDAO";
 import {connect} from "react-redux";
 import Actions from "../../../../../redux/actions/actions";
+import FileInput from "../../../file_input/FileInput";
 
 const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
 
@@ -44,7 +45,7 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <InputText name={'foto_url'} label={'Foto URL'}/>
+                         <FileInput />
                          <InputText name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
                              <InputText name={'telefone'} label={'Telefone'}/>

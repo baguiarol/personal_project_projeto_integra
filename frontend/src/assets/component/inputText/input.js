@@ -4,7 +4,7 @@ import './style.sass';
 
 const InputText = props => {
     return (
-        <div className={'input_text'}>
+        <div className={'input_text'} style={props.style}>
             <input
                 placeholder={props.placeholder}
                 type={props.type ? props.type : 'text'}
@@ -19,6 +19,7 @@ InputText.propTypes = {
     placeholder: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.string,
+    style: PropTypes.object,
 }
 
 export default InputText;
