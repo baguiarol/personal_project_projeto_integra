@@ -9,10 +9,11 @@ const FileInput = props => {
     const [fileName, setFileName] = React.useState('Nenhum arquivo selecionado.');
     const [fileURL, setFileURL] = React.useState('');
     const onChange = e => {
-        if (e.target.files) {
+        if (e.target.files[0]) {
             setFileName(e.target.files[0].name);
             setFileURL(URL.createObjectURL(e.target.files[0]))
         } else {
+            setFileURL('');
             setFileName('Nenhum arquivo selecionado.');
         }
     }
@@ -51,7 +52,9 @@ const FileInput = props => {
                     </button>
                     <span>{fileName}</span>
                 </div>
-                <InputText style={!isURL ? {display: 'none'} : {width: '100%'}} label={'URL da foto'}/>
+                <InputText style={!isURL ? {display: 'none'} : {width: '100%'}} label={'URL da foto'} onChange={e => {
+                    setFileURL(e.target.value);
+                }}/>
             </div>
         </div>
     )
