@@ -22,7 +22,7 @@ const FileInput = props => {
     return (
         <div className={'preview_input_container'}>
             <div className={'file_input_container'}>
-                <img src={fileURL} />
+                <img src={fileURL === '' ? require('../../preview.jpg') : fileURL} />
                 <input type={'file'}
                        name={'fileToUpload'}
                        id={'real_file'}
