@@ -3,7 +3,7 @@ import ModalParent from "../../modal_parent/modal";
 import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
 import "./modal_new_profissional.sass";
-// import clienteDAO from "../../../../../DAO/clienteDAO";
+import clienteDAO from "../../../../../DAO/clienteDAO";
  import {connect} from "react-redux";
 import Actions from "../../../../../redux/actions/actions";
 import FileInput from "../../../file_input/FileInput";
@@ -13,6 +13,7 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
+    const [fileURL, setFileURL] = React.useState('');
 
     const fileUpload = async (file) => {
         const url = 'https://teste.integracps.com.br/imageUpload.php';
@@ -25,17 +26,17 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
-        // const form = e.target;
+        const form = e.target;
         try {
-            alert(JSON.stringify(await fileUpload(file)));
-            // await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-            //     nome: form.nome.value,
-            //     telefone: form.telefone.value,
-            //     ocupacao: form.ocupacao.value,
-            //     descricao: form.descricao.value,
-            //     foto_url: form.foto_url.value,
-            //     email: form.email.value,
-            // });
+            await fileUpload(file);
+            await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                nome: form.nome.value,
+                telefone: form.telefone.value,
+                ocupacao: form.ocupacao.value,
+                descricao: form.descricao.value,
+                foto_url: fileURL,
+                email: form.email.value,
+            });
             alert('Profissional Adicionado com Sucesso!')
         } catch(err) {
             alert(err);
@@ -57,7 +58,10 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
                      </header>}
                      body={<div>
                          <FileInput
-                             onChangeFile={file => setFile(file)}
+                            onChangeFile={(file, url) => {
+                                setFile(file);
+                                setFileURL(url);
+                            }}
                             urlName={'foto_url'}
                             fileName={'userfile'} />
                          <InputText name={'nome'} label={'Nome'}/>

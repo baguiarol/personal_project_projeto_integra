@@ -5,17 +5,25 @@ import InputText from "../inputText/input";
 
 const FileInput = props => {
 
+    const url = 'https://teste.integracps.com.br/uploads/';
+
     let realUploadButton = React.createRef();
     const [fileName, setFileName] = React.useState('Nenhum arquivo selecionado.');
     const [fileURL, setFileURL] = React.useState('');
     const onChange = e => {
-        if (e.target.files[0]) {
-            setFileName(e.target.files[0].name);
-            setFileURL(URL.createObjectURL(e.target.files[0]))
-            props.onChangeFile(e.target.files[0]);
+        // Verifica se é URL ou Arquivo
+        if (e.target.files) {
+            if (e.target.files[0]) {
+                setFileName(e.target.files[0].name);
+                setFileURL(URL.createObjectURL(e.target.files[0]))
+                props.onChangeFile(e.target.files[0], url + e.target.files[0].name);
+            } else {
+                setFileURL('');
+                setFileName('Nenhum arquivo selecionado.');
+            }
         } else {
-            setFileURL('');
-            setFileName('Nenhum arquivo selecionado.');
+            props.onChangeFile(null, e.target.value);
+            setFileURL(e.target.value);
         }
     }
 
@@ -59,9 +67,7 @@ const FileInput = props => {
                     name={props.urlName}
                     style={!isURL ? {display: 'none'} : {width: '100%'}}
                     label={'URL da foto'}
-                    onChange={e => {
-                        setFileURL(e.target.value);
-                    }}/>
+                    onChange={onChange}/>
             </div>
         </div>
     )
