@@ -12,6 +12,7 @@ const FileInput = props => {
         if (e.target.files[0]) {
             setFileName(e.target.files[0].name);
             setFileURL(URL.createObjectURL(e.target.files[0]))
+            props.onChangeFile(e.target.files[0]);
         } else {
             setFileURL('');
             setFileName('Nenhum arquivo selecionado.');
@@ -23,7 +24,9 @@ const FileInput = props => {
     return (
         <div className={'preview_input_container'}>
             <div className={'file_input_container'}>
-                <img src={fileURL === '' ? require('../../preview.jpg') : fileURL}/>
+                <img
+                    alt={'Preview'}
+                    src={fileURL === '' ? require('../../preview.jpg') : fileURL}/>
                 <input type={'file'}
                        name={props.fileName}
                        id={'real_file'}
@@ -65,6 +68,7 @@ const FileInput = props => {
 }
 
 FileInput.propTypes = {
+    onChangeFile: PropTypes.func,
     data: PropTypes.any,
     setData: PropTypes.func,
     fileName: PropTypes.string.isRequired,

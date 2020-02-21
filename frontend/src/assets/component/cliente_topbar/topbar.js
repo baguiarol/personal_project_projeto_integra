@@ -6,7 +6,9 @@ const ClienteTopbar = props => {
     return (
         <div className={'topbar_container'}>
             <div className={'img_container'}>
-                <img src={require('../../integra_logo.png')} />
+                <img
+                    alt={'logo'}
+                    src={require('../../integra_logo.png')} />
             </div>
             <div className={'titulo'}>
                 <h2>Portal da Equipe</h2>
@@ -18,9 +20,15 @@ const ClienteTopbar = props => {
                     <h4>Fisioterapeuta</h4>
                 </div>
             </div>
-            <img className={'profile_pic'} src={'https://randomuser.me/api/portraits/women/43.jpg'} />
+            <img
+                alt={'profile_pic'}
+                className={'profile_pic'} src={'https://randomuser.me/api/portraits/women/43.jpg'} />
         </div>
     )
+}
+
+ClienteTopbar.propTypes = {
+    usuario: PropTypes.object,
 }
 
 export default ClienteTopbar;

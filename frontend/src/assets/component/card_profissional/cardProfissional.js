@@ -6,7 +6,9 @@ import Button from "../button/button";
 const CardProfissional = props => {
     return (
         <div className={'card_profissional'}>
-            <img src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
+            <img
+                alt={'profissional_pic'}
+                src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
             <h2>Claudio Correa de Andrade Matias Pinto</h2>
             <h3>Fisioterapeuta</h3>
             <Button text={'Informações'} />
@@ -15,7 +17,7 @@ const CardProfissional = props => {
 }
 
 CardProfissional.propTypes = {
-
+    profissional: PropTypes.object,
 };
 
 export default CardProfissional;

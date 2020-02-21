@@ -9,7 +9,6 @@ import ModalTypes from "../../../assets/modal_types";
 import ModalDetalhesSala from "../../../assets/component/modals/cliente/modal_detalhes_sala/detalhesSala";
 import AlternatingTab from "../../../assets/component/alternating_tab/alt_tab";
 import Snack from "../../../assets/component/Snack/snack";
-import Redirect from 'react-router-dom/Redirect';
 import ModoPaisagem from "../../../assets/component/modoPaisagem/modoPaisagem";
 
 const ClienteAgendamentos = props => {

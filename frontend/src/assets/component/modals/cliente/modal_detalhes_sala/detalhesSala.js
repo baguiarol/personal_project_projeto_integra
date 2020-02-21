@@ -34,4 +34,8 @@ const ModalDetalhesSala = props => {
     )
 };
 
+ModalDetalhesSala.propTypes = {
+    sala: PropTypes.object,
+}
+
 export default ModalDetalhesSala;

@@ -1,13 +1,10 @@
 import React from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import * as am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import "./dash.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 
 const DashboardPage = props => {
-
-    const [chartState, setChart] = React.useState(null);
 
     React.useEffect(() => {
 
@@ -41,9 +38,6 @@ const DashboardPage = props => {
         let scrollbarX = new am4charts.XYChartScrollbar();
         scrollbarX.series.push(series);
         chart.scrollbarX = scrollbarX;
-
-        setChart(chart);
-
     }, []);
 
     return (

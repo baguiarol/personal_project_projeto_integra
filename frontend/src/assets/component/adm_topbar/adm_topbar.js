@@ -27,7 +27,9 @@ const AdministradorTopbar = ({pageSelected}) => {
             <HamburgerMenu onClick={() => setHambOpen(true)}/>
             <ResponsiveMenu open={hambOpen} pageSelected={pageSelected} onClick={() => setHambOpen(false)}/>
             <div className={'img_container'}>
-                <img src={require('../../integra_logo.png')}/>
+                <img
+                    alt={'integra_logo'}
+                    src={require('../../integra_logo.png')}/>
             </div>
             <div className={'tabs'}>
                 <Tab
@@ -51,7 +53,9 @@ const AdministradorTopbar = ({pageSelected}) => {
                     <h4>Fisioterapeuta</h4>
                 </div>
             </div>
-            <img className={'profile_pic'} src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
+            <img
+                alt={'profile_pic'}
+                className={'profile_pic'} src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
         </div>
     )
 };

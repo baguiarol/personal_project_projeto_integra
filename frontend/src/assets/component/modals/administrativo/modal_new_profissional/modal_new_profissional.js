@@ -3,8 +3,8 @@ import ModalParent from "../../modal_parent/modal";
 import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
 import "./modal_new_profissional.sass";
-import clienteDAO from "../../../../../DAO/clienteDAO";
-import {connect} from "react-redux";
+// import clienteDAO from "../../../../../DAO/clienteDAO";
+ import {connect} from "react-redux";
 import Actions from "../../../../../redux/actions/actions";
 import FileInput from "../../../file_input/FileInput";
 import {post} from 'axios';
@@ -12,22 +12,22 @@ import {post} from 'axios';
 const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
 
     const [loading, setLoading] = React.useState(false);
-    const [file, setFile] = React.useState()
+    const [file, setFile] = React.useState(null);
 
     const fileUpload = async (file) => {
         const url = 'https://teste.integracps.com.br/imageUpload.php';
         const formData = new FormData();
-        formData.append('file', file);
-        const config = { headers: {'Content-Type': 'multipart/form-data'}};
+        formData.append('userfile', file);
+        const config = { headers: {'content-type': 'multipart/form-data'}};
         return post(url, formData, config);
     }
 
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
-        const form = e.target;
+        // const form = e.target;
         try {
-            alert(JSON.stringify(await fileUpload(form.fileToUpload.files[0])));
+            alert(JSON.stringify(await fileUpload(file)));
             // await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
             //     nome: form.nome.value,
             //     telefone: form.telefone.value,
@@ -57,8 +57,9 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
                      </header>}
                      body={<div>
                          <FileInput
+                             onChangeFile={file => setFile(file)}
                             urlName={'foto_url'}
-                            fileName={'fileToUpload'} />
+                            fileName={'userfile'} />
                          <InputText name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
                              <InputText name={'telefone'} label={'Telefone'}/>
