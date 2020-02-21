@@ -9,6 +9,7 @@ const AlternatingTab = props => {
             {
                 props.elements.map((element, index) => (
                     <div
+                        key={index}
                         className={index === props.selectedIndex ? 'selected' : ''}
                         onClick={element.onClick}>
                         <h2>{element.name}</h2>

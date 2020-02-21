@@ -1,0 +1,65 @@
+@import "../../variables"
+
+.preview_input_container
+  display: flex
+  flex-direction: column
+  width: 100%
+  img
+    width: 65px
+    height: 65px
+    object-fit: cover
+    margin: 10px auto
+    border-radius: 500px
+
+.file_input_container
+  border-radius: 5px 5px 5px 5px
+  display: flex
+  .buttons
+    margin: auto
+    margin-right: 25px
+    display: flex
+    height: 45px
+  .button_secondary
+    background-color: transparent
+    border: none
+    margin: auto
+    color: $grey
+    cursor: pointer
+    padding: 10px 25px
+    text-transform: uppercase
+    letter-spacing: 2px
+    @include putTransition()
+    &.selected
+      color: $primaryBlue
+      font-weight: 600
+    &:first-child
+      border-right: 1px solid $grey
+  .arquivo_upload
+    margin: auto
+    display: flex
+    width: 100%
+    justify-content: center
+    flex-direction: column
+    button
+      background-color: $primaryBlue
+      color: #FFFFFF
+      border-radius: 5px
+      padding: 10px 15px
+      border: none
+      cursor: pointer
+      text-transform: uppercase
+      box-shadow: 0 2px 3px rgba(0,0,0,0.2)
+      font-weight: 700
+      letter-spacing: 2px
+      width: 25%
+      margin: auto
+      &:active
+        transform: translateY(2px)
+      i
+        color: #FFF
+        font-size: 25px
+    span
+      color: $grey
+      padding-top: 5px
+      text-align: center
+      margin: auto

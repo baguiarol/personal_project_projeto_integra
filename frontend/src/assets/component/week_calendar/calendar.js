@@ -1,7 +1,7 @@
 import React from 'react';
 import "./styles.sass";
 import PropTypes from 'prop-types';
-import ReservaCliente from "../reserva_cliente/reserva_cliente";
+
 const Reserva = props => {
     return (
         <div className={'reserva'}>
@@ -29,6 +29,7 @@ const WeekCalendar = props => {
             <div className={'chevron'}><p><i className={'fas fa-chevron-left'}/></p></div>
             {days.map((day) => (
                 <div
+                    key={day}
                     onClick={props.addReservaListener}
                     className={'week_day'}>
                     <h1>{day}</h1>

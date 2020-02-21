@@ -1,9 +1,9 @@
 import React from 'react';
-import Select from "react-select";
 import ModalParent from "../../modal_parent/modal";
 import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
 import "./modal_new_administrativo.sass";
+import FileInput from "../../../file_input/FileInput";
 
 const ModalNewAdministrativo = ({show, close}) => {
     return (
@@ -17,7 +17,9 @@ const ModalNewAdministrativo = ({show, close}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <InputText label={'Foto URL'} />
+                         <FileInput
+                             urlName={'foto_url'}
+                                fileName={'fileToUpload'}/>
                          <InputText label={'Nome'} />
                          <InputText label={'Login'} />
                          <div className={'flex'}>

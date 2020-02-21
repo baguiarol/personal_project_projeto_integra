@@ -1,4 +1,4 @@
-import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from "mongodb-stitch-browser-sdk";
+import { UserPasswordCredential, UserPasswordAuthProviderClient } from "mongodb-stitch-browser-sdk";
 
 const COLLECTION = 'clientes'
 const clienteDAO = {

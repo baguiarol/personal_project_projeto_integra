@@ -6,7 +6,7 @@ import './login.sass';
 import InputText from "../../assets/component/inputText/input";
 import Button from "../../assets/component/button/button";
 import CheckBox from "../../assets/component/checkbox/checkbox";
-import {Redirect} from "react-router";
+import {Redirect} from "react-router-dom";
 import ModoPaisagem from "../../assets/component/modoPaisagem/modoPaisagem";
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
@@ -30,7 +30,9 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
             <ModoPaisagem />
             <div className={'ball'} />
             <div className={'logo_container'}>
-                <img src={require('../../assets/integra_logo.png')} />
+                <img
+                    alt={'integra_logo'}
+                    src={require('../../assets/integra_logo.png')} />
                 <p>Sistema de Gerenciamento</p>
             </div>
             <div className={'login'}>

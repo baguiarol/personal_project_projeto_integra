@@ -27,24 +27,24 @@ const CalendarAgendamentos = props => {
                     <tr>
                         <td></td>
                         {
-                            salas.map(sala => <td>{sala}</td>)
+                            salas.map((sala, index) => <td key={index}>{sala}</td>)
                         }
                     </tr>
                 </thead>
                 <tbody>
                 {
-                    horas.map(hora => (
-                        <tr>
+                    horas.map((hora, index) => (
+                        <tr key={index}>
                             <td>{hora}</td>
-                            { salas.map(sala => {
+                            { salas.map((sala, index) => {
                                 if (Math.round(Math.random())) {
                                     return (
-                                        <td className={'free'}>
+                                        <td key={index} className={'free'}>
                                         <i className={'fa fa-plus'}/>
                                         </td>
                                     )
                                 } else {
-                                    return (<td className={'occupied'}>
+                                    return (<td key={index} className={'occupied'}>
                                         Igor Nogueira
                                     </td>)
                                 }
@@ -57,6 +57,10 @@ const CalendarAgendamentos = props => {
             </div>
         </div>
     )
+}
+
+CalendarAgendamentos.propTypes = {
+    agendamentos: PropTypes.array,
 }
 
 export default CalendarAgendamentos;

@@ -4,32 +4,61 @@ import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
 import "./modal_new_profissional.sass";
 import clienteDAO from "../../../../../DAO/clienteDAO";
-import {connect} from "react-redux";
+ import {connect} from "react-redux";
 import Actions from "../../../../../redux/actions/actions";
+import FileInput from "../../../file_input/FileInput";
+import {post} from 'axios';
 
 const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
 
     const [loading, setLoading] = React.useState(false);
+    const [file, setFile] = React.useState(null);
+    const [fileURL, setFileURL] = React.useState('');
+
+    const fileUpload = async (file) => {
+        const url = 'https://teste.integracps.com.br/imageUpload.php';
+        const formData = new FormData();
+        formData.append('userfile', file);
+        const config = { headers: {'content-type': 'multipart/form-data'}};
+        return post(url, formData, config);
+    }
+
+    const checkIfURLIsImage = url => {
+        let string = url.split('.');
+        if (string.length > 0) {
+            return (string[string.length - 1].toLowerCase() === 'jpg' ||
+                string[string.length - 1].toLowerCase() === 'jpeg' ||
+                string[string.length - 1].toLowerCase() === 'png');
+        } else {
+            return false;
+        }
+    }
 
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
         const form = e.target;
-        try {
-            await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-                nome: form.nome.value,
-                telefone: form.telefone.value,
-                ocupacao: form.ocupacao.value,
-                descricao: form.descricao.value,
-                foto_url: form.foto_url.value,
-                email: form.email.value,
-            });
-            alert('Profissional Adicionado com Sucesso!')
-        } catch(err) {
-            alert(err);
+        if (checkIfURLIsImage(fileURL)) {
+            try {
+                await fileUpload(file);
+                await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                    nome: form.nome.value,
+                    telefone: form.telefone.value,
+                    ocupacao: form.ocupacao.value,
+                    descricao: form.descricao.value,
+                    foto_url: fileURL,
+                    email: form.email.value,
+                });
+                checkIfURLIsImage(fileURL);
+                alert('Profissional Adicionado com Sucesso!')
+            } catch(err) {
+                alert(err);
+            }
+            closeModal();
+        } else {
+            alert('Informe uma imagem válida acima');
         }
         setLoading(false);
-        closeModal();
     }
 
     return (
@@ -44,7 +73,13 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <InputText name={'foto_url'} label={'Foto URL'}/>
+                         <FileInput
+                            onChangeFile={(file, url) => {
+                                setFile(file);
+                                setFileURL(url);
+                            }}
+                            urlName={'foto_url'}
+                            fileName={'userfile'} />
                          <InputText name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
                              <InputText name={'telefone'} label={'Telefone'}/>

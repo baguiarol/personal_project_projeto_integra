@@ -29,8 +29,9 @@ const ResponsiveMenu = ({pageSelected, onClick, open}) => {
     return (
         <div className={'responsive_menu ' + (open ? 'open': '')}>
             <ul>
-                {pages.map(page => (
+                {pages.map((page, index) => (
                     <li
+                        key={index}
                         onClick={() => {
                             onClick();
                             history.push(page.pageName)

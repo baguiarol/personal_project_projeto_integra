@@ -6,7 +6,7 @@ const ModalParent = props => {
     return (
         <div className={props.show ? 'modal_container' : 'modal_container hidden'}>
                 {props.header}
-            <form onSubmit={props.onSubmit}>
+            <form onSubmit={props.onSubmit} encType={'multipart/form-data'}>
             <div>
                 {props.body}
             </div>

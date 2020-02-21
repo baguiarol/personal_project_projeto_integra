@@ -4,9 +4,10 @@ import './style.sass';
 
 const InputText = props => {
     return (
-        <div className={'input_text'}>
+        <div className={'input_text'} style={props.style}>
             <input
                 placeholder={props.placeholder}
+                onChange={props.onChange}
                 type={props.type ? props.type : 'text'}
                 name={props.name ? props.name : ''} />
             <label className={'label'}>{props.label}</label>
@@ -19,6 +20,8 @@ InputText.propTypes = {
     placeholder: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.string,
+    style: PropTypes.object,
+    onChange: PropTypes.func,
 }
 
 export default InputText;
