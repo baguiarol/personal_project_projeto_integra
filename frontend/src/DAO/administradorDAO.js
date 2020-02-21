@@ -2,6 +2,13 @@ import {AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
 const COLLECTION = 'administradores';
 
+/*
+    foto_url: string,
+    login: string,
+    nome: string,
+    senha: string,
+ */
+
 const administradorDAO = {
     create(db, adm) {
         return db.collection(COLLECTION).insertOne(adm);

@@ -6,6 +6,19 @@ import "./modal_new_administrativo.sass";
 import FileInput from "../../../file_input/FileInput";
 
 const ModalNewAdministrativo = ({show, close}) => {
+
+    const [loading, setLoading] = React.useState(false);
+    const [file, setFile] = React.useState(null);
+    const [fileURL, setFileURL] = React.useState('');
+
+    const onSubmit = e => {
+        const form = e.target;
+        e.preventDefault();
+        setLoading(true);
+
+        setLoading(false);
+    }
+
     return (
         <ModalParent show={show}
                      header={<header>
@@ -18,8 +31,12 @@ const ModalNewAdministrativo = ({show, close}) => {
                      </header>}
                      body={<div>
                          <FileInput
+                             onChangeFile={(file, url) => {
+                                 setFile(file);
+                                 setFileURL(url);
+                             }}
                              urlName={'foto_url'}
-                                fileName={'fileToUpload'}/>
+                             fileName={'userfile'} />
                          <InputText label={'Nome'} />
                          <InputText label={'Login'} />
                          <div className={'flex'}>
@@ -29,7 +46,7 @@ const ModalNewAdministrativo = ({show, close}) => {
                      </div>}
                      footer={
                          <div className={'footer'}>
-                             <Button text={'Confirmar'}/>
+                             <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                          </div>}/>
     )
 }
