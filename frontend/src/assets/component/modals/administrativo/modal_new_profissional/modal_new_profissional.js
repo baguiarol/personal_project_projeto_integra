@@ -23,26 +23,41 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
         return post(url, formData, config);
     }
 
+    const checkIfURLIsImage = url => {
+        let string = url.split('.');
+        if (string.length > 0) {
+            return (string[string.length - 1].toLowerCase() === 'jpg' ||
+                string[string.length - 1].toLowerCase() === 'png');
+        } else {
+            return false;
+        }
+    }
+
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
         const form = e.target;
-        try {
-            await fileUpload(file);
-            await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-                nome: form.nome.value,
-                telefone: form.telefone.value,
-                ocupacao: form.ocupacao.value,
-                descricao: form.descricao.value,
-                foto_url: fileURL,
-                email: form.email.value,
-            });
-            alert('Profissional Adicionado com Sucesso!')
-        } catch(err) {
-            alert(err);
+        if (checkIfURLIsImage(fileURL)) {
+            try {
+                await fileUpload(file);
+                await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                    nome: form.nome.value,
+                    telefone: form.telefone.value,
+                    ocupacao: form.ocupacao.value,
+                    descricao: form.descricao.value,
+                    foto_url: fileURL,
+                    email: form.email.value,
+                });
+                checkIfURLIsImage(fileURL);
+                alert('Profissional Adicionado com Sucesso!')
+            } catch(err) {
+                alert(err);
+            }
+            closeModal();
+        } else {
+            alert('Informe uma imagem válida acima');
         }
         setLoading(false);
-        closeModal();
     }
 
     return (
