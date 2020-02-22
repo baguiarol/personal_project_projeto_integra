@@ -8,6 +8,7 @@ import clienteDAO from "../../../../../DAO/clienteDAO";
 import Actions from "../../../../../redux/actions/actions";
 import FileInput from "../../../file_input/FileInput";
 import {post} from 'axios';
+import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
 const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
 
@@ -21,17 +22,6 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
         formData.append('userfile', file);
         const config = { headers: {'content-type': 'multipart/form-data'}};
         return post(url, formData, config);
-    }
-
-    const checkIfURLIsImage = url => {
-        let string = url.split('.');
-        if (string.length > 0) {
-            return (string[string.length - 1].toLowerCase() === 'jpg' ||
-                string[string.length - 1].toLowerCase() === 'jpeg' ||
-                string[string.length - 1].toLowerCase() === 'png');
-        } else {
-            return false;
-        }
     }
 
     const onSubmit = async e => {
