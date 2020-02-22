@@ -4,13 +4,15 @@ import "./styles.sass";
 import Button from "../../../button/button";
 import Select from 'react-select';
 import ModalParent from "../../modal_parent/modal";
+import Actions from "../../../../../redux/actions/actions";
+import {connect} from "react-redux";
 
 const selectOptions = [
     {label: '08:00', value: 8},
     {label: '09:00', value: 9},
 ]
 
-const ModalAgendamento = ({show, close}) => {
+const ModalAgendamentoAdm = ({show, close}) => {
     return (
         <ModalParent show={show}
                      header={<header>
@@ -56,9 +58,18 @@ const ModalAgendamento = ({show, close}) => {
     )
 };
 
-ModalAgendamento.propTypes = {
+ModalAgendamentoAdm.propTypes = {
     show: PropTypes.bool.isRequired,
     close: PropTypes.func
-}
+};
 
-export default ModalAgendamentoAdm;
+const mapStateToProps = state => ({
+    mongoClient: state.general.mongoClient,
+});
+
+const mapDispatchToProps = dispatch => ({
+    closeModal: () => dispatch({type: Actions.closeModal})
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalAgendamentoAdm);
+

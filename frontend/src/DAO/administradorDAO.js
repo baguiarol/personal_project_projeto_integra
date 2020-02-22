@@ -14,17 +14,17 @@ const administradorDAO = {
     setDb(db) {
         this.db = db;
     },
-    create(db, adm) {
-        return db.collection(COLLECTION).insertOne(adm);
+    create(adm) {
+        return this.db.collection(COLLECTION).insertOne(adm);
     },
-    update(db, query, changes) {
-        return db.collection(COLLECTION).updateMany(query, {$set: changes})
+    update(query, changes) {
+        return this.db.collection(COLLECTION).updateMany(query, {$set: changes})
     },
-    delete(db, query) {
-        return db.collection(COLLECTION).deleteMany(query);
+    delete(query) {
+        return this.db.collection(COLLECTION).deleteMany(query);
     },
-    findAll(db) {
-        return db.collection(COLLECTION).find({}).toArray();
+    findAll() {
+        return this.db.collection(COLLECTION).find({}).toArray();
     },
     async addUser(client, email, password, clienteData){
         const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);

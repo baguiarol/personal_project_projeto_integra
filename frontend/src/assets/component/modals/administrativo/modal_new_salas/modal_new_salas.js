@@ -6,7 +6,16 @@ import Button from "../../../button/button";
 import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 
-const ModalNewSalas = props => {
+const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
+
+    const [loading, setLoading] = React.useState(false);
+    const [file, setFile] = React.useState(null);
+    const [fileURL, setFileURL] = React.useState('');
+
+    const onSubmit = e => {
+        e.preventDefault();
+    };
+
     return (
         <ModalParent show={show}
                      onSubmit={onSubmit}
@@ -19,24 +28,7 @@ const ModalNewSalas = props => {
                          </div>
                      </header>}
                      body={<div>
-                         <FileInput
-                             onChangeFile={(file, url) => {
-                                 setFile(file);
-                                 setFileURL(url);
-                             }}
-                             urlName={'foto_url'}
-                             fileName={'userfile'} />
-                         <InputText name={'nome'} label={'Nome'}/>
-                         <div className={'flex'}>
-                             <InputText name={'telefone'} label={'Telefone'}/>
-                             <InputText name={'ocupacao'} label={'Ocupação'}/>
-                         </div>
-                         <InputText name={'descricao'} label={'Descrição'}/>
-                         <InputText name={'email'} label={'Email'} placeholder={'E-mail utilizado para Login'}/>
-                         <div className={'flex'}>
-                             <InputText name={'senha'} label={'Senha'}/>
-                             <InputText name={'confirmar_senha'} label={'Confirmar Senha'}/>
-                         </div>
+                         <p>Teste</p>
                      </div>}
                      footer={
                          <div className={'footer'}>

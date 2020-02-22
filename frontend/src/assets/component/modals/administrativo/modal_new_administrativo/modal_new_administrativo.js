@@ -9,6 +9,7 @@ import {connect} from "react-redux";
 import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 import clienteDAO from "../../../../../DAO/clienteDAO";
+import administradorDAO from "../../../../../DAO/administradorDAO";
 
 const ModalNewAdministrativo = ({show, close, mongoClient}) => {
 
@@ -31,13 +32,13 @@ const ModalNewAdministrativo = ({show, close, mongoClient}) => {
         if (checkIfURLIsImage(fileURL)) {
             try {
                 await fileUpload(file);
-                await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                await administradorDAO.addUser(mongoClient, form.email.value, form.senha.value, {
                     nome: form.nome.value,
                     foto_url: fileURL,
                     email: form.email.value,
                 });
                 checkIfURLIsImage(fileURL);
-                alert('Profissional Adicionado com Sucesso!')
+                alert('Administrador adicionado com Sucesso!')
             } catch (err) {
                 alert(err);
             }

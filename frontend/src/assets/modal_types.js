@@ -4,6 +4,8 @@ const ModalTypes = {
     adicionarAdministrador: 'ADD_ADM',
     adicionarProfissional: 'ADD_PROF',
     adicionarAgendamentoAdm: 'ADD_TASK_ADM',
+    adicionarSalas: 'ADD_SALAS',
+    adicionarAgendamento: 'ADD_AGENDAMENTO',
 };
 
 export default ModalTypes;

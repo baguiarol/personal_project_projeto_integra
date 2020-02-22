@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import "./CalendarAgendamentos.sass";
+import {connect} from "react-redux";
+import Actions from "../../../redux/actions/actions";
+import ModalTypes from "../../modal_types";
 
 const fillHoras = () => {
     let array = [];
@@ -39,7 +42,7 @@ const CalendarAgendamentos = props => {
                             { salas.map((sala, index) => {
                                 if (Math.round(Math.random())) {
                                     return (
-                                        <td key={index} className={'free'}>
+                                        <td key={index} className={'free'} onClick={() => props.openModal(ModalTypes.adicionarAgendamentoAdm)}>
                                         <i className={'fa fa-plus'}/>
                                         </td>
                                     )
@@ -63,4 +66,8 @@ CalendarAgendamentos.propTypes = {
     agendamentos: PropTypes.array,
 }
 
-export default CalendarAgendamentos;
+const mapDispatchToProps = dispatch => ({
+    openModal: open => dispatch({type: Actions.showModal, payload: open}),
+});
+
+export default connect(null, mapDispatchToProps)(CalendarAgendamentos);
