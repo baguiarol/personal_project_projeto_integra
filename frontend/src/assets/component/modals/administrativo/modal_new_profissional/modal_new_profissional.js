@@ -10,7 +10,7 @@ import FileInput from "../../../file_input/FileInput";
 import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
-const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
+const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissionais}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -39,6 +39,7 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal}) => {
                     foto_url: fileURL,
                     email: form.email.value,
                 });
+                setProfissionais(await clienteDAO.findAll());
                 checkIfURLIsImage(fileURL);
                 alert('Profissional Adicionado com Sucesso!')
             } catch(err) {
@@ -94,7 +95,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    closeModal: () => dispatch({type: Actions.closeModal})
+    closeModal: () => dispatch({type: Actions.closeModal}),
+    setProfissionais: profs => dispatch({type: Actions.setProfissionais, payload: profs}),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalNewProfissional);

@@ -5,6 +5,7 @@ import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
 import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
+import salaDAO from "../../../../../DAO/salaDAO";
 
 const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
 
@@ -12,8 +13,18 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
     const [file, setFile] = React.useState(null);
     const [fileURL, setFileURL] = React.useState('');
 
-    const onSubmit = e => {
+    const onSubmit = async e => {
         e.preventDefault();
+        const form = e.target;
+        setLoading(true);
+        await salaDAO.create({
+            nome: form.nome.value,
+            descricao: form.descricao.value,
+            valor_hora: form.valor_hora.value,
+        });
+        alert('Sala Adicionada com Sucesso!');
+        setLoading(false);
+        closeModal();
     };
 
     return (
@@ -28,7 +39,9 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <p>Teste</p>
+                         <InputText label={"Nome"} name={'nome'} required/>
+                         <InputText label={"Descrição"} name={'descricao'} required />
+                         <InputText label={'Valor da Hora'} name={'valor_hora'} type={'number'} required />
                      </div>}
                      footer={
                          <div className={'footer'}>

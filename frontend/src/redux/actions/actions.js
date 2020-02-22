@@ -4,6 +4,7 @@ const Actions = {
     setUserLogged: 'SET_USER_LOGGED',
     showModal: 'SHOW_MODAL',
     closeModal: 'CLOSE_MODAL',
+    setProfissionais: 'SET_PROFISSIONAIS',
 }
 
 export default Actions;

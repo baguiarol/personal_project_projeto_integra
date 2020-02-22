@@ -8,16 +8,16 @@ const CardProfissional = props => {
         <div className={'card_profissional'}>
             <img
                 alt={'profissional_pic'}
-                src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
-            <h2>Claudio Correa de Andrade Matias Pinto</h2>
-            <h3>Fisioterapeuta</h3>
+                src={props.profissional.foto_url}/>
+            <h2>{props.profissional.nome}</h2>
+            <h3>{props.profissional.ocupacao}</h3>
             <Button text={'Informações'} />
         </div>
     )
 }
 
 CardProfissional.propTypes = {
-    profissional: PropTypes.object,
+    profissional: PropTypes.object.isRequired,
 };
 
 export default CardProfissional;

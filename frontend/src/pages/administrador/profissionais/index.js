@@ -8,8 +8,18 @@ import {connect} from "react-redux";
 import ModalNewProfissional
     from "../../../assets/component/modals/administrativo/modal_new_profissional/modal_new_profissional";
 import ModalTypes from "../../../assets/modal_types";
+import clienteDAO from "../../../DAO/clienteDAO";
 
 const ProfissionaisPage = props => {
+    
+    React.useEffect(() => {
+        if (clienteDAO.db) {
+            clienteDAO.findAll().then(res => {
+                props.setProfissionais(res);
+            })
+        }
+    });
+    
     return (
         <div>
             <ModalNewProfissional
@@ -18,12 +28,11 @@ const ProfissionaisPage = props => {
                 props.modalType === ModalTypes.adicionarProfissional}/>
             <AdministradorTopbar pageSelected={'profissionais'}/>
             <div className={'profissionais_container'}>
-                <CardProfissional />
-                <CardProfissional />
-                <CardProfissional />
-                <CardProfissional />
-                <CardProfissional />
-                <CardProfissional />
+                {
+                    props.profissionais.map(profissional => (
+                        <CardProfissional profissional={profissional}/>
+                    ))
+                }
             </div>
             <Fab onClick={() => { props.openModal(ModalTypes.adicionarProfissional)}} />
         </div>
@@ -33,10 +42,12 @@ const ProfissionaisPage = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    profissionais: state.profissionais.profissionais,
 })
 
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
+    setProfissionais: profs => dispatch({type: Actions.setProfissionais, payload: profs}),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionaisPage);
