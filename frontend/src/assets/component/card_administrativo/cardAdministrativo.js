@@ -1,17 +1,22 @@
 import React from 'react';
 import Button from "../button/button";
 import "./styles.sass";
+import PropTypes from 'prop-types';
 
 const CardAdministrativo = props => {
     return (
         <div className={'card_administrativo'}>
             <img
                 alt={'administrativo_pic'}
-                src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
-            <h2>Claudio Correa de Andrade Matias Pinto</h2>
+                src={props.administrador.foto_url}/>
+            <h2>{props.administrador.nome}</h2>
             <Button text={'Informações'} />
         </div>
     )
 }
+
+CardAdministrativo.propTypes = {
+    administrador: PropTypes.object.isRequired,
+};
 
 export default CardAdministrativo;

@@ -1,5 +1,4 @@
 import Actions from "../actions/actions";
-import clienteDAO from "../../DAO/clienteDAO";
 
 const initialState = {
     profissionais: [],

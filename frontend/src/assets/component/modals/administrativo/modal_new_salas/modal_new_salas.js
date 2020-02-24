@@ -6,6 +6,8 @@ import Button from "../../../button/button";
 import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import salaDAO from "../../../../../DAO/salaDAO";
+import {post} from "axios";
+import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
 const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
 
@@ -13,17 +15,34 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
     const [file, setFile] = React.useState(null);
     const [fileURL, setFileURL] = React.useState('');
 
+    const fileUpload = async (file) => {
+        const url = 'https://teste.integracps.com.br/imageUpload.php';
+        const formData = new FormData();
+        formData.append('userfile', file);
+        const config = {headers: {'content-type': 'multipart/form-data'}};
+        return post(url, formData, config);
+    }
+
     const onSubmit = async e => {
         e.preventDefault();
         const form = e.target;
         setLoading(true);
-        await salaDAO.create({
-            nome: form.nome.value,
-            descricao: form.descricao.value,
-            valor_hora: form.valor_hora.value,
-        });
-        alert('Sala Adicionada com Sucesso!');
-        setLoading(false);
+        if (checkIfURLIsImage(fileURL)) {
+            try {
+                await fileUpload(file);
+                await salaDAO.create({
+                    nome: form.nome.value,
+                    descricao: form.descricao.value,
+                    valor_hora: form.valor_hora.value,
+                    fotos: [fileURL],
+                });
+                alert('Administrador adicionado com Sucesso!')
+                closeModal();
+            } catch (err) {
+                alert(err);
+            }
+            setLoading(false);
+        }
         closeModal();
     };
 
@@ -39,6 +58,10 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
                          </div>
                      </header>}
                      body={<div>
+                         <FileInput onChangeFile={(file, url) => {
+                             setFile(file);
+                             setFileURL(url);
+                         }} fileName={'userfile'} urlName={'file_url'} />
                          <InputText label={"Nome"} name={'nome'} required/>
                          <InputText label={"Descrição"} name={'descricao'} required />
                          <InputText label={'Valor da Hora'} name={'valor_hora'} type={'number'} required />

@@ -8,8 +8,19 @@ import ModalNewSalas from "../../../assets/component/modals/administrativo/modal
 import ModalTypes from "../../../assets/modal_types";
 import Actions from "../../../redux/actions/actions";
 import {connect} from "react-redux";
+import salaDAO from "../../../DAO/salaDAO";
 
 const SalasPage = props => {
+
+    React.useEffect(() => {
+        if (salaDAO.db) {
+            salaDAO.findAll().then(res => {
+                props.setSalas(res);
+            })
+        }
+    });
+
+
     return (
         <div>
             <AdministradorTopbar pageSelected={'salas'}/>
@@ -29,9 +40,11 @@ const SalasPage = props => {
                     </div>
                 </div>
                 <div className={'salas'}>
-                    <CardSala />
-                    <CardSala />
-                    <CardSala />
+                    {
+                        props.salas.map((sala, index) => (
+                            <CardSala sala={sala} key={index}/>
+                        ))
+                    }
                 </div>
             </div>
             <Fab onClick={() => props.openModal(ModalTypes.adicionarSalas)}/>
@@ -42,11 +55,13 @@ const SalasPage = props => {
 const mapStateToProps = state => ({
    showModal: state.general.showModal,
     modalType: state.general.modalType,
+    salas: state.salas.salas,
 });
 
 const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
-    closeModal: () => dispatch({type: Actions.closeModal})
+    closeModal: () => dispatch({type: Actions.closeModal}),
+    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SalasPage);

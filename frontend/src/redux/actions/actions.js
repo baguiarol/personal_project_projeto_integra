@@ -5,6 +5,8 @@ const Actions = {
     showModal: 'SHOW_MODAL',
     closeModal: 'CLOSE_MODAL',
     setProfissionais: 'SET_PROFISSIONAIS',
+    setAdministrativo: 'SET_ADMS',
+    setSalas: 'SET_SALAS',
 }
 
 export default Actions;

@@ -8,10 +8,9 @@ import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
-import clienteDAO from "../../../../../DAO/clienteDAO";
 import administradorDAO from "../../../../../DAO/administradorDAO";
 
-const ModalNewAdministrativo = ({show, close, mongoClient}) => {
+const ModalNewAdministrativo = ({show, close, mongoClient, closeModal}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -39,6 +38,7 @@ const ModalNewAdministrativo = ({show, close, mongoClient}) => {
                 });
                 checkIfURLIsImage(fileURL);
                 alert('Administrador adicionado com Sucesso!')
+                closeModal();
             } catch (err) {
                 alert(err);
             }
