@@ -1,17 +1,21 @@
-const COLLECTION = 'sala'
+const COLLECTION = 'salas'
 
 const salaDAO = {
-    create(db,sala){
-        return db.collection(COLLECTION).insertOne(sala);
+    db: null,
+    setDb(db) {
+        this.db = db;
     },
-    update(db, query, changes) {
-        return db.collection(COLLECTION).updateMany(query, {$set: changes})
+    create(sala){
+        return this.db.collection(COLLECTION).insertOne(sala);
     },
-    delete(db, query) {
-        return db.collection(COLLECTION).deleteMany(query);
+    update(query, changes) {
+        return this.db.collection(COLLECTION).updateMany(query, {$set: changes})
     },
-    findAll(db) {
-        return db.collection(COLLECTION).find({}).toArray();
+    delete(query) {
+        return this.db.collection(COLLECTION).deleteMany(query);
+    },
+    findAll() {
+        return this.db.collection(COLLECTION).find({}).toArray();
     }
 };
 export default salaDAO;

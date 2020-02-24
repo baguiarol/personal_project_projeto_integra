@@ -4,13 +4,29 @@ import "./styles.sass";
 import Button from "../../../button/button";
 import Select from 'react-select';
 import ModalParent from "../../modal_parent/modal";
+import Actions from "../../../../../redux/actions/actions";
+import {connect} from "react-redux";
 
-const selectOptions = [
-    {label: '08:00', value: 8},
-    {label: '09:00', value: 9},
-]
+const selectOptions = () => {
+    let array = [];
+    for (let i = 8; i < 20; i++) {
+        array.push({label: i+':00', value: i});
+    }
+    return array;
+}
 
-const ModalAgendamento = ({show, close}) => {
+const ModalAgendamentoAdm = ({show, close, profissionais}) => {
+
+    const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
+
+    React.useEffect(() => {
+        let array = [];
+        profissionais.forEach(prof => {
+            array.push({label: prof.nome, value: prof})
+        });
+        setProfissionaisOptions(array);
+    }, [profissionais]);
+
     return (
         <ModalParent show={show}
                      header={<header>
@@ -28,14 +44,20 @@ const ModalAgendamento = ({show, close}) => {
                              <div className={'option'}><p>Turno</p></div>
                              <div className={'option'}><p>Mensal</p></div>
                          </div>
+                         <div className={'select_profissionais_container'}>
+                             <Select
+                                 style={{marginLeft: '5%', marginRight: '5%'}}
+                                 placeholder={'Profissional'}
+                                 options={profissionaisOptions}/>
+                         </div>
                          <div className={'horas_intervalo'}>
                              <div>
                                  <h2>Hora Inicial</h2>
-                                 <Select options={selectOptions}/>
+                                 <Select classNamePrefix={'Select'} options={selectOptions()}/>
                              </div>
                              <div>
                                  <h2>Hora Final</h2>
-                                 <Select options={selectOptions}/>
+                                 <Select classNamePrefix={'Select'} options={selectOptions()}/>
                              </div>
                          </div>
                          <div className={'resume_container'}>
@@ -56,9 +78,19 @@ const ModalAgendamento = ({show, close}) => {
     )
 };
 
-ModalAgendamento.propTypes = {
+ModalAgendamentoAdm.propTypes = {
     show: PropTypes.bool.isRequired,
     close: PropTypes.func
-}
+};
 
-export default ModalAgendamentoAdm;
+const mapStateToProps = state => ({
+    mongoClient: state.general.mongoClient,
+    profissionais: state.profissionais.profissionais,
+});
+
+const mapDispatchToProps = dispatch => ({
+    closeModal: () => dispatch({type: Actions.closeModal}),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalAgendamentoAdm);
+

@@ -16,11 +16,15 @@ import ProfissionaisPage from "./pages/administrador/profissionais";
 import AdministrativoPage from "./pages/administrador/administrativo";
 import SalasPage from "./pages/administrador/salas";
 import clienteDAO from "./DAO/clienteDAO";
+import administradorDAO from "./DAO/administradorDAO";
+import salaDAO from "./DAO/salaDAO";
 
 function App() {
 
     const setDatabaseIntoDAOs = (db) => {
         clienteDAO.setDb(db);
+        administradorDAO.setDb(db);
+        salaDAO.setDb(db);
     }
 
     React.useEffect(() => {

@@ -24,7 +24,7 @@ const clienteDAO = {
         return client.auth.loginWithCredential(new UserPasswordCredential(email, password));
     },
     findAll(){
-        return this.db.collection(COLLECTION).find({}).toArray();
+        return this.db.collection(COLLECTION).find({}, {sort: {'nome': 1}}).toArray();
     }
 };
 export default clienteDAO;

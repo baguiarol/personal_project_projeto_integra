@@ -8,8 +8,18 @@ import ModalTypes from "../../../assets/modal_types";
 import ModalNewAdministrativo
     from "../../../assets/component/modals/administrativo/modal_new_administrativo/modal_new_administrativo";
 import {connect} from "react-redux";
+import administradorDAO from "../../../DAO/administradorDAO";
 
 const AdministrativoPage = props => {
+
+    React.useEffect(() => {
+        if (administradorDAO.db) {
+            administradorDAO.findAll().then(adms => {
+                props.setAdministrativo(adms);
+            });
+        }
+    });
+
     return (
         <div>
             <ModalNewAdministrativo
@@ -19,10 +29,11 @@ const AdministrativoPage = props => {
             />
             <AdministradorTopbar pageSelected={'administrativo'}/>
             <div className={'container_adms'}>
-                <CardAdministrativo/>
-                <CardAdministrativo/>
-                <CardAdministrativo/>
-                <CardAdministrativo/>
+                {
+                    props.administradores.map((adm, index) => (
+                        <CardAdministrativo key={index}  administrador={adm} />
+                    ))
+                }
             </div>
             <Fab onClick={() => {
                 props.openModal(ModalTypes.adicionarAdministrador);
@@ -34,11 +45,13 @@ const AdministrativoPage = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    administradores: state.administradores.administradores,
 });
 
 const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
     closeModal: () => dispatch({type: Actions.closeModal}),
+    setAdministrativo: adms => dispatch({type: Actions.setAdministrativo, payload: adms})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdministrativoPage);
