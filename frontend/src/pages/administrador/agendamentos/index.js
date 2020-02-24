@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import ModalAgendamentoAdm
     from "../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm";
 import clienteDAO from "../../../DAO/clienteDAO";
+import salaDAO from "../../../DAO/salaDAO";
 
 const AgendamentosAdministrador = props => {
 
@@ -15,7 +16,10 @@ const AgendamentosAdministrador = props => {
         if (clienteDAO.db) {
             clienteDAO.findAll().then(res => {
                 props.setProfissionais(res);
-            })
+            });
+            salaDAO.findAll().then(res => {
+                props.setSalas(res);
+            });
         }
     });
 
@@ -43,6 +47,7 @@ const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
     closeModal: () => dispatch({type: Actions.closeModal}),
     setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
+    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgendamentosAdministrador);

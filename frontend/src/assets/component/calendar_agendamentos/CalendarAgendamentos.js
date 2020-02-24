@@ -30,7 +30,7 @@ const CalendarAgendamentos = props => {
                     <tr>
                         <td></td>
                         {
-                            salas.map((sala, index) => <td key={index}>{sala}</td>)
+                            props.salas.map((sala, index) => <td key={index}>{sala.nome}</td>)
                         }
                     </tr>
                 </thead>
@@ -39,8 +39,8 @@ const CalendarAgendamentos = props => {
                     horas.map((hora, index) => (
                         <tr key={index}>
                             <td>{hora}</td>
-                            { salas.map((sala, index) => {
-                                if (Math.round(Math.random())) {
+                            { props.salas.map((sala, index) => {
+                                if (true) {
                                     return (
                                         <td key={index} className={'free'} onClick={() => props.openModal(ModalTypes.adicionarAgendamentoAdm)}>
                                         <i className={'fa fa-plus'}/>
@@ -66,8 +66,12 @@ CalendarAgendamentos.propTypes = {
     agendamentos: PropTypes.array,
 }
 
+const mapStateToProps = state => ({
+    salas: state.salas.salas,
+});
+
 const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
 });
 
-export default connect(null, mapDispatchToProps)(CalendarAgendamentos);
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarAgendamentos);
