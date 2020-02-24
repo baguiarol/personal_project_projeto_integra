@@ -7,8 +7,18 @@ import Actions from "../../../redux/actions/actions";
 import {connect} from "react-redux";
 import ModalAgendamentoAdm
     from "../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm";
+import clienteDAO from "../../../DAO/clienteDAO";
 
 const AgendamentosAdministrador = props => {
+
+    React.useEffect(() => {
+        if (clienteDAO.db) {
+            clienteDAO.findAll().then(res => {
+                props.setProfissionais(res);
+            })
+        }
+    });
+
     return (
         <div>
             <AdministradorTopbar pageSelected={'agendamento_adm'} />
@@ -32,6 +42,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
     closeModal: () => dispatch({type: Actions.closeModal}),
+    setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgendamentosAdministrador);
