@@ -15,6 +15,7 @@ const HoraAvulsa = ({profissionais}) => {
 
     const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
     const [horasFinais, setHorasFinais] = React.useState(selectOptions(8));
+    let selectedOption = null;
 
     React.useEffect(() => {
         let array = [];
@@ -28,6 +29,7 @@ const HoraAvulsa = ({profissionais}) => {
         <div>
             <div className={'select_profissionais_container'}>
                 <Select
+                    name={'profissional'}
                     style={{marginLeft: '5%', marginRight: '5%'}}
                     placeholder={'Profissional'}
                     options={profissionaisOptions}/>
@@ -36,6 +38,7 @@ const HoraAvulsa = ({profissionais}) => {
                 <div>
                     <h2>Hora Inicial</h2>
                     <Select
+                        name={'hora_inicio'}
                         onChange={e => {
                             setHorasFinais(selectOptions(e.value + 1, true));
                         }}
@@ -44,7 +47,9 @@ const HoraAvulsa = ({profissionais}) => {
                 </div>
                 <div>
                     <h2>Hora Final</h2>
-                    <Select classNamePrefix={'Select'} options={horasFinais}/>
+                    <Select
+                        name={'hora_fim'}
+                        classNamePrefix={'Select'} options={horasFinais}/>
                 </div>
             </div>
             <div className={'resume_container'}>

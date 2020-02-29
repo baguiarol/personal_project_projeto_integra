@@ -13,8 +13,20 @@ import Options from "./tipos/options";
 
 const ModalAgendamentoAdm = ({show, close}) => {
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        const form = e.target;
+        const profissional = e.target.value;
+        alert(JSON.stringify({
+            profissional_id: profissional,
+            hora_inicio: form.hora_inicio.value,
+            hora_fim: form.hora_fim.value,
+        }));
+    }
+
     return (
         <ModalParent show={show}
+                     onSubmit={handleSubmit}
                      header={<header>
                          <div>
                              <h1>Adicionar Reserva</h1>
