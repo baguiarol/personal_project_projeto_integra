@@ -7,10 +7,11 @@ import ModalParent from "../../modal_parent/modal";
 import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import HoraAvulsa from "./tipos/hora_avulsa";
+import Options from "./tipos/options";
 
 
 
-const ModalAgendamentoAdm = ({show, close, profissionais}) => {
+const ModalAgendamentoAdm = ({show, close}) => {
 
     return (
         <ModalParent show={show}
@@ -24,12 +25,7 @@ const ModalAgendamentoAdm = ({show, close, profissionais}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <div className={'options'}>
-                             <div className={'option selected'}><p>Hora Avulsa</p></div>
-                             <div className={'option'}><p>Turno</p></div>
-                             <div className={'option'}><p>Mensal</p></div>
-                         </div>
-                         <HoraAvulsa />
+                         <Options />
                      </div>}
                      footer={
                          <div className={'footer'}>
@@ -45,12 +41,11 @@ ModalAgendamentoAdm.propTypes = {
 
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
-    profissionais: state.profissionais.profissionais,
 });
 
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalAgendamentoAdm);
 

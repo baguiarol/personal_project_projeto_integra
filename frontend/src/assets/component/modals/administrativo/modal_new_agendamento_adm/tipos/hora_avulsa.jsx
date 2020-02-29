@@ -3,15 +3,15 @@ import Select from "react-select";
 import Actions from "../../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 
-const HoraAvulsa = ({profissionais}) => {
-
-    const selectOptions = (horaInicial, isHoraFinal = false) => {
-        let array = [];
-        for (let i = horaInicial; i < (isHoraFinal ? 21 : 20); i++) {
-            array.push({label: i+':00', value: i});
-        }
-        return array;
+const selectOptions = (horaInicial, isHoraFinal = false) => {
+    let array = [];
+    for (let i = horaInicial; i < (isHoraFinal ? 21 : 20); i++) {
+        array.push({label: i+':00', value: i});
     }
+    return array;
+};
+
+const HoraAvulsa = ({profissionais}) => {
 
     const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
     const [horasFinais, setHorasFinais] = React.useState(selectOptions(8));
