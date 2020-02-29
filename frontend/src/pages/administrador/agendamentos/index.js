@@ -6,7 +6,7 @@ import ModalTypes from "../../../assets/modal_types";
 import Actions from "../../../redux/actions/actions";
 import {connect} from "react-redux";
 import ModalAgendamentoAdm
-    from "../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm";
+    from "../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm.jsx";
 import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 

@@ -7,9 +7,9 @@ import ModalParent from "../../modal_parent/modal";
 import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 
-const selectOptions = () => {
+const selectOptions = (horaInicial, isHoraFinal = false) => {
     let array = [];
-    for (let i = 8; i < 20; i++) {
+    for (let i = horaInicial; i < (isHoraFinal ? 21 : 20); i++) {
         array.push({label: i+':00', value: i});
     }
     return array;
@@ -18,6 +18,7 @@ const selectOptions = () => {
 const ModalAgendamentoAdm = ({show, close, profissionais}) => {
 
     const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
+    const [horasFinais, setHorasFinais] = React.useState(selectOptions(8));
 
     React.useEffect(() => {
         let array = [];
@@ -53,11 +54,16 @@ const ModalAgendamentoAdm = ({show, close, profissionais}) => {
                          <div className={'horas_intervalo'}>
                              <div>
                                  <h2>Hora Inicial</h2>
-                                 <Select classNamePrefix={'Select'} options={selectOptions()}/>
+                                 <Select
+                                     onChange={e => {
+                                         setHorasFinais(selectOptions(e.value + 1, true));
+                                     }}
+                                     classNamePrefix={'Select'}
+                                     options={selectOptions(8)}/>
                              </div>
                              <div>
                                  <h2>Hora Final</h2>
-                                 <Select classNamePrefix={'Select'} options={selectOptions()}/>
+                                 <Select classNamePrefix={'Select'} options={horasFinais}/>
                              </div>
                          </div>
                          <div className={'resume_container'}>
