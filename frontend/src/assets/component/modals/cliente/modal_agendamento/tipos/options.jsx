@@ -1,5 +1,7 @@
 import React from 'react';
 import HoraAvulsaCliente from "./horaAvulsa";
+import TurnoCliente from "./turno";
+import MensalCliente from "./mensal";
 
 const Options = () => {
 
@@ -8,6 +10,10 @@ const Options = () => {
         switch (page) {
             case 'Hora Avulsa':
                 return (<HoraAvulsaCliente />);
+            case 'Turno':
+                return (<TurnoCliente />);
+            case 'Mensal':
+                return (<MensalCliente />);
             default:
                 return (<></>);
         }
