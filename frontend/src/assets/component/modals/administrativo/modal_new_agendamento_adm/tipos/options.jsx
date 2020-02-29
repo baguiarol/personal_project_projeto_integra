@@ -1,6 +1,7 @@
 import React from 'react';
 import HoraAvulsa from "./hora_avulsa";
 import Turno from "./turno";
+import Mensal from "./mensal";
 
 const Options = () => {
 
@@ -12,7 +13,7 @@ const Options = () => {
             case 'Turno':
                 return (<Turno/>);
             case 'Mensal':
-                return (<></>);
+                return (<Mensal />);
             default:
                 return (<></>);
         }
