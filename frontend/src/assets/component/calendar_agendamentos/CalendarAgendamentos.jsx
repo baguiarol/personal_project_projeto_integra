@@ -44,8 +44,12 @@ const CalendarAgendamentos = props => {
                             { props.salas.map((sala, index) => {
                                 let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
                                 let isOccupied = false;
+                                let agnd = null;
                                 agendamentosDaSala.forEach(agendamento => {
-                                    isOccupied = numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim);
+                                    if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)) {
+                                        isOccupied = true;
+                                        agnd = agendamento;
+;                                    }
                                 });
                                 console.log(isOccupied);
                                 if (!isOccupied) {
@@ -54,12 +58,12 @@ const CalendarAgendamentos = props => {
                                             props.openModal(ModalTypes.adicionarAgendamentoAdm);
                                             props.selectSala(sala);
                                         }}>
-                                        <i className={'fa fa-plus'}/>
+                                            <i className={'fa fa-plus'}/>
                                         </td>
                                     )
                                 } else {
                                     return (<td key={index} className={'occupied'}>
-                                        Igor Nogueira
+                                        {agnd ? agnd.profissional.nome: ''}
                                     </td>)
                                 }
                             })}

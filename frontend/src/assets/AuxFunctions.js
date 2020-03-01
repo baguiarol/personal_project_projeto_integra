@@ -29,7 +29,7 @@ const transformReaisToFloat = string => {
 };
 
 const numberIsBetween = (number, start, end) => {
-    return (number >= start) && (number <= end);
+    return (number >= start) && (number < end);
 }
 
 export {checkIfURLIsImage, transformStringToReais, transformReaisToFloat, numberIsBetween};
