@@ -33,7 +33,7 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
                 await salaDAO.create({
                     nome: form.nome.value,
                     descricao: form.descricao.value,
-                    valor_hora: form.valor_hora.value,
+                    valor_hora: Number(form.valor_hora.value),
                     fotos: [fileURL],
                 });
                 alert('Administrador adicionado com Sucesso!')

@@ -2,6 +2,7 @@ import React from 'react';
 import Select from "react-select";
 import Actions from "../../../../../../redux/actions/actions";
 import {connect} from "react-redux";
+import {transformStringToReais} from "../../../../../AuxFunctions";
 
 const selectOptions = (horaInicial, isHoraFinal = false) => {
     let array = [];
@@ -11,9 +12,11 @@ const selectOptions = (horaInicial, isHoraFinal = false) => {
     return array;
 };
 
-const HoraAvulsa = ({profissionais}) => {
+const HoraAvulsa = ({profissionais, selectProf, salaSelected}) => {
 
     const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
+    const [horaInicial, setHoraInicial] = React.useState(0);
+    const [horaFinal, setHoraFinal] = React.useState(0);
     const [horasFinais, setHorasFinais] = React.useState(selectOptions(8));
     let selectedOption = null;
 
@@ -30,6 +33,7 @@ const HoraAvulsa = ({profissionais}) => {
             <div className={'select_profissionais_container'}>
                 <Select
                     name={'profissional'}
+                    onChange={e => { selectProf(e.value) }}
                     style={{marginLeft: '5%', marginRight: '5%'}}
                     placeholder={'Profissional'}
                     options={profissionaisOptions}/>
@@ -41,6 +45,7 @@ const HoraAvulsa = ({profissionais}) => {
                         name={'hora_inicio'}
                         onChange={e => {
                             setHorasFinais(selectOptions(e.value + 1, true));
+                            setHoraInicial(e.value);
                         }}
                         classNamePrefix={'Select'}
                         options={selectOptions(8)}/>
@@ -48,6 +53,7 @@ const HoraAvulsa = ({profissionais}) => {
                 <div>
                     <h2>Hora Final</h2>
                     <Select
+                        onChange={e => setHoraFinal(e.value)}
                         name={'hora_fim'}
                         classNamePrefix={'Select'} options={horasFinais}/>
                 </div>
@@ -55,11 +61,11 @@ const HoraAvulsa = ({profissionais}) => {
             <div className={'resume_container'}>
                 <div>
                     <h2>Valor/Hora</h2>
-                    <h3>R$39,90</h3>
+                    <h3>{transformStringToReais(salaSelected.valor_hora)}</h3>
                 </div>
                 <div>
                     <h2>Valor Total:</h2>
-                    <h3>R$139,90</h3>
+                    <h3>{transformStringToReais(salaSelected.valor_hora * (horaFinal - horaInicial))}</h3>
                 </div>
             </div>
         </div>
@@ -69,6 +75,7 @@ const HoraAvulsa = ({profissionais}) => {
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
     profissionais: state.profissionais.profissionais,
+    salaSelected: state.agendamentos.salaSelected,
 });
 
 const mapDispatchToProps = dispatch => ({

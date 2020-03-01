@@ -8,20 +8,33 @@ import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import HoraAvulsa from "./tipos/hora_avulsa";
 import Options from "./tipos/options";
+import moment from 'moment';
+import reservaDAO from "../../../../../DAO/reservaDAO";
 
+const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected}) => {
 
+    const [selectedProfissional, selectProf] = React.useState({});
+    const [loading, setLoading] = React.useState(false);
 
-const ModalAgendamentoAdm = ({show, close}) => {
-
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
         const form = e.target;
-        const profissional = e.target.value;
-        alert(JSON.stringify({
-            profissional_id: profissional,
-            hora_inicio: form.hora_inicio.value,
-            hora_fim: form.hora_fim.value,
-        }));
+        const profissional = selectedProfissional;
+        setLoading(true);
+        await reservaDAO.create({
+            profissional_id: profissional._id,
+            hora_inicio: Number(form.hora_inicio.value),
+            hora_fim: Number(form.hora_fim.value),
+            sala_id: salaSelected._id,
+            data: dateSelected,
+            valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
+            cancelado: false,
+            pago: false,
+            executado: false,
+
+        });
+        setLoading(false);
+        alert('Adicionado com sucesso!');
     }
 
     return (
@@ -37,11 +50,11 @@ const ModalAgendamentoAdm = ({show, close}) => {
                          </div>
                      </header>}
                      body={<div>
-                         <Options />
+                         <Options selectProf={selectProf}/>
                      </div>}
                      footer={
                          <div className={'footer'}>
-                             <Button text={'Confirmar'}/>
+                             <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                          </div>}/>
     )
 };
@@ -53,6 +66,8 @@ ModalAgendamentoAdm.propTypes = {
 
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
+    dateSelected: state.general.dateSelected,
+    salaSelected: state.agendamentos.salaSelected,
 });
 
 const mapDispatchToProps = dispatch => ({

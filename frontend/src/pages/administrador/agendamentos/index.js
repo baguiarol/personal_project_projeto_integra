@@ -9,6 +9,7 @@ import ModalAgendamentoAdm
     from "../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm.jsx";
 import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
+import reservaDAO from "../../../DAO/reservaDAO";
 
 const AgendamentosAdministrador = props => {
 
@@ -19,6 +20,10 @@ const AgendamentosAdministrador = props => {
             });
             salaDAO.findAll().then(res => {
                 props.setSalas(res);
+            });
+            reservaDAO.findAll(props.client).then(res => {
+                props.setAgendamentos(res);
+                console.log(res);
             });
         }
     });
@@ -41,6 +46,7 @@ const AgendamentosAdministrador = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    client: state.general.mongoClient,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -48,6 +54,7 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
+    setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgendamentosAdministrador);

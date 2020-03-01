@@ -4,11 +4,13 @@ import "./CalendarAgendamentos.sass";
 import {connect} from "react-redux";
 import Actions from "../../../redux/actions/actions";
 import ModalTypes from "../../modal_types";
+import {numberIsBetween} from "../../AuxFunctions";
+import reservaDAO from "../../../DAO/reservaDAO";
 
 const fillHoras = () => {
     let array = [];
     for (let i = 0; i < 13; i++)
-        array.push(i + 8 + ':00');
+        array.push({label: i + 8 + ':00', value: i + 8});
     return array;
 }
 
@@ -38,11 +40,20 @@ const CalendarAgendamentos = props => {
                 {
                     horas.map((hora, index) => (
                         <tr key={index}>
-                            <td>{hora}</td>
+                            <td>{hora.label}</td>
                             { props.salas.map((sala, index) => {
-                                if (true) {
+                                let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
+                                let isOccupied = false;
+                                agendamentosDaSala.forEach(agendamento => {
+                                    isOccupied = numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim);
+                                });
+                                console.log(isOccupied);
+                                if (!isOccupied) {
                                     return (
-                                        <td key={index} className={'free'} onClick={() => props.openModal(ModalTypes.adicionarAgendamentoAdm)}>
+                                        <td key={index} className={'free'} onClick={() => {
+                                            props.openModal(ModalTypes.adicionarAgendamentoAdm);
+                                            props.selectSala(sala);
+                                        }}>
                                         <i className={'fa fa-plus'}/>
                                         </td>
                                     )
@@ -68,10 +79,12 @@ CalendarAgendamentos.propTypes = {
 
 const mapStateToProps = state => ({
     salas: state.salas.salas,
+    agendamentos: state.agendamentos.agendamentos,
 });
 
 const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
+    selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarAgendamentos);

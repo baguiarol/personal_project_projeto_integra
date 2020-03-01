@@ -4,12 +4,14 @@ import ProfissionaisReducer from "./reducers/profissionais_reducer";
 import thunk from "redux-thunk";
 import AdministradoresReducer from "./reducers/administradores_reducer";
 import SalasReducer from "./reducers/salas_reducer";
+import AgendamentosReducer from "./reducers/agendamentos_reducer";
 
 const Store = createStore(combineReducers({
     general: GeneralReducer,
     profissionais: ProfissionaisReducer,
     administradores: AdministradoresReducer,
     salas: SalasReducer,
+    agendamentos: AgendamentosReducer,
 }, applyMiddleware(thunk)));
 
 export default Store;

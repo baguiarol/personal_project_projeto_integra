@@ -32,8 +32,17 @@ const reservaDAO = {
     findReservaDeCliente(id_cliente){
         return this.db.collection(COLLECTION).find({ id_cliente }).toArray();
     },
-    findAll() {
-        return this.db.collection(COLLECTION).find({}).toArray();
+    findAll(client) {
+        return client.callFunction('getAgendamentos');
+    },
+    getAgendamentosFromSala(agendamentos, sala) {
+        let array = [];
+        agendamentos.forEach(agendamento => {
+            if (sala.nome === agendamento.sala.nome) {
+                array.push(agendamento);
+            }
+        });
+        return array;
     }
 };
 export default reservaDAO;

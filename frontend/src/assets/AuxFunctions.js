@@ -7,6 +7,29 @@ const checkIfURLIsImage = url => {
     } else {
         return false;
     }
+};
+
+const transformStringToReais = string => {
+    if (typeof string == 'number') {
+        string = string.toFixed(2);
+    }
+    string = 'R$ ' + string;
+    if (string.includes('.') || string.includes(',')) {
+        string = string.replace('.', ',');
+    } else {
+        string = string + ',00';
+    }
+    return string;
+};
+
+const transformReaisToFloat = string => {
+    string = string.replace(',', '.');
+    string = string.replace('R$ ', '');
+    return Number(string);
+};
+
+const numberIsBetween = (number, start, end) => {
+    return (number >= start) && (number <= end);
 }
 
-export {checkIfURLIsImage};
+export {checkIfURLIsImage, transformStringToReais, transformReaisToFloat, numberIsBetween};

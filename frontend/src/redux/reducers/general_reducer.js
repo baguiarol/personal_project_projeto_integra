@@ -6,6 +6,7 @@ const initialState = {
     modalType: '',
     userLogged: null,
     showModal: false,
+    dateSelected: new Date(),
 };
 
 const GeneralReducer = (state = initialState, action) => {
@@ -20,6 +21,8 @@ const GeneralReducer = (state = initialState, action) => {
             return {...state, showModal: true, modalType: action.payload};
         case Actions.closeModal:
             return {...state, showModal: false};
+        case Actions.selectDate:
+            return {...state, dateSelected: action.payload};
         default:
             return state;
     }

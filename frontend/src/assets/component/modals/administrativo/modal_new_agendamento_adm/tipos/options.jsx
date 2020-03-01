@@ -3,13 +3,13 @@ import HoraAvulsa from "./hora_avulsa";
 import Turno from "./turno";
 import Mensal from "./mensal";
 
-const Options = () => {
+const Options = props => {
 
     const [selectedPage, selectPage] = React.useState('Hora Avulsa');
     const renderPage = page => {
         switch (page) {
             case 'Hora Avulsa':
-                return (<HoraAvulsa/>);
+                return (<HoraAvulsa selectProf={props.selectProf}/>);
             case 'Turno':
                 return (<Turno/>);
             case 'Mensal':
