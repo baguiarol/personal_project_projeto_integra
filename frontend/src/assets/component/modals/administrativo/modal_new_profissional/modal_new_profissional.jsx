@@ -10,7 +10,15 @@ import FileInput from "../../../file_input/FileInput";
 import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
-const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissionais, profissionalSelected}) => {
+const ModalNewProfissional = ({
+                                  show,
+                                  close,
+                                  mongoClient,
+                                  closeModal,
+                                  setProfissionais,
+                                  profissionalSelected,
+                                  selectProfissional
+    }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -46,6 +54,7 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissi
             } catch(err) {
                 alert(err);
             }
+            selectProfissional();
             closeModal();
         } else {
             alert('Informe uma imagem válida acima');
@@ -62,6 +71,7 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissi
                          </div>
                          <div className={'close_container'} onClick={() => {
                              close();
+                             selectProfissional();
                              setEditing(false);
                          }}>
                              <i className={'fa fa-times'}/>
@@ -127,6 +137,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     setProfissionais: profs => dispatch({type: Actions.setProfissionais, payload: profs}),
+    selectProfissional: () => dispatch({type: Actions.selectProfissional, payload: {}}),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalNewProfissional);
