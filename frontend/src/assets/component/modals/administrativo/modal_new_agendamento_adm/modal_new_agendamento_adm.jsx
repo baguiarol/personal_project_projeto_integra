@@ -26,7 +26,7 @@ const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected}) => {
             hora_inicio: Number(form.hora_inicio.value),
             hora_fim: Number(form.hora_fim.value),
             sala_id: salaSelected._id,
-            data: dateSelected,
+            data: dateSelected.toDate(),
             valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
             cancelado: false,
             pago: false,
@@ -35,6 +35,7 @@ const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected}) => {
         });
         setLoading(false);
         alert('Adicionado com sucesso!');
+        close();
     }
 
     return (

@@ -6,7 +6,7 @@ import Actions from "../../../redux/actions/actions";
 import ModalTypes from "../../modal_types";
 import {numberIsBetween} from "../../AuxFunctions";
 import reservaDAO from "../../../DAO/reservaDAO";
-import moment from "moment";
+import moment from "moment/min/moment-with-locales";
 
 const fillHoras = () => {
     let array = [];
@@ -22,9 +22,21 @@ const CalendarAgendamentos = props => {
     return (
         <div className={'calendar_agendamentos_container'}>
             <h1>
-                <span style={{float: 'left', margin: 'auto'}}><i className={'fa fa-chevron-left'}/> </span>
-                17 de Fevereiro de 2020
-                <span style={{float: 'right', margin: 'auto'}}><i className={'fa fa-chevron-right'}/> </span>
+                <span
+                    onClick={() => {
+                        props.selectDate(moment(props.dateSelected).subtract(1, 'day'))
+                    }}
+                    className={'chevron_date'}
+                    style={{float: 'left'}}>
+                    <i className={'fa fa-chevron-left'}/>
+                </span>
+                {moment(props.dateSelected).locale('pt-BR').format(' DD MMMM YYYY')}
+                <span
+                    onClick={() => {props.selectDate(moment(props.dateSelected).add(1, 'day'))}}
+                    className={'chevron_date'}
+                    style={{float: 'right'}}>
+                    <i className={'fa fa-chevron-right'}/>
+                </span>
             </h1>
             <div className={'container_table'}>
             <table className={'calendar_table'}>
@@ -89,6 +101,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
     selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
 });

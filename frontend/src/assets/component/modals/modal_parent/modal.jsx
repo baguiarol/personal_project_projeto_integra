@@ -7,18 +7,20 @@ const ModalParent = props => {
     const form = React.useRef();
 
     React.useEffect(() => {
-        setTimeout(() => {
-            console.log(form.current.reset());
-        }, 300);
+        if (form.current) {
+            setTimeout(() => {
+                console.log(form.current.reset());
+            }, 300);
+        }
     }, [props.show]);
 
     return (
         <div className={props.show ? 'modal_container' : 'modal_container hidden'}>
-                {props.header}
+            {props.header}
             <form ref={form} onSubmit={props.onSubmit} encType={'multipart/form-data'}>
-            <div>
-                {props.body}
-            </div>
+                <div>
+                    {props.body}
+                </div>
                 {props.footer}
             </form>
         </div>

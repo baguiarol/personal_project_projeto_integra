@@ -1,6 +1,12 @@
 @import "src/assets/variables"
 
 .calendar_agendamentos_container
+  .chevron_date
+    color: $grey
+    cursor: pointer
+    @include putTransition()
+    &:hover
+      color: $darkGrey
   h1
     text-align: center
     margin: auto
