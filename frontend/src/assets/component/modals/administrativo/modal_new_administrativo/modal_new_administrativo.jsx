@@ -10,7 +10,15 @@ import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 import administradorDAO from "../../../../../DAO/administradorDAO";
 
-const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administradorSelected = {}, setAdministrativo}) => {
+const ModalNewAdministrativo = ({
+                                    show,
+                                    close,
+                                    mongoClient,
+                                    closeModal,
+                                    administradorSelected = {},
+                                    setAdministrativo,
+                                    unselectAdministrativo
+                                }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -71,6 +79,7 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administr
         } else {
             await editAdministrativo(form);
         }
+        unselectAdministrativo();
         setEditing(false);
         setLoading(false);
     }
@@ -86,6 +95,7 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administr
                 <div className={'close_container'} onClick={() => {
                     close();
                     setEditing(false);
+                    unselectAdministrativo();
                 }}>
                     <i className={'fa fa-times'}/>
                 </div>
@@ -136,7 +146,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setAdministrativo: adms => dispatch({type: Actions.setAdministrativo, payload: adms}),
-    closeModal: () => dispatch({type: Actions.closeModal})
+    closeModal: () => dispatch({type: Actions.closeModal}),
+    unselectAdministrativo: () => dispatch({type: Actions.selectAdministrador, payload: {}})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalNewAdministrativo)
