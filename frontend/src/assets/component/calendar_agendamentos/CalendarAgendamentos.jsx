@@ -6,6 +6,7 @@ import Actions from "../../../redux/actions/actions";
 import ModalTypes from "../../modal_types";
 import {numberIsBetween} from "../../AuxFunctions";
 import reservaDAO from "../../../DAO/reservaDAO";
+import moment from "moment";
 
 const fillHoras = () => {
     let array = [];
@@ -46,7 +47,8 @@ const CalendarAgendamentos = props => {
                                 let isOccupied = false;
                                 let agnd = null;
                                 agendamentosDaSala.forEach(agendamento => {
-                                    if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)) {
+                                    if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
+                                        && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))) {
                                         isOccupied = true;
                                         agnd = agendamento;
 ;                                    }
@@ -84,6 +86,7 @@ CalendarAgendamentos.propTypes = {
 const mapStateToProps = state => ({
     salas: state.salas.salas,
     agendamentos: state.agendamentos.agendamentos,
+    dateSelected: state.general.dateSelected,
 });
 
 const mapDispatchToProps = dispatch => ({
