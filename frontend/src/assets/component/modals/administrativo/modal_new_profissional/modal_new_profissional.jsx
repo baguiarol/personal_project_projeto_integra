@@ -125,7 +125,8 @@ const ModalNewProfissional = ({
                                                                         onClick={() => setEditing(true)}
                                                                         text={'Editar'}
                                                                         type={'button'}/> : <></> }
-                             <Button loading={loading} type={'submit'} text={'Confirmar'}/>                         </div>}/>
+                             <Button loading={loading} type={'submit'} text={'Confirmar'}/>
+                         </div>}/>
     )
 }
 

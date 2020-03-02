@@ -9,10 +9,11 @@ import salaDAO from "../../../../../DAO/salaDAO";
 import {post} from "axios";
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
-const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
+const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unselectSala}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
+    const [editing, setEditing] = React.useState(false);
     const [fileURL, setFileURL] = React.useState('');
 
     const fileUpload = async (file) => {
@@ -43,6 +44,7 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
             }
             setLoading(false);
         }
+        unselectSala();
         closeModal();
     };
 
@@ -51,9 +53,12 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
                      onSubmit={onSubmit}
                      header={<header>
                          <div>
-                             <h1>Adicionar Sala</h1>
+                             <h1>{'nome' in salaSelected ? 'Informações da Sala' : 'Adicionar Sala'}</h1>
                          </div>
-                         <div className={'close_container'} onClick={close}>
+                         <div className={'close_container'} onClick={() => {
+                             close();
+                             unselectSala();
+                         }}>
                              <i className={'fa fa-times'}/>
                          </div>
                      </header>}
@@ -62,12 +67,25 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
                              setFile(file);
                              setFileURL(url);
                          }} fileName={'userfile'} urlName={'file_url'} />
-                         <InputText label={"Nome"} name={'nome'} required/>
-                         <InputText label={"Descrição"} name={'descricao'} required />
-                         <InputText label={'Valor da Hora'} name={'valor_hora'} type={'number'} required />
+                         <InputText
+                             disabled={'nome' in salaSelected && !editing}
+                             defaultValue={salaSelected.nome}
+                             label={"Nome"} name={'nome'} required/>
+                         <InputText
+                             disabled={'nome' in salaSelected && !editing}
+                             defaultValue={salaSelected.descricao}
+                             label={"Descrição"} name={'descricao'} required />
+                         <InputText
+                             disabled={'nome' in salaSelected && !editing}
+                             defaultValue={salaSelected.valor_hora}
+                             label={'Valor da Hora'} name={'valor_hora'} type={'number'} required />
                      </div>}
                      footer={
                          <div className={'footer'}>
+                             {'nome' in salaSelected ? <Button editing={editing}
+                                                                       onClick={() => setEditing(true)}
+                                                                       text={'Editar'}
+                                                                       type={'button'}/> : <></> }
                              <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                          </div>}/>
     )
@@ -75,10 +93,12 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close}) => {
 
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
+    salaSelected: state.salas.salaSelected,
 });
 
 const mapDispatchToProps = dispatch => ({
-    closeModal: () => dispatch({type: Actions.closeModal})
+    closeModal: () => dispatch({type: Actions.closeModal}),
+    unselectSala: () => dispatch({type: Actions.selectSala, payload: {}})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalNewSalas)
