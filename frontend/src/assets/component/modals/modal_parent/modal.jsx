@@ -3,10 +3,19 @@ import PropTypes from 'prop-types';
 import "./styles.sass";
 
 const ModalParent = props => {
+
+    const form = React.useRef();
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            console.log(form.current.reset());
+        }, 300);
+    }, [props.show]);
+
     return (
         <div className={props.show ? 'modal_container' : 'modal_container hidden'}>
                 {props.header}
-            <form onSubmit={props.onSubmit} encType={'multipart/form-data'}>
+            <form ref={form} onSubmit={props.onSubmit} encType={'multipart/form-data'}>
             <div>
                 {props.body}
             </div>

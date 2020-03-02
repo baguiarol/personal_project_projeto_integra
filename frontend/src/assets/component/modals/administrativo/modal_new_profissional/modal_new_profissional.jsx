@@ -17,7 +17,7 @@ const ModalNewProfissional = ({
                                   closeModal,
                                   setProfissionais,
                                   profissionalSelected,
-                                  selectProfissional
+                                  selectProfissional,
                               }) => {
 
     const [loading, setLoading] = React.useState(false);
