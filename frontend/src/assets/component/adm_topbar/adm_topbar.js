@@ -50,7 +50,7 @@ const AdministradorTopbar = ({pageSelected}) => {
             <div className={'user_data'}>
                 <div>
                     <h2>Catherine Torres</h2>
-                    <h4>Fisioterapeuta</h4>
+                    <h4>Administradora</h4>
                 </div>
             </div>
             <img

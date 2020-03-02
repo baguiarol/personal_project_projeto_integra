@@ -9,7 +9,7 @@ const Sala = props => {
         <div className={'sala_content'}>
             <div className={'sala_container'}>
             <div>
-                <h1>Sala 01</h1>
+                <h1>{props.sala.nome}</h1>
                  <p>Horários Reservados</p>
             </div>
             <div>
@@ -19,7 +19,7 @@ const Sala = props => {
                     onClick={props.onClickDetalhesListener} />
             </div>
             </div>
-            <WeekCalendar isAdm={props.isAdm} addReservaListener={props.addReservaListener}/>
+            <WeekCalendar sala={props.sala} isAdm={props.isAdm} addReservaListener={props.addReservaListener}/>
 
         </div>
     )

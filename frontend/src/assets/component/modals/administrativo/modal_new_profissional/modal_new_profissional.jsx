@@ -67,6 +67,7 @@ const ModalNewProfissional = ({
             });
             const profs = await clienteDAO.findAll();
             setProfissionais(profs);
+            selectProfissional();
             alert('Profissional editado com Sucesso!')
         } catch (err) {
             alert(err);
@@ -95,6 +96,7 @@ const ModalNewProfissional = ({
         }
         selectProfissional();
         setEditing(false);
+        form.reset();
         closeModal();
         setLoading(false);
     }

@@ -31,9 +31,9 @@ const CalendarAgendamentos = props => {
                 {/*aqui vai a numeracao das salas*/}
                 <thead>
                     <tr>
-                        <td></td>
+                        <th style={{width: '10%'}}></th>
                         {
-                            props.salas.map((sala, index) => <td key={index}>{sala.nome}</td>)
+                            props.salas.map((sala, index) => <th key={index}>{sala.nome}</th>)
                         }
                     </tr>
                 </thead>

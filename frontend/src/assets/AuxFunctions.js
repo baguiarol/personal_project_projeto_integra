@@ -32,4 +32,8 @@ const numberIsBetween = (number, start, end) => {
     return (number >= start) && (number < end);
 }
 
-export {checkIfURLIsImage, transformStringToReais, transformReaisToFloat, numberIsBetween};
+const numberToHours = number => {
+    return number+":00";
+}
+
+export {checkIfURLIsImage, transformStringToReais, transformReaisToFloat, numberIsBetween, numberToHours};

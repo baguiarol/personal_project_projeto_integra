@@ -11,17 +11,19 @@
   .calendar_table
     width: 98%
     border-spacing: 5px
+    table-layout: fixed
     margin-left: 1%
     overflow-x: auto
     text-align: center
     padding-bottom: 5%
     thead
-      td
+      th
         padding-bottom: 1.5%
     tbody
       tr
         td
-         padding: 2% 0
+          padding: 2% 0
+          width: 100%
         td:not(:first-child)
           box-shadow: 0 1px 2px rgba(0,0,0,0.2)
           cursor: pointer

@@ -40,13 +40,17 @@ const ClienteAgendamentos = props => {
                 <Snack/>
             </div>
             <div className={'container_salas'}>
-                <Sala
-                    onClickDetalhesListener={() => {
-                        props.openModal(ModalTypes.detalhesSala);
-                    }}
-                    addReservaListener={() =>
-                        props.openModal(ModalTypes.reservaCliente)}/>
-                <Sala />
+                {
+                    props.salas.map((sala, index) => (
+                        <Sala
+                            sala={sala}
+                            onClickDetalhesListener={() => {
+                                props.openModal(ModalTypes.detalhesSala);
+                            }}
+                            addReservaListener={() =>
+                                props.openModal(ModalTypes.reservaCliente)}/>
+                    ))
+                }
             </div>
         </div>
     )
@@ -55,6 +59,7 @@ const ClienteAgendamentos = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    salas: state.salas.salas,
 });
 
 const mapDispatchToProps = dispatch => ({
