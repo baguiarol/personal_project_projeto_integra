@@ -70,6 +70,17 @@ const ModalNewAdministrativo = ({
         }
     }
 
+    const removeAdministrativo = async () => {
+        try {
+            await administradorDAO.delete({_id: administradorSelected._id});
+            const adms = await administradorDAO.findAll();
+            setAdministrativo(adms);
+            alert('Administrador deletado com Sucesso!');
+        } catch (err) {
+            alert(err);
+        }
+    }
+
     const onSubmit = async e => {
         const form = e.target;
         e.preventDefault();
@@ -130,10 +141,20 @@ const ModalNewAdministrativo = ({
             </div>}
             footer={
                 <div className={'footer'}>
-                    {'nome' in administradorSelected ? <Button editing={editing}
-                                                               onClick={() => setEditing(true)}
-                                                               text={'Editar'}
-                                                               type={'button'}/> : <></>}
+                    {'nome' in administradorSelected ?
+                        <div className={'flex crud_ops'}>
+                            <Button text={'Remover'} type={'button'} onClick={async () => {
+                                if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
+                                    await removeAdministrativo();
+                                    closeModal();
+                                    setEditing(false);
+                                }
+                            }}/>
+                            <Button editing={editing}
+                                    onClick={() => setEditing(true)}
+                                    text={'Editar'}
+                                    type={'button'}/>
+                        </div> : <></>}
                     <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                 </div>}/>
     );
