@@ -4,7 +4,7 @@ import InputText from "../../../inputText/input";
 import Button from "../../../button/button";
 import "./modal_new_profissional.sass";
 import clienteDAO from "../../../../../DAO/clienteDAO";
- import {connect} from "react-redux";
+import {connect} from "react-redux";
 import Actions from "../../../../../redux/actions/actions";
 import FileInput from "../../../file_input/FileInput";
 import {post} from 'axios';
@@ -18,7 +18,7 @@ const ModalNewProfissional = ({
                                   setProfissionais,
                                   profissionalSelected,
                                   selectProfissional
-    }) => {
+                              }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -29,14 +29,11 @@ const ModalNewProfissional = ({
         const url = 'https://teste.integracps.com.br/imageUpload.php';
         const formData = new FormData();
         formData.append('userfile', file);
-        const config = { headers: {'content-type': 'multipart/form-data'}};
+        const config = {headers: {'content-type': 'multipart/form-data'}};
         return post(url, formData, config);
     }
 
-    const onSubmit = async e => {
-        e.preventDefault();
-        setLoading(true);
-        const form = e.target;
+    const newProfissional = async form => {
         if (checkIfURLIsImage(fileURL)) {
             try {
                 await fileUpload(file);
@@ -51,14 +48,43 @@ const ModalNewProfissional = ({
                 setProfissionais(await clienteDAO.findAll());
                 checkIfURLIsImage(fileURL);
                 alert('Profissional Adicionado com Sucesso!')
-            } catch(err) {
+            } catch (err) {
                 alert(err);
             }
-            selectProfissional();
-            closeModal();
         } else {
             alert('Informe uma imagem válida acima');
         }
+    }
+
+    const editProfissional = async form => {
+        try {
+            await clienteDAO.update({_id: profissionalSelected._id}, {
+                nome: form.nome.value,
+                telefone: form.telefone.value,
+                ocupacao: form.ocupacao.value,
+                descricao: form.descricao.value,
+                email: form.email.value,
+            });
+            const profs = await clienteDAO.findAll();
+            setProfissionais(profs);
+            alert('Profissional editado com Sucesso!')
+        } catch (err) {
+            alert(err);
+        }
+    };
+
+    const onSubmit = async e => {
+        e.preventDefault();
+        setLoading(true);
+        const form = e.target;
+        if (!editing) {
+            await newProfissional(form);
+        } else {
+            await editProfissional(form);
+        }
+        selectProfissional();
+        setEditing(false);
+        closeModal();
         setLoading(false);
     }
 
@@ -79,12 +105,12 @@ const ModalNewProfissional = ({
                      </header>}
                      body={<div>
                          <FileInput
-                            onChangeFile={(file, url) => {
-                                setFile(file);
-                                setFileURL(url);
-                            }}
-                            urlName={'foto_url'}
-                            fileName={'userfile'} />
+                             onChangeFile={(file, url) => {
+                                 setFile(file);
+                                 setFileURL(url);
+                             }}
+                             urlName={'foto_url'}
+                             fileName={'userfile'}/>
                          <InputText
                              disabled={'nome' in profissionalSelected && !editing}
                              defaultValue={profissionalSelected.nome}
@@ -122,9 +148,9 @@ const ModalNewProfissional = ({
                      footer={
                          <div className={'footer'}>
                              {'nome' in profissionalSelected ? <Button editing={editing}
-                                                                        onClick={() => setEditing(true)}
-                                                                        text={'Editar'}
-                                                                        type={'button'}/> : <></> }
+                                                                       onClick={() => setEditing(true)}
+                                                                       text={'Editar'}
+                                                                       type={'button'}/> : <></>}
                              <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                          </div>}/>
     )
