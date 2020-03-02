@@ -10,6 +10,8 @@ const Actions = {
     selectDate: 'SELECT_DATE',
     selectSala: 'SELECT_SALA',
     setAgendamentos: 'SET_AGENDAMENTOS',
+    selectAdministrador: 'SELECT_ADM',
+    selectProfissional: 'SELECT_PROF',
 }
 
 export default Actions;

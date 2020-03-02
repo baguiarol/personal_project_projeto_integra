@@ -8,10 +8,11 @@ const Button = props => {
             type={props.type}
             style={props.width ? {width: props.width} : {}}
             onClick={props.onClick}
-            disabled={props.loading}
-            className={props.loading ?
+            editing={props.editing}
+            disabled={props.loading || props.editing}
+            className={(props.loading || props.editing) ?
                 'button loading '+props.className : 'button '+props.className }>
-            { props.loading ? 'Carregando' : props.text}
+            { props.loading ? 'Carregando' : (props.editing ? 'Editando' : props.text)}
         </button>
     );
 }
@@ -21,6 +22,7 @@ Button.propTypes = {
     onClick: PropTypes.func,
     type: PropTypes.string,
     width: PropTypes.string,
+    editing: PropTypes.bool,
     className: PropTypes.string,
     loading: PropTypes.bool,
 }

@@ -10,6 +10,8 @@ const InputText = props => {
                 onChange={props.onChange}
                 step={'0.01'}
                 required={props.required}
+                disabled={props.disabled}
+                defaultValue={props.defaultValue}
                 type={props.type ? props.type : 'text'}
                 name={props.name ? props.name : ''} />
             <label className={'label'}>{props.label}</label>
@@ -22,7 +24,9 @@ InputText.propTypes = {
     placeholder: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.string,
+    disabled: PropTypes.bool,
     required: PropTypes.bool,
+    defaultValue: PropTypes.string,
     style: PropTypes.object,
     onChange: PropTypes.func,
 }

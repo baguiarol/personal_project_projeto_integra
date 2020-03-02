@@ -51,9 +51,8 @@ const CalendarAgendamentos = props => {
                                         && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))) {
                                         isOccupied = true;
                                         agnd = agendamento;
-;                                    }
+                                    }
                                 });
-                                console.log(isOccupied);
                                 if (!isOccupied) {
                                     return (
                                         <td key={index} className={'free'} onClick={() => {

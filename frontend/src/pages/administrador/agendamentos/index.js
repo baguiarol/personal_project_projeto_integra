@@ -23,7 +23,6 @@ const AgendamentosAdministrador = props => {
             });
             reservaDAO.findAll(props.client).then(res => {
                 props.setAgendamentos(res);
-                console.log(res);
             });
         }
     });

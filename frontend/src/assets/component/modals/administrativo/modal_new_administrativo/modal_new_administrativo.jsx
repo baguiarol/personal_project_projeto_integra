@@ -10,11 +10,16 @@ import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 import administradorDAO from "../../../../../DAO/administradorDAO";
 
-const ModalNewAdministrativo = ({show, close, mongoClient, closeModal}) => {
+const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administradorSelected = {}}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
     const [fileURL, setFileURL] = React.useState('');
+    const [editing, setEditing] = React.useState(false);
+
+    React.useEffect(() => {
+        setEditing(false);
+    }, []);
 
     const fileUpload = async (file) => {
         const url = 'https://teste.integracps.com.br/imageUpload.php';
@@ -37,11 +42,12 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal}) => {
                     email: form.email.value,
                 });
                 checkIfURLIsImage(fileURL);
-                alert('Administrador adicionado com Sucesso!')
+                alert('Administrador adicionado com Sucesso!');
                 closeModal();
             } catch (err) {
                 alert(err);
             }
+            setEditing(false);
             setLoading(false);
         }
     }
@@ -52,9 +58,12 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal}) => {
             show={show}
             header={<header>
                 <div>
-                    <h1>Adicionar Administrativo</h1>
+                    <h1>{'nome' in administradorSelected ? 'Informações do Administrador' : 'Adicionar Administrativo'}</h1>
                 </div>
-                <div className={'close_container'} onClick={close}>
+                <div className={'close_container'} onClick={() => {
+                    close();
+                    setEditing(false);
+                }}>
                     <i className={'fa fa-times'}/>
                 </div>
             </header>}
@@ -66,22 +75,40 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal}) => {
                     }}
                     urlName={'foto_url'}
                     fileName={'userfile'}/>
-                <InputText label={'Nome'} name={'nome'}/>
-                <InputText label={'Login'} name={'email'}/>
-                <div className={'flex'}>
-                    <InputText label={'Senha'} name={'senha'}/>
-                    <InputText label={'Confirmar Senha'}/>
-                </div>
+                <InputText
+                    defaultValue={administradorSelected.nome}
+                    disabled={'nome' in administradorSelected && !editing}
+                    label={'Nome'}
+                    name={'nome'}/>
+                <InputText
+                    defaultValue={administradorSelected.email}
+                    disabled={'nome' in administradorSelected && !editing}
+                    label={'Login'}
+                    name={'email'}/>
+                {
+                    'email' in administradorSelected ? <></> :
+                        (
+                            <div className={'flex'}>
+                                <InputText label={'Senha'} name={'senha'}/>
+                                <InputText label={'Confirmar Senha'}/>
+                            </div>)
+                }
+
             </div>}
             footer={
                 <div className={'footer'}>
+                    {'nome' in administradorSelected ? <Button editing={editing}
+                                                               onClick={() => setEditing(true)}
+                                                               text={'Editar'}
+                                                               type={'button'}/> : <></> }
                     <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                 </div>}/>
     )
 };
 
 const mapStateToProps = state => ({
-    mongoClient: state.general.mongoClient
+    mongoClient: state.general.mongoClient,
+    administradorSelected: state.administradores.administradorSelected,
 });
 
 const mapDispatchToProps = dispatch => ({

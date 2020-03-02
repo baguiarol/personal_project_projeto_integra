@@ -71,9 +71,14 @@ header
 
 .footer
   display: flex
+  justify-content: flex-end
   float: right
-  width: 30%
+  width: 60%
   margin-bottom: 2%
+  button
+    width: 50%
+  button:not(:last-child)
+    margin-right: 15px
 
 
 @media (max-width: 641px)
