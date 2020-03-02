@@ -2,6 +2,8 @@ import React from 'react';
 import './styles.sass';
 import Button from "../button/button";
 import PropTypes from 'prop-types';
+import Actions from "../../../redux/actions/actions";
+import {connect} from "react-redux";
 
 const CardSala = props => {
     return (
@@ -20,5 +22,6 @@ const CardSala = props => {
 CardSala.propTypes = {
     sala: PropTypes.object.isRequired,
 }
+
 
 export default CardSala;

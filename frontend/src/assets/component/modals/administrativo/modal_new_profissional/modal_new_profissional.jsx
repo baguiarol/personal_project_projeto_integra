@@ -10,10 +10,11 @@ import FileInput from "../../../file_input/FileInput";
 import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
-const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissionais}) => {
+const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissionais, profissionalSelected}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
+    const [editing, setEditing] = React.useState(false);
     const [fileURL, setFileURL] = React.useState('');
 
     const fileUpload = async (file) => {
@@ -57,9 +58,12 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissi
                      onSubmit={onSubmit}
                      header={<header>
                          <div>
-                             <h1>Adicionar Profissional</h1>
+                             <h1>{'nome' in profissionalSelected ? 'Informações do Profissional' : 'Adicionar Profissional'}</h1>
                          </div>
-                         <div className={'close_container'} onClick={close}>
+                         <div className={'close_container'} onClick={() => {
+                             close();
+                             setEditing(false);
+                         }}>
                              <i className={'fa fa-times'}/>
                          </div>
                      </header>}
@@ -71,27 +75,53 @@ const ModalNewProfissional = ({show, close, mongoClient, closeModal, setProfissi
                             }}
                             urlName={'foto_url'}
                             fileName={'userfile'} />
-                         <InputText name={'nome'} label={'Nome'}/>
+                         <InputText
+                             disabled={'nome' in profissionalSelected && !editing}
+                             defaultValue={profissionalSelected.nome}
+                             name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
-                             <InputText name={'telefone'} label={'Telefone'}/>
-                             <InputText name={'ocupacao'} label={'Ocupação'}/>
+                             <InputText
+                                 disabled={'nome' in profissionalSelected && !editing}
+                                 defaultValue={profissionalSelected.telefone}
+                                 name={'telefone'}
+                                 label={'Telefone'}/>
+                             <InputText
+                                 disabled={'nome' in profissionalSelected && !editing}
+                                 defaultValue={profissionalSelected.ocupacao}
+                                 name={'ocupacao'}
+                                 label={'Ocupação'}/>
                          </div>
-                         <InputText name={'descricao'} label={'Descrição'}/>
-                         <InputText name={'email'} label={'Email'} placeholder={'E-mail utilizado para Login'}/>
-                         <div className={'flex'}>
-                             <InputText name={'senha'} label={'Senha'}/>
-                             <InputText name={'confirmar_senha'} label={'Confirmar Senha'}/>
-                         </div>
+                         <InputText
+                             disabled={'nome' in profissionalSelected && !editing}
+                             defaultValue={profissionalSelected.descricao}
+                             name={'descricao'} label={'Descrição'}/>
+                         <InputText name={'email'}
+                                    disabled={'nome' in profissionalSelected && !editing}
+                                    defaultValue={profissionalSelected.email}
+                                    label={'Email'}
+                                    placeholder={'E-mail utilizado para Login'}/>
+                         {
+                             'email' in profissionalSelected ? <></> :
+                                 (
+                                     <div className={'flex'}>
+                                         <InputText label={'Senha'} name={'senha'}/>
+                                         <InputText label={'Confirmar Senha'}/>
+                                     </div>)
+                         }
                      </div>}
                      footer={
                          <div className={'footer'}>
-                             <Button loading={loading} type={'submit'} text={'Confirmar'}/>
-                         </div>}/>
+                             {'nome' in profissionalSelected ? <Button editing={editing}
+                                                                        onClick={() => setEditing(true)}
+                                                                        text={'Editar'}
+                                                                        type={'button'}/> : <></> }
+                             <Button loading={loading} type={'submit'} text={'Confirmar'}/>                         </div>}/>
     )
 }
 
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
+    profissionalSelected: state.profissionais.profissionalSelected,
 });
 
 const mapDispatchToProps = dispatch => ({
