@@ -56,6 +56,18 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
             alert(err);
         }
         setLoading(false);
+    };
+
+    const removeSala = async () => {
+        try {
+            await salaDAO.delete({_id: salaSelected._id});
+            alert('Sala removida com sucesso!');
+            closeModal();
+        } catch (err) {
+            alert(err);
+        }
+        unselectSala();
+        setLoading(false);
     }
 
     const onSubmit = async e => {
@@ -107,10 +119,20 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
                      </div>}
                      footer={
                          <div className={'footer'}>
-                             {'nome' in salaSelected ? <Button editing={editing}
-                                                                       onClick={() => setEditing(true)}
-                                                                       text={'Editar'}
-                                                                       type={'button'}/> : <></> }
+                             {'nome' in salaSelected ?
+                                 <div className={'flex crud_ops'}>
+                                     <Button text={'Remover'} type={'button'} onClick={async () => {
+                                         if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
+                                             await removeSala();
+                                             closeModal();
+                                             setEditing(false);
+                                         }
+                                     }}/>
+                                     <Button editing={editing}
+                                             onClick={() => setEditing(true)}
+                                             text={'Editar'}
+                                             type={'button'}/>
+                                 </div> : <></>}
                              <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                          </div>}/>
     )
