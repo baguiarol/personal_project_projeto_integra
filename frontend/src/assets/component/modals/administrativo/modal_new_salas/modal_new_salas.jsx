@@ -24,10 +24,7 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
         return post(url, formData, config);
     }
 
-    const onSubmit = async e => {
-        e.preventDefault();
-        const form = e.target;
-        setLoading(true);
+    const newSala = async form => {
         if (checkIfURLIsImage(fileURL)) {
             try {
                 await fileUpload(file);
@@ -37,14 +34,41 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
                     valor_hora: Number(form.valor_hora.value),
                     fotos: [fileURL],
                 });
-                alert('Administrador adicionado com Sucesso!')
+                alert('Sala adicionada com Sucesso!');
                 closeModal();
             } catch (err) {
                 alert(err);
             }
             setLoading(false);
         }
+    }
+
+    const editSala = async form => {
+        try {
+            await salaDAO.update({_id: salaSelected._id}, {
+                nome: form.nome.value,
+                descricao: form.descricao.value,
+                valor_hora: Number(form.valor_hora.value),
+            });
+            alert('Sala editada com sucesso!');
+            closeModal();
+        } catch (err) {
+            alert(err);
+        }
+        setLoading(false);
+    }
+
+    const onSubmit = async e => {
+        e.preventDefault();
+        const form = e.target;
+        setLoading(true);
+        if (!editing) {
+            await newSala(form);
+        } else {
+            await editSala(form);
+        }
         unselectSala();
+        setEditing(false);
         closeModal();
     };
 
@@ -58,6 +82,7 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
                          <div className={'close_container'} onClick={() => {
                              close();
                              unselectSala();
+                             setEditing(false);
                          }}>
                              <i className={'fa fa-times'}/>
                          </div>
