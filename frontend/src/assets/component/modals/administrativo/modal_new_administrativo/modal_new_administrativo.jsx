@@ -144,12 +144,12 @@ const ModalNewAdministrativo = ({
                     {'nome' in administradorSelected ?
                         <div className={'flex crud_ops'}>
                             <Button text={'Remover'} type={'button'} onClick={async () => {
-                                if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
-                                    await removeAdministrativo();
-                                    closeModal();
-                                    setEditing(false);
-                                }
-                            }}/>
+                            if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
+                                await removeAdministrativo();
+                                closeModal();
+                                setEditing(false);
+                            }
+                        }}/>
                             <Button editing={editing}
                                     onClick={() => setEditing(true)}
                                     text={'Editar'}

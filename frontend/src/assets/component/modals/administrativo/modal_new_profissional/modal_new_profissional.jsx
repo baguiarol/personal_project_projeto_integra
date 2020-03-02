@@ -73,6 +73,17 @@ const ModalNewProfissional = ({
         }
     };
 
+    const removeProfissional = async () => {
+        try {
+            await clienteDAO.delete({_id: profissionalSelected._id})
+            const profs = await clienteDAO.findAll();
+            setProfissionais(profs);
+            alert('Profissional removido com sucesso');
+        } catch(err) {
+            alert(err);
+        }
+    }
+
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
@@ -147,10 +158,20 @@ const ModalNewProfissional = ({
                      </div>}
                      footer={
                          <div className={'footer'}>
-                             {'nome' in profissionalSelected ? <Button editing={editing}
-                                                                       onClick={() => setEditing(true)}
-                                                                       text={'Editar'}
-                                                                       type={'button'}/> : <></>}
+                             {'nome' in profissionalSelected ?
+                                 <div className={'flex crud_ops'}>
+                                     <Button text={'Remover'} type={'button'} onClick={async () => {
+                                         if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
+                                             await removeProfissional();
+                                             closeModal();
+                                             setEditing(false);
+                                         }
+                                     }}/>
+                                     <Button editing={editing}
+                                             onClick={() => setEditing(true)}
+                                             text={'Editar'}
+                                             type={'button'}/>
+                                 </div> : <></>}
                              <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                          </div>}/>
     )

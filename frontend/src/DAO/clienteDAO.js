@@ -6,6 +6,9 @@ const clienteDAO = {
     setDb(db){
         this.db = db;
     },
+    delete(query) {
+        return this.db.collection(COLLECTION).deleteOne(query);
+    },
     create(cliente){
         return this.db.collection(COLLECTION).insertOne(cliente);
     },
