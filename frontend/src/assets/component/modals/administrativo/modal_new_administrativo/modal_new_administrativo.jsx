@@ -10,7 +10,7 @@ import {post} from 'axios';
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 import administradorDAO from "../../../../../DAO/administradorDAO";
 
-const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administradorSelected = {}}) => {
+const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administradorSelected = {}, setAdministrativo}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -29,10 +29,7 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administr
         return post(url, formData, config);
     }
 
-    const onSubmit = async e => {
-        const form = e.target;
-        e.preventDefault();
-        setLoading(true);
+    const newAdministrativo = async form => {
         if (checkIfURLIsImage(fileURL)) {
             try {
                 await fileUpload(file);
@@ -47,9 +44,35 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administr
             } catch (err) {
                 alert(err);
             }
-            setEditing(false);
-            setLoading(false);
         }
+    };
+
+    const editAdministrativo = async form => {
+        try {
+            await administradorDAO.update({_id: administradorSelected._id}, {
+                nome: form.nome.value,
+                email: form.email.value,
+            });
+            const adms = await administradorDAO.findAll();
+            setAdministrativo(adms);
+            alert('Administrador editado com Sucesso!');
+            closeModal();
+        } catch (err) {
+            alert(err);
+        }
+    }
+
+    const onSubmit = async e => {
+        const form = e.target;
+        e.preventDefault();
+        setLoading(true);
+        if (!editing) {
+            await newAdministrativo(form);
+        } else {
+            await editAdministrativo(form);
+        }
+        setEditing(false);
+        setLoading(false);
     }
 
     return (
@@ -100,11 +123,11 @@ const ModalNewAdministrativo = ({show, close, mongoClient, closeModal, administr
                     {'nome' in administradorSelected ? <Button editing={editing}
                                                                onClick={() => setEditing(true)}
                                                                text={'Editar'}
-                                                               type={'button'}/> : <></> }
+                                                               type={'button'}/> : <></>}
                     <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                 </div>}/>
-    )
-};
+    );
+}
 
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
@@ -112,6 +135,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setAdministrativo: adms => dispatch({type: Actions.setAdministrativo, payload: adms}),
     closeModal: () => dispatch({type: Actions.closeModal})
 });
 
