@@ -122,7 +122,7 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
                              {'nome' in salaSelected ?
                                  <div className={'flex crud_ops'}>
                                      <Button text={'Remover'} type={'button'} onClick={async () => {
-                                         if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
+                                         if (window.confirm("Tem certeza que deseja apagar essa sala do sistema?")) {
                                              await removeSala();
                                              closeModal();
                                              setEditing(false);

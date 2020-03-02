@@ -161,7 +161,7 @@ const ModalNewProfissional = ({
                              {'nome' in profissionalSelected ?
                                  <div className={'flex crud_ops'}>
                                      <Button text={'Remover'} type={'button'} onClick={async () => {
-                                         if (window.confirm("Tem certeza que deseja apagar esse administrador do sistema?")) {
+                                         if (window.confirm("Tem certeza que deseja apagar esse profissional do sistema?")) {
                                              await removeProfissional();
                                              closeModal();
                                              setEditing(false);

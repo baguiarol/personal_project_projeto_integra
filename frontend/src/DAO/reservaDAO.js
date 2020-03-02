@@ -1,7 +1,7 @@
 const COLLECTION = 'reservas'
 const reservaDAO = {
     db: null,
-    setDb(db){
+    setDb(db) {
         this.db = db;
     },
     create(reserva) {
@@ -10,27 +10,27 @@ const reservaDAO = {
     update(query, changes) {
         return this.db.collection(COLLECTION).updateMany(query, {$set: changes});
     },
-    cancelaReserva(id_reserva){
-        return this.update({ _id: id_reserva }, { cancelado: true });
+    cancelaReserva(id_reserva) {
+        return this.update({_id: id_reserva}, {cancelado: true});
     },
-    cancelaMuitasReservas(reservas){
+    cancelaMuitasReservas(reservas) {
         const promises = [];
-        for(let i = 0; i < reservas.length; i++){
+        for (let i = 0; i < reservas.length; i++) {
             promises.push(this.cancelaReserva(reservas[i]._id));
         }
         return Promise.all(promises);
     },
-    executaReserva(id_reserva){
-        return this.update({ _id: id_reserva }, { executado: true });
+    executaReserva(id_reserva) {
+        return this.update({_id: id_reserva}, {executado: true});
     },
-    pagaReserva(id_reserva){
-        return this.update({ _id: id_reserva }, { pago: true });
+    pagaReserva(id_reserva) {
+        return this.update({_id: id_reserva}, {pago: true});
     },
-    editaReserva(id_reserva, edits){
-        return this.update({ _id: id_reserva }, edits);
+    editaReserva(id_reserva, edits) {
+        return this.update({_id: id_reserva}, edits);
     },
-    findReservaDeCliente(id_cliente){
-        return this.db.collection(COLLECTION).find({ id_cliente }).toArray();
+    findReservaDeCliente(id_cliente) {
+        return this.db.collection(COLLECTION).find({id_cliente}).toArray();
     },
     findAll(client) {
         return client.callFunction('getAgendamentos');
@@ -38,11 +38,14 @@ const reservaDAO = {
     getAgendamentosFromSala(agendamentos, sala) {
         let array = [];
         agendamentos.forEach(agendamento => {
-            if (sala.nome === agendamento.sala.nome) {
-                array.push(agendamento);
+            if ('sala' in agendamento) {
+                if (sala.nome === agendamento.sala.nome) {
+                    array.push(agendamento);
+                }
             }
         });
         return array;
     }
 };
+
 export default reservaDAO;
