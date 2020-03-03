@@ -15,7 +15,7 @@ const ClienteTopbar = props => {
         localStorage.removeItem('email');
         localStorage.removeItem('pwd');
         hist.push('/');
-    }
+    };
 
     return (
         <div className={'topbar_container'}>
@@ -60,6 +60,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setUserLogged: user => dispatch({type: Actions.setUserLogged, payload: user}),
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClienteTopbar);
