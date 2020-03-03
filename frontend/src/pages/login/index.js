@@ -9,6 +9,7 @@ import CheckBox from "../../assets/component/checkbox/checkbox";
 import {Redirect} from "react-router-dom";
 import ModoPaisagem from "../../assets/component/modoPaisagem/modoPaisagem";
 import clienteDAO from "../../DAO/clienteDAO";
+import {useHistory} from "react-router-dom";
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
@@ -63,9 +64,15 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                 performLogin(email, senha);
     }, [mongoClient]);
 
+    const hist = useHistory();
+
     React.useEffect(() => {
         if ('nome' in userLogged) {
             setLoading(true);
+            if ('ocupacao' in userLogged)
+                hist.push('/agendamentos');
+            else
+                hist.push('/agendamento_adm');
         } else {
             setLoading(false);
         }
@@ -122,7 +129,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setUserLogged: user =>
-        dispatch({type: Actions.setUserLogged, payload: user})
+        dispatch({type: Actions.setUserLogged, payload: user}),
+    //Para uso somente no login do cliente.
+    setProfissionalReservas: reservas =>
+        dispatch({type: Actions.setProfissionalReservas, payload: reservas}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)
