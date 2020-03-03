@@ -14,7 +14,7 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
 
     const [logged, setLogged] = React.useState(false);
     const [loggedAdm, setLoggedAdm] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [checked, setChecked] = React.useState(false);
 
     const saveUserLogged = (email, pwd) => {
@@ -24,6 +24,43 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
             alert("Adicionado ao local storage");
         }
     }
+
+    const performLogin = async (email, senha) => {
+        let [clientes, administradores] = [[], []];
+        try {
+            await clienteDAO.login(mongoClient, email, senha);
+            clientes = await clienteDAO.find({email: email});
+            if (clientes.length > 0) {
+                setLogged(true);
+                setUserLogged(clientes[0]);
+                saveUserLogged(email, senha);
+            } else {
+                administradores = await administradorDAO.find({email: email});
+                if (administradores.length > 0) {
+                    setLoggedAdm(true);
+                    setUserLogged(administradores[0]);
+                    saveUserLogged(email, senha);
+                } else {
+                    alert('Erro interno. Por favor, contate os desenvolvedores.');
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            if (err.errorCode === 46) {
+                alert('Usuário ou senha inválidos.');
+            } else {
+                alert('Erro desconhecido! Log do erro '+ err);
+            }
+        }
+    }
+
+    React.useEffect(() => {
+        let [email, senha] = [localStorage.getItem('email'), localStorage.getItem('pwd')];
+        setLoading(true);
+        if (mongoClient)
+            if (email && senha)
+                performLogin(email, senha).then(() => setLoading(false));
+    }, [mongoClient]);
 
     return (
         <div className={'login_container'}>
@@ -40,34 +77,8 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
                 <div className={'card'}>
                     <form onSubmit={async e => {
                         e.preventDefault();
-                        const [email, senha] = [e.target.email.value, e.target.senha.value];
                         setLoading(true);
-                        let [clientes, administradores] = [[], []];
-                        try {
-                            await clienteDAO.login(mongoClient, email, senha);
-                            clientes = await clienteDAO.find({email: email});
-                            if (clientes.length > 0) {
-                                setLogged(true);
-                                setUserLogged(clientes[0]);
-                                saveUserLogged(email, senha);
-                            } else {
-                                administradores = await administradorDAO.find({email: email});
-                                if (administradores.length > 0) {
-                                    setLoggedAdm(true);
-                                    setUserLogged(administradores[0]);
-                                    saveUserLogged(email, senha);
-                                } else {
-                                    alert('Erro interno. Por favor, contate os desenvolvedores.');
-                                }
-                            }
-                        } catch (err) {
-                            console.log(err);
-                            if (err.errorCode === 46) {
-                                alert('Usuário ou senha inválidos.');
-                            } else {
-                                alert('Erro desconhecido! Log do erro '+ err);
-                            }
-                        }
+                        await performLogin(e.target.email.value, e.target.senha.value);
                         setLoading(false);
                     }}>
                         <InputText
