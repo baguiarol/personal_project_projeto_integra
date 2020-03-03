@@ -8,7 +8,7 @@ const reservaDAO = {
     },
     create(reserva, userLogged = null) {
         if (userLogged) {
-            logDAO.create(this.db, { usuario: userLogged, log: 'Adicionou uma reserva', data_hora: new Date()})
+            logDAO.create({usuario: userLogged, log: 'Adicionou uma reserva', data_hora: new Date()})
         }
         return this.db.collection(COLLECTION).insertOne(reserva);
     },

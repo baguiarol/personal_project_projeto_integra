@@ -65,6 +65,7 @@ const ClienteAgendamentos = props => {
                             addReservaListener={date => {
                                 props.selectDate(date.toDate());
                                 console.log(date.toDate());
+                                props.selectSala(sala);
                                 props.openModal(ModalTypes.reservaCliente)
                             }}/>
                     ))
@@ -86,6 +87,7 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
     selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
+    selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
 });
 

@@ -20,7 +20,6 @@ const Sala = props => {
             </div>
             </div>
             <WeekCalendar sala={props.sala} isAdm={props.isAdm} addReservaListener={props.addReservaListener}/>
-
         </div>
     )
 };
