@@ -15,6 +15,15 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
     const [logged, setLogged] = React.useState(false);
     const [loggedAdm, setLoggedAdm] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [checked, setChecked] = React.useState(false);
+
+    const saveUserLogged = (email, pwd) => {
+        if (checked) {
+            localStorage.setItem('email', email);
+            localStorage.setItem('pwd', pwd);
+            alert("Adicionado ao local storage");
+        }
+    }
 
     return (
         <div className={'login_container'}>
@@ -31,21 +40,22 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
                 <div className={'card'}>
                     <form onSubmit={async e => {
                         e.preventDefault();
-                        const form = e.target;
+                        const [email, senha] = [e.target.email.value, e.target.senha.value];
                         setLoading(true);
-                        let clientes = [];
-                        let administradores = [];
+                        let [clientes, administradores] = [[], []];
                         try {
-                            await clienteDAO.login(mongoClient, form.email.value, form.senha.value);
-                            clientes = await clienteDAO.find({email: form.email.value});
+                            await clienteDAO.login(mongoClient, email, senha);
+                            clientes = await clienteDAO.find({email: email});
                             if (clientes.length > 0) {
                                 setLogged(true);
                                 setUserLogged(clientes[0]);
+                                saveUserLogged(email, senha);
                             } else {
-                                administradores = await administradorDAO.find({email: form.email.value});
+                                administradores = await administradorDAO.find({email: email});
                                 if (administradores.length > 0) {
                                     setLoggedAdm(true);
                                     setUserLogged(administradores[0]);
+                                    saveUserLogged(email, senha);
                                 } else {
                                     alert('Erro interno. Por favor, contate os desenvolvedores.');
                                 }
@@ -69,7 +79,11 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
                             label={'Senha'}
                             type={'password'}
                             placeholder={'Informe sua senha'} />
-                        <CheckBox label={'Manter-me Conectado'} />
+                        <CheckBox
+                            onCheck={ checked => {
+                                setChecked(!checked)
+                            }}
+                            label={'Manter-me Conectado'} />
                         <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                     </form>
                     {logged && <Redirect to={'/agendamentos'} />}

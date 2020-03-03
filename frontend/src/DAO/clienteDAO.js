@@ -18,9 +18,6 @@ const clienteDAO = {
     editCliente(id_cliente, edits){
         return this.update({_id: id_cliente}, edits);
     },
-    findToLogin(client, email) {
-        return client.callFunction('checkIfUserExists', {email: email});
-    },
     async addUser(client, email, password, clienteData){
         const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
         await emailPasswordClient.registerWithEmail(email, password);
