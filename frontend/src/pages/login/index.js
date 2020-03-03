@@ -10,7 +10,7 @@ import {Redirect} from "react-router-dom";
 import ModoPaisagem from "../../assets/component/modoPaisagem/modoPaisagem";
 import clienteDAO from "../../DAO/clienteDAO";
 
-const LoginPage = ({mongoClient, setUserLogged}) => {
+const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     const [logged, setLogged] = React.useState(false);
     const [loggedAdm, setLoggedAdm] = React.useState(false);
@@ -27,6 +27,7 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
 
     const performLogin = async (email, senha) => {
         let [clientes, administradores] = [[], []];
+        setLoading(true);
         try {
             await clienteDAO.login(mongoClient, email, senha);
             clientes = await clienteDAO.find({email: email});
@@ -52,15 +53,23 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
                 alert('Erro desconhecido! Log do erro '+ err);
             }
         }
+        setLoading(false);
     }
 
     React.useEffect(() => {
         let [email, senha] = [localStorage.getItem('email'), localStorage.getItem('pwd')];
-        setLoading(true);
         if (mongoClient)
             if (email && senha)
-                performLogin(email, senha).then(() => setLoading(false));
+                performLogin(email, senha);
     }, [mongoClient]);
+
+    React.useEffect(() => {
+        if ('nome' in userLogged) {
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [userLogged]);
 
     return (
         <div className={'login_container'}>
@@ -108,6 +117,7 @@ const LoginPage = ({mongoClient, setUserLogged}) => {
 const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
     database: state.general.database,
+    userLogged: state.general.userLogged,
 });
 
 const mapDispatchToProps = dispatch => ({

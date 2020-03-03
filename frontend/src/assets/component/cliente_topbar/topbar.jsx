@@ -2,8 +2,21 @@ import React from 'react';
 import "./styles.sass";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
+import Button from "../button/button";
+import Actions from "../../../redux/actions/actions";
+import {useHistory} from "react-router";
 
 const ClienteTopbar = props => {
+
+    const hist = useHistory();
+
+    const logout = () => {
+        props.setUserLogged({});
+        localStorage.removeItem('email');
+        localStorage.removeItem('pwd');
+        hist.push('/');
+    }
+
     return (
         <div className={'topbar_container'}>
             <div className={'img_container'}>
@@ -26,6 +39,13 @@ const ClienteTopbar = props => {
                 className={'profile_pic'} src={
                     props.userLogged ?
                         props.userLogged.foto_url : 'https://randomuser.me/api/portraits/women/43.jpg'} />
+                        <Button
+                            onClick={() => {
+                                logout();
+                            }}
+                            width={'5%'}
+                            text={<i className={'fas fa-door-open'}/>}
+                            className={'log-off'}/>
         </div>
     )
 }
@@ -36,6 +56,10 @@ ClienteTopbar.propTypes = {
 
 const mapStateToProps = state => ({
     userLogged: state.general.userLogged,
+});
+
+const mapDispatchToProps = dispatch => ({
+    setUserLogged: user => dispatch({type: Actions.setUserLogged, payload: user}),
 })
 
-export default connect(mapStateToProps)(ClienteTopbar);
+export default connect(mapStateToProps, mapDispatchToProps)(ClienteTopbar);

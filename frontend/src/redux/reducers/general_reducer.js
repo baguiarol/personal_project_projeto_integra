@@ -4,7 +4,7 @@ const initialState = {
     database: null,
     mongoClient: null,
     modalType: '',
-    userLogged: null,
+    userLogged: {},
     showModal: false,
     dateSelected: new Date(),
 };
