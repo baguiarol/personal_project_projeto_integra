@@ -6,7 +6,7 @@ const clienteDAO = {
     setDb(db){
         this.db = db;
     },
-    delete(query) {
+    async delete(query) {
         return this.db.collection(COLLECTION).deleteOne(query);
     },
     create(cliente){
@@ -28,6 +28,9 @@ const clienteDAO = {
     },
     findAll(){
         return this.db.collection(COLLECTION).find({}, {sort: {'nome': 1}}).toArray();
-    }
+    },
+    find(query) {
+        return this.db.collection(COLLECTION).find(query).toArray();
+    },
 };
 export default clienteDAO;

@@ -10,6 +10,7 @@ import ModalAgendamentoAdm
 import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
+import logDAO from "../../../DAO/logDAO";
 
 const AgendamentosAdministrador = props => {
 
@@ -24,6 +25,9 @@ const AgendamentosAdministrador = props => {
             reservaDAO.findAll(props.client).then(res => {
                 props.setAgendamentos(res);
             });
+            logDAO.findAll().then(res => {
+                props.setLogs(res);
+            })
         }
     });
 
@@ -53,7 +57,8 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
-    setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos})
+    setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
+    setLogs: logs => dispatch({type: Actions.setLogs, payload: logs}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgendamentosAdministrador);

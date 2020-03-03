@@ -4,6 +4,7 @@ import "./styles.sass";
 import {useHistory} from 'react-router-dom';
 import HamburgerMenu from "../hamburgerMenu/hamburgerMenu";
 import ResponsiveMenu from "../responsiveMenu/responsiveMenu";
+import {connect} from "react-redux";
 
 const Tab = props => {
     const story = useHistory();
@@ -18,9 +19,10 @@ const Tab = props => {
     )
 };
 
-const AdministradorTopbar = ({pageSelected}) => {
+const AdministradorTopbar = ({pageSelected, userLogged}) => {
 
     const [hambOpen, setHambOpen] = React.useState(false);
+    console.log(userLogged);
 
     return (
         <div className={'topbar_container topbar_container_adm'}>
@@ -49,13 +51,13 @@ const AdministradorTopbar = ({pageSelected}) => {
             </div>
             <div className={'user_data'}>
                 <div>
-                    <h2>Catherine Torres</h2>
-                    <h4>Administradora</h4>
+                    <h2>{userLogged ? userLogged.nome : 'Catherine Torres'}</h2>
+                    <h4>Administrador</h4>
                 </div>
             </div>
             <img
                 alt={'profile_pic'}
-                className={'profile_pic'} src={'https://randomuser.me/api/portraits/women/43.jpg'}/>
+                className={'profile_pic'} src={userLogged ? userLogged.foto_url : 'https://randomuser.me/api/portraits/women/43.jpg'}/>
         </div>
     )
 };
@@ -64,4 +66,8 @@ AdministradorTopbar.propTypes = {
     pageSelected: PropTypes.string.isRequired,
 };
 
-export default AdministradorTopbar;
+const mapStateToProps = state => ({
+    userLogged: state.general.userLogged,
+})
+
+export default connect(mapStateToProps)(AdministradorTopbar);

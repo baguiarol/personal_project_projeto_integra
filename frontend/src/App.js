@@ -19,6 +19,7 @@ import clienteDAO from "./DAO/clienteDAO";
 import administradorDAO from "./DAO/administradorDAO";
 import salaDAO from "./DAO/salaDAO";
 import reservaDAO from "./DAO/reservaDAO";
+import logDAO from "./DAO/logDAO";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         administradorDAO.setDb(db);
         salaDAO.setDb(db);
         reservaDAO.setDb(db);
+        logDAO.setDb(db);
     }
 
     React.useEffect(() => {

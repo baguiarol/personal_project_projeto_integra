@@ -1,11 +1,15 @@
-const COLLECTION = 'logs'
+const COLLECTION = 'logs';
 
 const logDAO = {
-    create(db, log){
-        return db.collection(COLLECTION).insertOne(log);
+    db: null,
+    setDb(db) {
+      this.db = db;
     },
-    findAll(db){
-        return db.collection(COLLECTION).find({}).toArray();
+    create(log){
+        return this.db.collection(COLLECTION).insertOne(log);
+    },
+    findAll(){
+        return this.db.collection(COLLECTION).find({}).toArray();
     }
 };
 export default logDAO;

@@ -11,7 +11,7 @@ import Options from "./tipos/options";
 import moment from 'moment';
 import reservaDAO from "../../../../../DAO/reservaDAO";
 
-const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected}) => {
+const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected, userLogged}) => {
 
     const [selectedProfissional, selectProf] = React.useState({});
     const [loading, setLoading] = React.useState(false);
@@ -26,13 +26,12 @@ const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected}) => {
             hora_inicio: Number(form.hora_inicio.value),
             hora_fim: Number(form.hora_fim.value),
             sala_id: salaSelected._id,
-            data: dateSelected.toDate(),
+            data: moment(dateSelected).toDate(),
             valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
             cancelado: false,
             pago: false,
             executado: false,
-
-        });
+        }, userLogged);
         setLoading(false);
         alert('Adicionado com sucesso!');
         close();
@@ -69,6 +68,7 @@ const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
     dateSelected: state.general.dateSelected,
     salaSelected: state.agendamentos.salaSelected,
+    userLogged: state.general.userLogged,
 });
 
 const mapDispatchToProps = dispatch => ({

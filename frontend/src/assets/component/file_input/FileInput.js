@@ -40,7 +40,7 @@ const FileInput = props => {
                        id={'real_file'}
                        onChange={onChange}
                        hidden
-                       accept={'image/png, image/jpeg, image/jpg'}
+                       accept={'image/png, image/jpeg, image/jpg, image/gif'}
                        ref={realUploadButton}/>
                 <div className={'buttons'}>
                     <button

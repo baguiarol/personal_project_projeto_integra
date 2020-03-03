@@ -1,10 +1,15 @@
+import logDAO from "./logDAO";
+
 const COLLECTION = 'reservas'
 const reservaDAO = {
     db: null,
     setDb(db) {
         this.db = db;
     },
-    create(reserva) {
+    create(reserva, userLogged = null) {
+        if (userLogged) {
+            logDAO.create(this.db, { usuario: userLogged, log: 'Adicionou uma reserva', data_hora: new Date()})
+        }
         return this.db.collection(COLLECTION).insertOne(reserva);
     },
     update(query, changes) {

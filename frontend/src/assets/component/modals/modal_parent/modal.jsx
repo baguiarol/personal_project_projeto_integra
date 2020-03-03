@@ -9,7 +9,9 @@ const ModalParent = props => {
     React.useEffect(() => {
         if (form.current) {
             setTimeout(() => {
-                console.log(form.current.reset());
+                if (form.current) {
+                    form.current.reset();
+                }
             }, 300);
         }
     }, [props.show]);

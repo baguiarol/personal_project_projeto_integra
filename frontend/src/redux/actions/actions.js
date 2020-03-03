@@ -12,6 +12,7 @@ const Actions = {
     setAgendamentos: 'SET_AGENDAMENTOS',
     selectAdministrador: 'SELECT_ADM',
     selectProfissional: 'SELECT_PROF',
+    setLogs: 'SET_LOGS',
 }
 
 export default Actions;

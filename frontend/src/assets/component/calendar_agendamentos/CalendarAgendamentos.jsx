@@ -67,16 +67,16 @@ const CalendarAgendamentos = props => {
                                 });
                                 if (!isOccupied) {
                                     return (
-                                        <td key={index} className={'free'} onClick={() => {
-                                            props.openModal(ModalTypes.adicionarAgendamentoAdm);
-                                            props.selectSala(sala);
-                                        }}>
-                                            <i className={'fa fa-plus'}/>
-                                        </td>
-                                    )
+                                            <td key={index} className={'free'} onClick={() => {
+                                                props.openModal(ModalTypes.adicionarAgendamentoAdm);
+                                                props.selectSala(sala);
+                                            }}>
+                                                <i className={'fa fa-plus'}/>
+                                            </td>
+                                        )
                                 } else {
                                     return (<td key={index} className={'occupied'}>
-                                        {agnd ? agnd.profissional.nome: ''}
+                                        {agnd ? (agnd.profissional ? agnd.profissional.nome : <i>Usuário Excluído</i> ) : ''}
                                     </td>)
                                 }
                             })}

@@ -5,6 +5,7 @@ import thunk from "redux-thunk";
 import AdministradoresReducer from "./reducers/administradores_reducer";
 import SalasReducer from "./reducers/salas_reducer";
 import AgendamentosReducer from "./reducers/agendamentos_reducer";
+import LogsReducer from "./reducers/logs_reducer";
 
 const Store = createStore(combineReducers({
     general: GeneralReducer,
@@ -12,6 +13,7 @@ const Store = createStore(combineReducers({
     administradores: AdministradoresReducer,
     salas: SalasReducer,
     agendamentos: AgendamentosReducer,
+    logs: LogsReducer,
 }, applyMiddleware(thunk)));
 
 export default Store;

@@ -1,4 +1,4 @@
-import {AnonymousCredential, UserPasswordAuthProviderClient} from 'mongodb-stitch-browser-sdk';
+import {AnonymousCredential, UserPasswordAuthProviderClient, UserPasswordCredential} from 'mongodb-stitch-browser-sdk';
 
 const COLLECTION = 'administradores';
 
@@ -33,6 +33,13 @@ const administradorDAO = {
     },
     anonymousLogin(client) {
         return client.auth.loginWithCredential(new AnonymousCredential());
+    },
+    find(query) {
+        return this.db.collection(COLLECTION).find(query).toArray();
+    },
+    userPasswordLogin(client, user, password) {
+        const credentials = new UserPasswordCredential(user, password);
+        return client.auth.loginWithCredential(credentials);
     }
 };
 
