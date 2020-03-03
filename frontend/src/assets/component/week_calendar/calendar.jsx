@@ -18,26 +18,31 @@ const Reserva = props => {
 const days = ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
 const WeekCalendar = props => {
+
+    const [agendamentosDaSala, setAgendamentosDaSala] = React.useState([]);
+
+    React.useEffect(() => {
+        setAgendamentosDaSala(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
+    }, [props]);
+
     return (
         <div className={'container_week'}>
             <div className={'chevron'}><p><i className={'fas fa-chevron-left'}/></p></div>
             {days.map((day, index) => {
 
                 let date = moment().locale('pt-BR').startOf('week').add(index, 'days');
-                let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala);
-                console.log(agendamentosDaSala);
 
                 return (
                     <div
                         key={day}
-                        onClick={props.addReservaListener}
+                        onClick={() => props.addReservaListener(date)}
                         className={'week_day'}>
                         <h1>{day}</h1>
                         <h3>{date.format('DD/MMM')}</h3>
                         {
-                            agendamentosDaSala.map(agendamento => {
+                            agendamentosDaSala.map((agendamento, index) => {
                                 if (date.isSame(agendamento.data, 'day')) {
-                                    return <Reserva reserva={agendamento}/>
+                                    return <Reserva key={index} reserva={agendamento}/>
                                 } else {
                                     return <></>
                                 }

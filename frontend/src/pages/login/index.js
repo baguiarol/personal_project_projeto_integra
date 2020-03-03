@@ -38,7 +38,8 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                             // Login de clientes
                             try {
                                 await clienteDAO.login(mongoClient, form.email.value, form.senha.value);
-                                alert('Entrar como cliente');
+                                setLogged(true);
+                                setUserLogged(clientes[0]);
                             } catch (err) {
                                 alert(err);
                             }

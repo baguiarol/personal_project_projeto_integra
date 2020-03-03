@@ -10,11 +10,25 @@ import ModalDetalhesSala from "../../../assets/component/modals/cliente/modal_de
 import AlternatingTab from "../../../assets/component/alternating_tab/alt_tab";
 import Snack from "../../../assets/component/Snack/snack";
 import ModoPaisagem from "../../../assets/component/modoPaisagem/modoPaisagem";
+import clienteDAO from "../../../DAO/clienteDAO";
+import salaDAO from "../../../DAO/salaDAO";
+import reservaDAO from "../../../DAO/reservaDAO";
+import logDAO from "../../../DAO/logDAO";
 
 const ClienteAgendamentos = props => {
 
     const [selectedTab, selectTab] = React.useState(0);
 
+    React.useEffect(() => {
+        if (clienteDAO.db) {
+            salaDAO.findAll().then(res => {
+                props.setSalas(res);
+            });
+            reservaDAO.findAll(props.client).then(res => {
+                props.setAgendamentos(res);
+            });
+        }
+    }, [props.client]);
 
     return (
         <div>
@@ -44,11 +58,15 @@ const ClienteAgendamentos = props => {
                     props.salas.map((sala, index) => (
                         <Sala
                             sala={sala}
+                            key={index}
                             onClickDetalhesListener={() => {
                                 props.openModal(ModalTypes.detalhesSala);
                             }}
-                            addReservaListener={() =>
-                                props.openModal(ModalTypes.reservaCliente)}/>
+                            addReservaListener={date => {
+                                props.selectDate(date.toDate());
+                                console.log(date.toDate());
+                                props.openModal(ModalTypes.reservaCliente)
+                            }}/>
                     ))
                 }
             </div>
@@ -60,11 +78,15 @@ const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
     salas: state.salas.salas,
+    client: state.general.mongoClient,
 });
 
 const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
     closeModal: () => dispatch({type: Actions.closeModal}),
+    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
+    selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
+    setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClienteAgendamentos)
