@@ -28,16 +28,13 @@ const ClienteAgendamentos = props => {
     })
 
     React.useEffect(() => {
-        if (clienteDAO.db) {
+        if (clienteDAO.db && 'nome' in props.userLogged) {
             salaDAO.findAll().then(res => {
                 props.setSalas(res);
             });
             reservaDAO.findAll(props.client).then(res => {
                 props.setAgendamentos(res);
-            });
-            reservaDAO.findReservaDeCliente(props.userLogged._id).then(res => {
-                props.setProfissionalReservas(res);
-                console.log(res);
+                props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, res));
             });
         }
     }, [props.client]);
@@ -95,6 +92,7 @@ const mapStateToProps = state => ({
     salas: state.salas.salas,
     client: state.general.mongoClient,
     userLogged: state.general.userLogged,
+    agendamentos: state.agendamentos.agendamentos,
 });
 
 const mapDispatchToProps = dispatch => ({

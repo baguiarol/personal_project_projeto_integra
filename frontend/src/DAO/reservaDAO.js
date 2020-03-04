@@ -4,6 +4,7 @@ const COLLECTION = 'reservas'
 const reservaDAO = {
     db: null,
     setDb(db) {
+
         this.db = db;
     },
     create(reserva, userLogged = null) {
@@ -34,8 +35,16 @@ const reservaDAO = {
     editaReserva(id_reserva, edits) {
         return this.update({_id: id_reserva}, edits);
     },
-    findReservaDeCliente(profissional_id) {
-        return this.db.collection(COLLECTION).find({profissional_id}).toArray();
+    findReservaDeCliente(profissional_id, reservas) {
+        let profissionalReservas = [];
+        reservas.forEach(reserva => {
+            if (reserva.profissional) {
+                console.log(reserva.profissional._id.toString());
+                if (reserva.profissional._id.toString() === profissional_id.toString())
+                    profissionalReservas.push(reserva);
+            }
+        });
+        return profissionalReservas;
     },
     findAll(client) {
         return client.callFunction('getAgendamentos');

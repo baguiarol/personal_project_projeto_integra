@@ -13,7 +13,7 @@ const ReservaCliente = props => {
             </div>
             <div>
                 <h4>Sala</h4>
-                <h1>05</h1>
+                <h1>{'sala' in props.reserva ? props.reserva.sala.nome : 'Sem nome'}</h1>
             </div>
             <div>
                 <h4>Situação</h4>

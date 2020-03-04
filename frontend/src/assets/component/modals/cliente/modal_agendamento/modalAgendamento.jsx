@@ -9,7 +9,7 @@ import moment from "moment/min/moment-with-locales";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
 
-const ModalAgendamento = ({show, close, dateSelected, userLogged, salaSelected, setAgendamentos, mongoClient}) => {
+const ModalAgendamento = ({show, close, dateSelected, userLogged, salaSelected, setAgendamentos, mongoClient, agendamentos}) => {
 
         const [loading, setLoading] = React.useState(false);
 
@@ -78,6 +78,7 @@ const mapStateToProps = state => ({
     salaSelected: state.salas.salaSelected,
     userLogged: state.general.userLogged,
     mongoClient: state.general.mongoClient,
+    agendamentos: state.agendamentos.agendamentos,
 });
 
 const mapDispatchToProps = dispatch => ({
