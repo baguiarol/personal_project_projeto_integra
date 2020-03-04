@@ -6,13 +6,16 @@ import AlternatingTab from "../../../assets/component/alternating_tab/alt_tab";
 import Snack from "../../../assets/component/Snack/snack";
 import ReservaCliente from "../../../assets/component/reserva_cliente/reserva_cliente";
 import Actions from "../../../redux/actions/actions";
-import reservaDAO from "../../../DAO/reservaDAO";
 import {useHistory} from "react-router";
 import Button from "../../../assets/component/button/button";
+import CheckBox from "../../../assets/component/checkbox/checkbox";
+import CancelCheckbox from "../../../assets/component/cancel_checkbox/CancelCheckbox";
 
 const MinhasReservasPage = props => {
 
     const [selectedTab, selectTab] = React.useState(1);
+    const [cancelando, setCancelando] = React.useState(false);
+
     const hist = useHistory();
 
     React.useEffect(() => {
@@ -36,8 +39,26 @@ const MinhasReservasPage = props => {
         }
     }
 
+    const renderReservas = () => {
+        if (props.profissionalReservas.length > 0) {
+            return props.profissionalReservas.map((reserva, index) => {
+                if (!reserva.executado)
+                    return (
+                        <div className={'flex'}>
+                            {cancelando ? <CancelCheckbox /> : <></>}
+                            <ReservaCliente reserva={reserva} key={index}/>
+                        </div>
+                    )
+                else
+                    return <></>
+            })
+        } else {
+            return <h2 className={'empty_array'}>Não há agendamentos marcados até o momento.</h2>
+        }
+    }
+
     return (
-        <div>
+        <div className={'reservas_page_container'}>
             <ClienteTopbar/>
             <div className={'info_container'}>
                 <AlternatingTab selectedIndex={selectedTab} elements={[{
@@ -52,17 +73,15 @@ const MinhasReservasPage = props => {
             <div className={'container_reservas'}>
                 <div className={'flex'}>
                     <h1 className={'title'}>Minhas Reservas</h1>
-                    <Button className={'cancelar_agendamentos'} text={'Cancelar Agendamentos'}/>
+                    <Button
+                        onClick={() => {
+                            setCancelando(!cancelando)
+                        }}
+                        className={'cancelar_agendamentos'}
+                        text={cancelando ? 'Parar Cancelamento' : 'Cancelar Agendamentos'}/>
                 </div>
                 {
-                    props.profissionalReservas.map((reserva, index) => {
-                        if (!reserva.executado)
-                            return (
-                                <ReservaCliente reserva={reserva} key={index}/>
-                            )
-                        else
-                            return <></>
-                    })
+                    renderReservas()
                 }
                 <h1 className={'title'}>Histórico</h1>
                 {
