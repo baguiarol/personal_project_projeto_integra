@@ -37,8 +37,8 @@ const WeekCalendar = props => {
                         key={day}
                         onClick={() => props.addReservaListener(date)}
                         className={'week_day'}>
-                        <h1>{day}</h1>
-                        <h3>{date.format('DD/MMM')}</h3>
+                        <h1 className={date.isSame(new Date(), 'day') ? 'today': ''}>{day}</h1>
+                        <h3 className={date.isSame(new Date(), 'day') ? 'today': ''}>{date.format('DD/MMM')}</h3>
                         {
                             agendamentosDaSala.map((agendamento, index) => {
                                 if (date.isSame(agendamento.data, 'day')) {
