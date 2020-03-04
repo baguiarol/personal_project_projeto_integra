@@ -14,10 +14,18 @@ import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
 import logDAO from "../../../DAO/logDAO";
+import {useHistory} from "react-router";
 
 const ClienteAgendamentos = props => {
 
     const [selectedTab, selectTab] = React.useState(0);
+
+    const story = useHistory();
+
+    React.useEffect(() => {
+        if (!('nome' in props.userLogged))
+            story.push('/');
+    })
 
     React.useEffect(() => {
         if (clienteDAO.db) {
@@ -26,6 +34,10 @@ const ClienteAgendamentos = props => {
             });
             reservaDAO.findAll(props.client).then(res => {
                 props.setAgendamentos(res);
+            });
+            reservaDAO.findReservaDeCliente(props.userLogged._id).then(res => {
+                props.setProfissionalReservas(res);
+                console.log(res);
             });
         }
     }, [props.client]);
@@ -42,14 +54,16 @@ const ClienteAgendamentos = props => {
                 close={() => props.closeModal()}
                 show={props.showModal && props.modalType === ModalTypes.detalhesSala}
             />
-            <ClienteTopbar />
+            <ClienteTopbar/>
             <div className={'info_container'}>
                 <AlternatingTab selectedIndex={selectedTab} elements={[{
                     name: 'Salas para Reservar',
                     onClick: () => selectTab(0),
                 }, {
                     name: 'Minhas Reservas',
-                    onClick: () => { selectTab(1) },
+                    onClick: () => {
+                        selectTab(1)
+                    },
                 }]}/>
                 <Snack/>
             </div>
@@ -80,6 +94,7 @@ const mapStateToProps = state => ({
     modalType: state.general.modalType,
     salas: state.salas.salas,
     client: state.general.mongoClient,
+    userLogged: state.general.userLogged,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -89,6 +104,7 @@ const mapDispatchToProps = dispatch => ({
     selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
     selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
+    setProfissionalReservas: reservas => dispatch({type: Actions.setProfissionalReservas, payload: reservas}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClienteAgendamentos)

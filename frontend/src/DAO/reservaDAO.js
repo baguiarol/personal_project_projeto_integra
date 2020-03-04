@@ -34,8 +34,8 @@ const reservaDAO = {
     editaReserva(id_reserva, edits) {
         return this.update({_id: id_reserva}, edits);
     },
-    findReservaDeCliente(id_cliente) {
-        return this.db.collection(COLLECTION).find({id_cliente}).toArray();
+    findReservaDeCliente(profissional_id) {
+        return this.db.collection(COLLECTION).find({profissional_id}).toArray();
     },
     findAll(client) {
         return client.callFunction('getAgendamentos');

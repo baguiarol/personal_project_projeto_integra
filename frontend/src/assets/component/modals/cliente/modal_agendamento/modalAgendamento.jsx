@@ -35,9 +35,11 @@ const ModalAgendamento = ({show, close, dateSelected, userLogged, salaSelected, 
             };
 
         React.useEffect(() => {
-            reservaDAO.findAll(mongoClient).then(res => {
-                setAgendamentos(res);
-            })
+            if (mongoClient) {
+                reservaDAO.findAll(mongoClient).then(res => {
+                    setAgendamentos(res);
+                })
+            }
         })
 
         return (
