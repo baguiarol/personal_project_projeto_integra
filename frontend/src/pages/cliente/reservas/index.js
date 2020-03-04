@@ -7,10 +7,17 @@ import Snack from "../../../assets/component/Snack/snack";
 import ReservaCliente from "../../../assets/component/reserva_cliente/reserva_cliente";
 import Actions from "../../../redux/actions/actions";
 import reservaDAO from "../../../DAO/reservaDAO";
+import {useHistory} from "react-router";
 
 const MinhasReservasPage = props => {
 
     const [selectedTab, selectTab] = React.useState(1);
+    const hist = useHistory();
+    React.useEffect(() => {
+        if (!('nome' in props.userLogged)) {
+            hist.push('/');
+        }
+    })
 
     const renderHistorico = () => {
         let arrayExecutados = [];
