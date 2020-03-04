@@ -35,7 +35,6 @@ const WeekCalendar = props => {
                 return (
                     <div
                         key={day}
-                        onClick={() => props.addReservaListener(date)}
                         className={'week_day'}>
                         <h1 className={date.isSame(new Date(), 'day') ? 'today': ''}>{day}</h1>
                         <h3 className={date.isSame(new Date(), 'day') ? 'today': ''}>{date.format('DD/MMM')}</h3>
@@ -48,7 +47,15 @@ const WeekCalendar = props => {
                                 }
                             })
                         }
-                        <div className={'add'}><span>+</span></div>
+                        {
+                            date.isSameOrAfter(new Date(), 'day') ?
+                            (<div
+                            onClick={() => props.addReservaListener(date)}
+                            className={'add'}>
+                            <span>+</span>
+                            </div>) : <></>
+                        }
+
                     </div>
                 )
             })}
