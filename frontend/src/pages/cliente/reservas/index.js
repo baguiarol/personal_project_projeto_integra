@@ -44,8 +44,10 @@ const MinhasReservasPage = props => {
             return props.profissionalReservas.map((reserva, index) => {
                 if (!reserva.executado)
                     return (
-                        <div className={'flex'}>
-                            {cancelando ? <CancelCheckbox /> : <></>}
+                        <div className={cancelando ? 'flex flex_margin' : 'flex'}>
+                            {cancelando ? <CancelCheckbox onCheck={() => {
+                                console.log('checked');
+                            }}/> : <></>}
                             <ReservaCliente reserva={reserva} key={index}/>
                         </div>
                     )

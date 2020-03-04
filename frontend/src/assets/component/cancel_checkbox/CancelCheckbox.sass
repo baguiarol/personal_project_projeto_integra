@@ -2,13 +2,28 @@
 
 .reservas_page_container
   .flex
-    margin-bottom: 12px
+    @include putTransition()
+    margin-bottom: 0px
+    &.flex_margin
+      margin-bottom: 1%
     .cancel_checkbox_container
       margin: auto
       cursor: pointer
+      @include putTransition()
       width: 50px
       .cancel_checkbox
         width: 35px
         border-radius: 500px
-        border: 1px solid $primaryBlue
+        border: 1px solid lighten($grey, 10)
         height: 35px
+        display: flex
+        @include putTransition()
+        i
+          margin: auto
+          transform: scale(0)
+          @include putTransition()
+        &.checked
+          border: 1px solid $primaryBlue
+          i
+            transform: scale(1)
+            color: $primaryBlue

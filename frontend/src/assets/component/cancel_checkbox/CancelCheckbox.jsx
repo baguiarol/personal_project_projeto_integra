@@ -13,6 +13,7 @@ const CancelCheckbox = ({ onCheck }) => {
                 setChecked(!checked);
                 onCheck(checked);
             }}>
+                <i className={'fas fa-check'} />
             </div>
         </div>
     )
