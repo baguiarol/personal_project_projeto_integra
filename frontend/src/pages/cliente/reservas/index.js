@@ -8,16 +8,18 @@ import ReservaCliente from "../../../assets/component/reserva_cliente/reserva_cl
 import Actions from "../../../redux/actions/actions";
 import reservaDAO from "../../../DAO/reservaDAO";
 import {useHistory} from "react-router";
+import Button from "../../../assets/component/button/button";
 
 const MinhasReservasPage = props => {
 
     const [selectedTab, selectTab] = React.useState(1);
     const hist = useHistory();
+
     React.useEffect(() => {
         if (!('nome' in props.userLogged)) {
             hist.push('/');
         }
-    })
+    });
 
     const renderHistorico = () => {
         let arrayExecutados = [];
@@ -48,7 +50,10 @@ const MinhasReservasPage = props => {
                 <Snack/>
             </div>
             <div className={'container_reservas'}>
-                <h1 className={'title'}>Minhas Reservas</h1>
+                <div className={'flex'}>
+                    <h1 className={'title'}>Minhas Reservas</h1>
+                    <Button className={'cancelar_agendamentos'} text={'Cancelar Agendamentos'}/>
+                </div>
                 {
                     props.profissionalReservas.map((reserva, index) => {
                         if (!reserva.executado)
