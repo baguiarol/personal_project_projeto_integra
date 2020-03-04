@@ -39,6 +39,14 @@ const MinhasReservasPage = props => {
         }
     }
 
+    const handleConfirmCancelamento = () => {
+        if (window.confirm("Você tem certeza que deseja cancelar esses agendamentos?")) {
+            console.log(true);
+        } else {
+            console.log(false);
+        }
+    }
+
     const renderReservas = () => {
         if (props.profissionalReservas.length > 0) {
             return props.profissionalReservas.map((reserva, index) => {
@@ -85,6 +93,10 @@ const MinhasReservasPage = props => {
                 {
                     renderReservas()
                 }
+                {cancelando ? <Button
+                    onClick={handleConfirmCancelamento}
+                    text={'Confirmar Cancelamento'}
+                    className={'cancelar_button'} />: <></>}
                 <h1 className={'title'}>Histórico</h1>
                 {
                     renderHistorico()
