@@ -32,7 +32,7 @@ const WeekCalendar = props => {
                 onClick={() => {
                     selectDate(selectedDate.subtract(1, 'week'));
                 }}
-                className={'chevron'}>
+                className={selectedDate.isSame(new Date(), 'week') ? 'chevron hidden' : 'chevron'}>
                 <p>
                     <i className={'fas fa-chevron-left'}/>
                 </p>
@@ -72,7 +72,7 @@ const WeekCalendar = props => {
                 onClick={() => {
                     selectDate(selectedDate.add(1, 'week'));
                 }}
-                className={'chevron'}>
+                className={selectedDate.isSame(moment().add(2, 'week'), 'week') ? 'chevron hidden' : 'chevron'}>
                 <p>
                     <i className={'fas fa-chevron-right'}/>
                 </p>
