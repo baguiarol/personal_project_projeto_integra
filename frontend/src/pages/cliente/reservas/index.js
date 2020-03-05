@@ -11,12 +11,14 @@ import Button from "../../../assets/component/button/button";
 import CancelCheckbox from "../../../assets/component/cancel_checkbox/CancelCheckbox";
 import {removeElementFromArray} from "../../../assets/AuxFunctions";
 import reservaDAO from "../../../DAO/reservaDAO";
+import clienteDAO from "../../../DAO/clienteDAO";
 
 const MinhasReservasPage = props => {
 
     const [selectedTab, selectTab] = React.useState(1);
     const [cancelando, setCancelando] = React.useState(false);
     const [selectedReservas, selectReservas] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
 
     const hist = useHistory();
 
@@ -43,12 +45,18 @@ const MinhasReservasPage = props => {
 
     const handleConfirmCancelamento = async () => {
         if (window.confirm("Você tem certeza que deseja cancelar esses agendamentos?")) {
+            setLoading(true);
             try {
                 await reservaDAO.cancelaMuitasReservas(selectedReservas);
+                const reservas = await reservaDAO.findAll(props.mongoClient);
+                props.setAgendamentos(reservas);
+                props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, reservas));
                 alert("Cancelamento realizado com sucesso!");
             } catch (err) {
                 alert("Erro! Informações: "+err);
             }
+            setLoading(false);
+            setCancelando(false);
         }
     };
 
@@ -107,6 +115,7 @@ const MinhasReservasPage = props => {
                 {cancelando ? <Button
                     onClick={handleConfirmCancelamento}
                     text={'Confirmar Cancelamento'}
+                    loading={loading}
                     className={'cancelar_button'} />: <></>}
                 <h1 className={'title'}>Histórico</h1>
                 {
@@ -119,9 +128,11 @@ const MinhasReservasPage = props => {
 
 const mapStateToProps = state => ({
     userLogged: state.general.userLogged,
+    mongoClient: state.general.mongoClient,
     profissionalReservas: state.profissionais.profissionalReservas,
 });
 const mapDispatchToProps = dispatch => ({
+    setAgendamentos: agnds => dispatch({type: Actions.setAgendamentos, payload: agnds}),
     setProfissionalReservas: reservas => dispatch({type: Actions.setProfissionalReservas, payload: reservas}),
 });
 

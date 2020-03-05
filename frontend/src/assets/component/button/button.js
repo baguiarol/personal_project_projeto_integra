@@ -11,7 +11,7 @@ const Button = props => {
             editing={props.editing}
             disabled={props.loading || props.editing}
             className={(props.loading || props.editing) ?
-                'button loading '+props.className : 'button '+props.className }>
+                'button '+props.className+' loading' : 'button '+props.className }>
             { props.loading ? 'Carregando' : (props.editing ? 'Editando' : props.text)}
         </button>
     );
