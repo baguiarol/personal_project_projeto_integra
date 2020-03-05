@@ -32,60 +32,68 @@ const CalendarAgendamentos = props => {
                 </span>
                 {moment(props.dateSelected).locale('pt-BR').format(' DD MMMM YYYY')}
                 <span
-                    onClick={() => {props.selectDate(moment(props.dateSelected).add(1, 'day'))}}
+                    onClick={() => {
+                        props.selectDate(moment(props.dateSelected).add(1, 'day'))
+                    }}
                     className={'chevron_date'}
                     style={{float: 'right'}}>
                     <i className={'fa fa-chevron-right'}/>
                 </span>
             </h1>
             <div className={'container_table'}>
-            <table className={'calendar_table'}>
-                {/*aqui vai a numeracao das salas*/}
-                <thead>
+                <table className={'calendar_table'}>
+                    {/*aqui vai a numeracao das salas*/}
+                    <thead>
                     <tr>
                         <th style={{width: '10%'}}></th>
                         {
                             props.salas.map((sala, index) => <th key={index}>{sala.nome}</th>)
                         }
                     </tr>
-                </thead>
-                <tbody>
-                {
-                    horas.map((hora, index) => (
-                        <tr key={index}>
-                            <td>{hora.label}</td>
-                            { props.salas.map((sala, index) => {
-                                let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
-                                let isOccupied = false;
-                                let agnd = null;
-                                agendamentosDaSala.forEach(agendamento => {
-                                    if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
-                                        && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))
-                                        && !agendamento.cancelado) {
-                                        isOccupied = true;
-                                        agnd = agendamento;
-                                    }
-                                });
-                                if (!isOccupied) {
-                                    return (
-                                            <td key={index} className={'free'} onClick={() => {
+                    </thead>
+                    <tbody>
+                    {
+                        horas.map((hora, index) => (
+                            <tr key={index}>
+                                <td>{hora.label}</td>
+                                {props.salas.map((sala, indexSala) => {
+                                    let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
+                                    let isOccupied = false;
+                                    let agnd = null;
+                                    agendamentosDaSala.forEach(agendamento => {
+                                        if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
+                                            && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))
+                                            && !agendamento.cancelado) {
+                                            isOccupied = true;
+                                            agnd = agendamento;
+                                            console.log(agnd);
+                                        }
+                                    });
+                                    if (!isOccupied) {
+                                        return (
+                                            <td key={indexSala} className={'free'} onClick={() => {
                                                 props.openModal(ModalTypes.adicionarAgendamentoAdm);
                                                 props.selectSala(sala);
                                             }}>
                                                 <i className={'fa fa-plus'}/>
                                             </td>
                                         )
-                                } else {
-                                    return (<td key={index} className={'occupied'}>
-                                        {agnd ? (agnd.profissional ? agnd.profissional.nome : <i>Usuário Excluído</i> ) : ''}
-                                    </td>)
-                                }
-                            })}
-                        </tr>
-                    ))
-                }
-                </tbody>
-            </table>
+                                    } else if (agnd) {
+                                        if (agnd.hora_inicio === hora.value) {
+                                            return (<td key={indexSala} rowSpan={agnd.hora_fim - agnd.hora_inicio} className={'occupied'}>
+                                                {agnd ? (agnd.profissional ? agnd.profissional.nome :
+                                                    <i>Usuário Excluído</i>) : ''}
+                                            </td>)
+                                        } else {
+                                            return <></>
+                                        }
+                                    }
+                                })}
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
             </div>
         </div>
     )
