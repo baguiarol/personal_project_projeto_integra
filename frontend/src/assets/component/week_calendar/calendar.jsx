@@ -30,6 +30,7 @@ const WeekCalendar = props => {
         <div className={'container_week'}>
             <div
                 onClick={() => {
+                    setAgendamentosDaSala(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
                     selectDate(selectedDate.subtract(1, 'week'));
                 }}
                 className={selectedDate.isSame(new Date(), 'week') ? 'chevron hidden' : 'chevron'}>
@@ -70,6 +71,7 @@ const WeekCalendar = props => {
             })}
             <div
                 onClick={() => {
+                    setAgendamentosDaSala(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
                     selectDate(selectedDate.add(1, 'week'));
                 }}
                 className={selectedDate.isSame(moment().add(2, 'week'), 'week') ? 'chevron hidden' : 'chevron'}>
