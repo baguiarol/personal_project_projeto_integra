@@ -20,6 +20,7 @@ const days = ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const WeekCalendar = props => {
 
     const [agendamentosDaSala, setAgendamentosDaSala] = React.useState([]);
+    const [selectedDate, selectDate] = React.useState(moment());
 
     React.useEffect(() => {
         setAgendamentosDaSala(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
@@ -27,10 +28,18 @@ const WeekCalendar = props => {
 
     return (
         <div className={'container_week'}>
-            <div className={'chevron'}><p><i className={'fas fa-chevron-left'}/></p></div>
+            <div
+                onClick={() => {
+                    selectDate(selectedDate.subtract(1, 'week'));
+                }}
+                className={'chevron'}>
+                <p>
+                    <i className={'fas fa-chevron-left'}/>
+                </p>
+            </div>
             {days.map((day, index) => {
 
-                let date = moment().locale('pt-BR').startOf('week').add(index, 'days');
+                let date = moment(selectedDate.toDate()).locale('pt-BR').startOf('week').add(index, 'days');
 
                 return (
                     <div
@@ -60,6 +69,9 @@ const WeekCalendar = props => {
                 )
             })}
             <div
+                onClick={() => {
+                    selectDate(selectedDate.add(1, 'week'));
+                }}
                 className={'chevron'}>
                 <p>
                     <i className={'fas fa-chevron-right'}/>
