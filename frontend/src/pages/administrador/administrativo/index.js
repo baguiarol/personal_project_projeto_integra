@@ -18,7 +18,7 @@ const AdministrativoPage = props => {
                 props.setAdministrativo(adms);
             });
         }
-    });
+    }, [props.client]);
 
     return (
         <div>
@@ -45,6 +45,7 @@ const AdministrativoPage = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    client: state.general.mongoClient,
     administradores: state.administradores.administradores,
 });
 

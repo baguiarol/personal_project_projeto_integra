@@ -18,7 +18,7 @@ const ProfissionaisPage = props => {
                 props.setProfissionais(res);
             })
         }
-    });
+    }, [props.client]);
     
     return (
         <div>
@@ -42,6 +42,7 @@ const ProfissionaisPage = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    client: state.general.mongoClient,
     profissionais: state.profissionais.profissionais,
 })
 
