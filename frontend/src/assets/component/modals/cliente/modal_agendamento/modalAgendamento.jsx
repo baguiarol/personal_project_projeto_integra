@@ -9,7 +9,15 @@ import moment from "moment/min/moment-with-locales";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
 
-const ModalAgendamento = ({show, close, dateSelected, userLogged, salaSelected, setAgendamentos, mongoClient, agendamentos}) => {
+const ModalAgendamento = ({show,
+                              close,
+                              dateSelected,
+                              userLogged,
+                              salaSelected,
+                              setAgendamentos,
+                              mongoClient,
+                              agendamentos,
+                              setProfissionalReservas}) => {
 
         const [loading, setLoading] = React.useState(false);
 
@@ -38,7 +46,10 @@ const ModalAgendamento = ({show, close, dateSelected, userLogged, salaSelected, 
             if (mongoClient) {
                 reservaDAO.findAll(mongoClient).then(res => {
                     setAgendamentos(res);
-                })
+                    if ('nome' in userLogged) {
+                        setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, res));
+                    }
+                });
             }
         })
 
@@ -82,6 +93,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setProfissionalReservas: reservas => dispatch({type: Actions.setProfissionalReservas, payload: reservas}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
 });
 
