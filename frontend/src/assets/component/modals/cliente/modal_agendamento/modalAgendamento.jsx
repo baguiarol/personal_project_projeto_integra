@@ -72,7 +72,7 @@ const ModalAgendamento = ({
                     }
                 });
             }
-        })
+        }, [mongoClient]);
 
         return (
             <ModalParent show={show}
