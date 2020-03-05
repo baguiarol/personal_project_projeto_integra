@@ -40,7 +40,7 @@ const WeekCalendar = props => {
                         <h3 className={date.isSame(new Date(), 'day') ? 'today': ''}>{date.format('DD/MMM')}</h3>
                         {
                             agendamentosDaSala.map((agendamento, index) => {
-                                if (date.isSame(agendamento.data, 'day')) {
+                                if (date.isSame(agendamento.data, 'day') && !agendamento.cancelado) {
                                     return <Reserva key={index} reserva={agendamento}/>
                                 } else {
                                     return <></>
