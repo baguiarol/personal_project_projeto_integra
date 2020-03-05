@@ -60,7 +60,8 @@ const CalendarAgendamentos = props => {
                                 let agnd = null;
                                 agendamentosDaSala.forEach(agendamento => {
                                     if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
-                                        && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))) {
+                                        && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))
+                                        && !agendamento.cancelado) {
                                         isOccupied = true;
                                         agnd = agendamento;
                                     }
