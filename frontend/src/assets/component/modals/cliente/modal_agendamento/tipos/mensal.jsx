@@ -9,7 +9,7 @@ const MensalCliente = props => {
 
     React.useEffect(() => {
         let meses = [];
-        for (let i = 0; i < 3; i++)
+        for (let i = 1; i < 4; i++)
             meses.push({
                 label: moment(new Date()).locale('pt-BR').add(i, 'month').format(' MMMM / YYYY'),
                 value: moment(new Date()).locale('pt-BR').add(i, 'month').format(' MMMM / YYYY'),
@@ -28,11 +28,7 @@ const MensalCliente = props => {
             </div>
             <div className={'resume_container'}>
                 <div>
-                    <h2>Valor/Hora</h2>
-                    <h3>R$39,90</h3>
-                </div>
-                <div>
-                    <h2>Valor Total:</h2>
+                    <h2>Valor Mensal:</h2>
                     <h3>R$139,90</h3>
                 </div>
             </div>

@@ -11,11 +11,17 @@ import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
 import logDAO from "../../../DAO/logDAO";
+import {useHistory} from "react-router";
 
 const AgendamentosAdministrador = props => {
 
+    const hist = useHistory();
+
     React.useEffect(() => {
         if (clienteDAO.db) {
+            if ('ocupacao' in props.userLogged) {
+                hist.push('/');
+            }
             clienteDAO.findAll().then(res => {
                 props.setProfissionais(res);
             });
@@ -49,6 +55,7 @@ const AgendamentosAdministrador = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    userLogged: state.general.userLogged,
     client: state.general.mongoClient,
 });
 

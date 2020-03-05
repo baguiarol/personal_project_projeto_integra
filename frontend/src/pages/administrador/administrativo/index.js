@@ -9,14 +9,20 @@ import ModalNewAdministrativo
     from "../../../assets/component/modals/administrativo/modal_new_administrativo/modal_new_administrativo";
 import {connect} from "react-redux";
 import administradorDAO from "../../../DAO/administradorDAO";
+import {useHistory} from "react-router";
 
 const AdministrativoPage = props => {
+
+    const hist = useHistory();
 
     React.useEffect(() => {
         if (administradorDAO.db) {
             administradorDAO.findAll().then(adms => {
                 props.setAdministrativo(adms);
             });
+        }
+        if ('ocupacao' in props.userLogged) {
+            hist.push('/');
         }
     }, [props.client]);
 
@@ -46,6 +52,7 @@ const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
     client: state.general.mongoClient,
+    userLogged: state.general.userLogged,
     administradores: state.administradores.administradores,
 });
 

@@ -7,7 +7,6 @@ import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar
 const DashboardPage = props => {
 
     React.useEffect(() => {
-
         let chart = am4core.create('chart_agendamentos', am4charts.XYChart);
 
         chart.paddingRight = 20;

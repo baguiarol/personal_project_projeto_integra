@@ -9,10 +9,18 @@ import ModalNewProfissional
     from "../../../assets/component/modals/administrativo/modal_new_profissional/modal_new_profissional";
 import ModalTypes from "../../../assets/modal_types";
 import clienteDAO from "../../../DAO/clienteDAO";
+import {useHistory} from "react-router";
 
 const ProfissionaisPage = props => {
-    
+
+    const hist = useHistory();
+
     React.useEffect(() => {
+
+        if ('ocupacao' in props.userLogged) {
+            hist.push('/');
+        }
+
         if (clienteDAO.db) {
             clienteDAO.findAll().then(res => {
                 props.setProfissionais(res);
@@ -43,6 +51,7 @@ const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
     client: state.general.mongoClient,
+    userLogged: state.general.userLogged,
     profissionais: state.profissionais.profissionais,
 })
 

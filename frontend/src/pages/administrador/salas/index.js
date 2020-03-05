@@ -9,8 +9,15 @@ import ModalTypes from "../../../assets/modal_types";
 import Actions from "../../../redux/actions/actions";
 import {connect} from "react-redux";
 import salaDAO from "../../../DAO/salaDAO";
+import {useHistory} from "react-router";
 
 const SalasPage = props => {
+
+    const hist = useHistory();
+
+    if ('ocupacao' in props.userLogged) {
+        hist.push('/');
+    }
 
     React.useEffect(() => {
         if (salaDAO.db) {
@@ -56,6 +63,7 @@ const mapStateToProps = state => ({
    showModal: state.general.showModal,
     modalType: state.general.modalType,
     salas: state.salas.salas,
+    userLogged: state.general.userLogged,
 });
 
 const mapDispatchToProps = dispatch => ({

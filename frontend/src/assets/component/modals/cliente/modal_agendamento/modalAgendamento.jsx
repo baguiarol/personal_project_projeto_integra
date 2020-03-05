@@ -49,6 +49,11 @@ const ModalAgendamento = ({
                         ...selectedTurno,
                         valorTotal: salaSelected.valor_hora * (selectedTurno.hora_fim - selectedTurno.hora_inicio)
                     }
+                case 'Mensal':
+                    return {
+                        ...data,
+                        valorTotal: 3500
+                    }
             }
         }
 
