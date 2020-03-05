@@ -9,7 +9,8 @@ import moment from "moment/min/moment-with-locales";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
 
-const ModalAgendamento = ({show,
+const ModalAgendamento = ({
+                              show,
                               close,
                               dateSelected,
                               userLogged,
@@ -17,30 +18,32 @@ const ModalAgendamento = ({show,
                               setAgendamentos,
                               mongoClient,
                               agendamentos,
-                              setProfissionalReservas}) => {
+                              setProfissionalReservas
+                          }) => {
 
         const [loading, setLoading] = React.useState(false);
+        const [selectedPage, selectPage] = React.useState('Hora Avulsa');
 
         const handleSubmit = async e => {
-                e.preventDefault();
-                const form = e.target;
-                setLoading(true);
-                let data = {
-                    profissional_id: userLogged._id,
-                    hora_inicio: Number(form.hora_inicio.value),
-                    hora_fim: Number(form.hora_fim.value),
-                    sala_id: salaSelected._id,
-                    data: dateSelected,
-                    valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
-                    cancelado: false,
-                    pago: false,
-                    executado: false,
-                };
-                await reservaDAO.create(data, userLogged);
-                setLoading(false);
-                alert('Adicionado com sucesso!');
-                close();
+            e.preventDefault();
+            const form = e.target;
+            setLoading(true);
+            let data = {
+                profissional_id: userLogged._id,
+                hora_inicio: Number(form.hora_inicio.value),
+                hora_fim: Number(form.hora_fim.value),
+                sala_id: salaSelected._id,
+                data: dateSelected,
+                valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
+                cancelado: false,
+                pago: false,
+                executado: false,
             };
+            await reservaDAO.create(data, userLogged);
+            setLoading(false);
+            alert('Adicionado com sucesso!');
+            close();
+        };
 
         React.useEffect(() => {
             if (mongoClient) {
@@ -69,7 +72,7 @@ const ModalAgendamento = ({show,
                              </div>
                          </header>}
                          body={<div>
-                             <Options/>
+                             <Options selectedPage={selectedPage} selectPage={selectPage}/>
                          </div>}
                          footer={
                              <div className={'footer'}>
