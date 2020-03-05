@@ -23,22 +23,40 @@ const ModalAgendamento = ({
 
         const [loading, setLoading] = React.useState(false);
         const [selectedPage, selectPage] = React.useState('Hora Avulsa');
+        const [selectedTurno, selectTurno] = React.useState({});
+
+        const prepareData = form => {
+            let data = {
+                profissional_id: userLogged._id,
+                sala_id: salaSelected._id,
+                data: dateSelected,
+                cancelado: false,
+                pago: false,
+                executado: false,
+            };
+            switch (selectedPage) {
+                case 'Hora Avulsa':
+                    return {
+                        ...data,
+                        hora_inicio: Number(form.hora_inicio.value),
+                        hora_fim: Number(form.hora_fim.value),
+                        valorTotal: Number((salaSelected.valor_hora *
+                            (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
+                    };
+                case 'Turno':
+                    return {
+                        ...data,
+                        ...selectedTurno,
+                        valorTotal: salaSelected.valor_hora * (selectedTurno.hora_fim - selectedTurno.hora_inicio)
+                    }
+            }
+        }
 
         const handleSubmit = async e => {
             e.preventDefault();
             const form = e.target;
             setLoading(true);
-            let data = {
-                profissional_id: userLogged._id,
-                hora_inicio: Number(form.hora_inicio.value),
-                hora_fim: Number(form.hora_fim.value),
-                sala_id: salaSelected._id,
-                data: dateSelected,
-                valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
-                cancelado: false,
-                pago: false,
-                executado: false,
-            };
+            let data = prepareData(form);
             await reservaDAO.create(data, userLogged);
             setLoading(false);
             alert('Adicionado com sucesso!');
@@ -72,7 +90,10 @@ const ModalAgendamento = ({
                              </div>
                          </header>}
                          body={<div>
-                             <Options selectedPage={selectedPage} selectPage={selectPage}/>
+                             <Options
+                                 selectedPage={selectedPage}
+                                 selectPage={selectPage}
+                                 selectTurno={selectTurno}/>
                          </div>}
                          footer={
                              <div className={'footer'}>

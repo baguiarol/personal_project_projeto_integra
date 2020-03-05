@@ -1,17 +1,30 @@
 import React from 'react';
 import {connect} from "react-redux";
 import Select from "react-select";
+import PropTypes from 'prop-types';
 
 const TurnoCliente = props => {
 
     const optionsTurno = [{
-        label: '08:00h às 13:00h', value: '08:00h às 13:00h',
+        label: '08:00h às 13:00h', value: {
+            hora_inicio: 8,
+            hora_fim: 13,
+        },
     }, {
-        label: '14:00h às 18:00h', value: '14:00h às 18:00h',
+        label: '14:00h às 18:00h', value: {
+            hora_inicio: 14,
+            hora_fim: 18,
+        },
     }, {
-        label: '15:00h às 19:00h', value: '15:00h às 19:00h',
+        label: '15:00h às 19:00h', value: {
+            hora_inicio: 15,
+            hora_fim: 19,
+        },
     }, {
-        label: '16:00h às 20:00h', value: '16:00h às 20:00h',
+        label: '16:00h às 20:00h', value: {
+            hora_inicio: 16,
+            hora_fim: 20,
+        },
     }];
 
     return (
@@ -19,6 +32,8 @@ const TurnoCliente = props => {
             <div className={'select_profissionais_container'}>
                 <h2>Duração do Turno</h2>
                 <Select
+                    onChange={e => props.selectTurno(e.value)}
+                    name={'hora_turno'}
                     placeholder={'Selecione o Horário do Turno'}
                     options={optionsTurno}/>
                 <div className={'resume_container'}>
@@ -35,6 +50,10 @@ const TurnoCliente = props => {
         </div>
     )
 }
+
+TurnoCliente.propTypes = {
+    selectTurno: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => ({
     profissionais: state.profissionais.profissionais,
