@@ -37,4 +37,16 @@ const numberToHours = number => {
     return number+":00";
 }
 
-export {checkIfURLIsImage, transformStringToReais, transformReaisToFloat, numberIsBetween, numberToHours};
+const removeElementFromArray = (arr, value) => {
+    const filter = (arrayValue) => {
+        return arrayValue !== value;
+    }
+    return arr.filter(filter);
+};
+
+export {checkIfURLIsImage,
+    removeElementFromArray,
+    transformStringToReais,
+    transformReaisToFloat,
+    numberIsBetween,
+    numberToHours};

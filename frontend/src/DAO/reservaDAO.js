@@ -39,7 +39,6 @@ const reservaDAO = {
         let profissionalReservas = [];
         reservas.forEach(reserva => {
             if (reserva.profissional) {
-                console.log(reserva.profissional._id.toString());
                 if (reserva.profissional._id.toString() === profissional_id.toString())
                     profissionalReservas.push(reserva);
             }

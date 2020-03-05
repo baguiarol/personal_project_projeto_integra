@@ -8,13 +8,15 @@ import ReservaCliente from "../../../assets/component/reserva_cliente/reserva_cl
 import Actions from "../../../redux/actions/actions";
 import {useHistory} from "react-router";
 import Button from "../../../assets/component/button/button";
-import CheckBox from "../../../assets/component/checkbox/checkbox";
 import CancelCheckbox from "../../../assets/component/cancel_checkbox/CancelCheckbox";
+import {removeElementFromArray} from "../../../assets/AuxFunctions";
+import reservaDAO from "../../../DAO/reservaDAO";
 
 const MinhasReservasPage = props => {
 
     const [selectedTab, selectTab] = React.useState(1);
     const [cancelando, setCancelando] = React.useState(false);
+    const [selectedReservas, selectReservas] = React.useState([]);
 
     const hist = useHistory();
 
@@ -29,7 +31,7 @@ const MinhasReservasPage = props => {
         props.profissionalReservas.forEach(reserva => {
             if (reserva.executado)
                 arrayExecutados.push(reserva);
-        })
+        });
         if (arrayExecutados > 0) {
             return arrayExecutados.map((reserva, index) => (
                 <ReservaCliente reserva={reserva} executado key={index}/>
@@ -37,35 +39,44 @@ const MinhasReservasPage = props => {
         } else {
             return <h2 className={'empty_array'}>Não há agendamentos executados até o momento.</h2>
         }
-    }
+    };
 
-    const handleConfirmCancelamento = () => {
+    const handleConfirmCancelamento = async () => {
         if (window.confirm("Você tem certeza que deseja cancelar esses agendamentos?")) {
-            console.log(true);
-        } else {
-            console.log(false);
+            try {
+                await reservaDAO.cancelaMuitasReservas(selectedReservas);
+                alert("Cancelamento realizado com sucesso!");
+            } catch (err) {
+                alert("Erro! Informações: "+err);
+            }
         }
-    }
+    };
 
     const renderReservas = () => {
         if (props.profissionalReservas.length > 0) {
             return props.profissionalReservas.map((reserva, index) => {
-                if (!reserva.executado)
+                if (!reserva.executado && !reserva.cancelado)
                     return (
                         <div className={cancelando ? 'flex flex_margin' : 'flex'}>
-                            {cancelando ? <CancelCheckbox onCheck={() => {
-                                console.log('checked');
+                            {cancelando ? <CancelCheckbox onCheck={checked => {
+                                if (!checked) {
+                                    //Se estiver marcado
+                                    selectReservas([...selectedReservas, reserva]);
+                                } else {
+                                    // Se não estiver
+                                    selectReservas(removeElementFromArray(selectedReservas, reserva));
+                                }
                             }}/> : <></>}
                             <ReservaCliente reserva={reserva} key={index}/>
                         </div>
-                    )
+                    );
                 else
                     return <></>
             })
         } else {
             return <h2 className={'empty_array'}>Não há agendamentos marcados até o momento.</h2>
         }
-    }
+    };
 
     return (
         <div className={'reservas_page_container'}>
@@ -104,7 +115,7 @@ const MinhasReservasPage = props => {
             </div>
         </div>
     )
-}
+};
 
 const mapStateToProps = state => ({
     userLogged: state.general.userLogged,
