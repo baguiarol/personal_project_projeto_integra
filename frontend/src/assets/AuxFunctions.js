@@ -44,6 +44,17 @@ const removeElementFromArray = (arr, value) => {
     return arr.filter(filter);
 };
 
+const findInArrayAndReturnIndex = (arr, key) => {
+    for (let i = 0; i < arr.length; i++)
+        if (arr[i] === key)
+            return i
+}
+
+const sendToTopArray = (arr, key) => {
+    let first = key;
+    arr.sort(function(x,y){ return x === first ? -1 : y === first ? 1 : 0; });
+}
+
 export {checkIfURLIsImage,
     removeElementFromArray,
     transformStringToReais,

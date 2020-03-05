@@ -40,5 +40,8 @@ const clienteDAO = {
         console.log('find query clientes');
         return this.db.collection(COLLECTION).find(query).toArray();
     },
+    fixarSalaNoTopo(sala, user) {
+        return this.db.collection(COLLECTION).updateOne({_id: user._id}, {$set: {sala_fixa: sala._id}});
+    },
 };
 export default clienteDAO;

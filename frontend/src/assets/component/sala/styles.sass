@@ -18,6 +18,17 @@
     margin: 0
   h1
     color: $darkGrey
+    span
+      font-size: 20px
+      cursor: pointer
+      color: $grey
+      @include putTransition()
+      &.fixa
+        color: $primaryBlue
+      &:hover(:not(.fixa))
+        color: $darkGrey
+      i
+        transform: rotate(-45deg)
   p
     color: $grey
 
