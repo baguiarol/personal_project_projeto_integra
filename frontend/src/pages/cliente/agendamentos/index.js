@@ -30,6 +30,10 @@ const ClienteAgendamentos = props => {
     React.useEffect(() => {
         if (clienteDAO.db && 'nome' in props.userLogged) {
             salaDAO.findAll().then(res => {
+                if ('sala_fixa' in props.userLogged) {
+                    let salaFixa = props.userLogged.sala_fixa.toString();
+                    res.sort(function(x,y){ return x._id.toString() == salaFixa ? -1 : y._id.toString() == salaFixa ? 1 : 0; });
+                }
                 props.setSalas(res);
             });
             reservaDAO.findAll(props.client).then(res => {
