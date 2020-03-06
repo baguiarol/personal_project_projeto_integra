@@ -4,7 +4,7 @@ import TurnoCliente from "./turno";
 import MensalCliente from "./mensal";
 import PropTypes from 'prop-types';
 
-const Options = ({selectedPage, selectPage, selectTurno}) => {
+const Options = ({selectedPage, selectPage, selectTurno, selectMes}) => {
 
     const renderPage = page => {
         switch (page) {
@@ -13,7 +13,7 @@ const Options = ({selectedPage, selectPage, selectTurno}) => {
             case 'Turno':
                 return (<TurnoCliente selectTurno={selectTurno}/>);
             case 'Mensal':
-                return (<MensalCliente />);
+                return (<MensalCliente selectMes={selectMes}/>);
             default:
                 return (<></>);
         }

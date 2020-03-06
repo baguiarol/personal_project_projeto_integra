@@ -12,7 +12,7 @@ const MensalCliente = props => {
         for (let i = 1; i < 4; i++)
             meses.push({
                 label: moment(new Date()).locale('pt-BR').add(i, 'month').format(' MMMM / YYYY'),
-                value: moment(new Date()).locale('pt-BR').add(i, 'month').format(' MMMM / YYYY'),
+                value: moment(new Date()).locale('pt-BR').add(i, 'month').toDate(),
             });
         setOptionMes(meses);
     }, []);
@@ -22,6 +22,10 @@ const MensalCliente = props => {
             <div className={'select_profissionais_container'}>
                 <h2>Mês a ser Solicitado</h2>
                 <Select
+                    onChange={e => {
+                        props.selectMes(e.value);
+                        console.log(e.value);
+                    }}
                     style={{marginLeft: '5%', marginRight: '5%'}}
                     placeholder={'Mês a ser solicitado'}
                     options={optionsMes}/>

@@ -58,34 +58,51 @@ const CalendarAgendamentos = props => {
                                 <td>{hora.label}</td>
                                 {props.salas.map((sala, indexSala) => {
                                     let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
-                                    let isOccupied = false;
+                                    let [isOccupied, isMonthly] = [false, false];
                                     let agnd = null;
                                     agendamentosDaSala.forEach(agendamento => {
-                                        if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
-                                            && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))
-                                            && !agendamento.cancelado) {
-                                            isOccupied = true;
-                                            agnd = agendamento;
-                                            console.log(agnd);
+                                        if ('hora_inicio' in agendamento) {
+                                            if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
+                                                && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))
+                                                && !agendamento.cancelado) {
+                                                isOccupied = true;
+                                                agnd = agendamento;
+                                                console.log(agnd);
+                                            }
+                                        } else if ('mes' in agendamento) {
+                                            isMonthly = true;
                                         }
                                     });
                                     if (!isOccupied) {
-                                        return (
-                                            <td key={indexSala} className={'free'} onClick={() => {
-                                                props.openModal(ModalTypes.adicionarAgendamentoAdm);
-                                                props.selectSala(sala);
-                                            }}>
-                                                <i className={'fa fa-plus'}/>
-                                            </td>
-                                        )
+                                        if (isMonthly) {
+                                            return (<td key={indexSala} className={'alugado'}>
+                                                    <i>Alugado Mensalmente</i>
+                                            </td>)
+                                        } else {
+                                            return (
+                                                <td key={indexSala} className={'free'} onClick={() => {
+                                                    props.openModal(ModalTypes.adicionarAgendamentoAdm);
+                                                    props.selectSala(sala);
+                                                }}>
+                                                    <i className={'fa fa-plus'}/>
+                                                </td>
+                                            )
+                                        }
                                     } else if (agnd) {
-                                        if (agnd.hora_inicio === hora.value) {
-                                            return (<td key={indexSala} rowSpan={agnd.hora_fim - agnd.hora_inicio} className={'occupied'}>
+                                        if (isMonthly) {
+                                            return (<td key={indexSala} className={'occupied'}>
                                                 {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                     <i>Usuário Excluído</i>) : ''}
                                             </td>)
                                         } else {
-                                            return <></>
+                                            if (agnd.hora_inicio === hora.value) {
+                                                return (<td key={indexSala} rowSpan={agnd.hora_fim - agnd.hora_inicio} className={'occupied'}>
+                                                    {agnd ? (agnd.profissional ? agnd.profissional.nome :
+                                                        <i>Usuário Excluído</i>) : ''}
+                                                </td>)
+                                            } else {
+                                                return <></>
+                                            }
                                         }
                                     }
                                 })}

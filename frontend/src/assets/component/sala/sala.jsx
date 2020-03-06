@@ -12,13 +12,25 @@ import Actions from "../../../redux/actions/actions";
 const Sala = props => {
 
     const [salaFixa, setSalaFixa] = React.useState(false);
+    const [aluguelMensal, setMensal] = React.useState(false);
+
+    const verificaAluguelMensal = () => {
+        for (let i = 0; i < props.agendamentos.length; i++) {
+            if ('mes' in props.agendamentos[i]) {
+                if (props.agendamentos[i].sala_id.toString() === props.sala._id.toString())
+                    return true;
+            }
+        }
+        return false;
+    }
+
 
     React.useEffect(() => {
         if ('sala_fixa' in props.userLogged && '_id' in props.sala) {
             setSalaFixa(props.sala._id.toString() === props.userLogged.sala_fixa.toString());
         }
+        setMensal(verificaAluguelMensal());
     }, [props]);
-
     return (
         <div className={'sala_content'}>
             <ReactTooltip id='main' place={'left'} type={'info'} effect={'solid'}/>
@@ -45,7 +57,11 @@ const Sala = props => {
                         onClick={props.onClickDetalhesListener}/>
                 </div>
             </div>
-            <WeekCalendar sala={props.sala} isAdm={props.isAdm} addReservaListener={props.addReservaListener}/>
+            { aluguelMensal ?
+                <h2 className={'aluguel_mensal'}>Esta sala está alugada por todo o mês e não está disponível para agendamentos.</h2>
+                :
+                <WeekCalendar sala={props.sala} isAdm={props.isAdm} addReservaListener={props.addReservaListener}/>
+            }
         </div>
     )
 };
@@ -58,6 +74,7 @@ Sala.propTypes = {
 
 const mapStateToProps = state => ({
     userLogged: state.general.userLogged,
+    agendamentos: state.agendamentos.agendamentos,
 });
 
 const mapDispatchToProps = dispatch => ({

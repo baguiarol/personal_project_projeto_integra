@@ -24,6 +24,7 @@ const ModalAgendamento = ({
         const [loading, setLoading] = React.useState(false);
         const [selectedPage, selectPage] = React.useState('Hora Avulsa');
         const [selectedTurno, selectTurno] = React.useState({});
+        const [selectedMes, selectMes] = React.useState(null);
 
         const prepareData = form => {
             let data = {
@@ -52,6 +53,7 @@ const ModalAgendamento = ({
                 case 'Mensal':
                     return {
                         ...data,
+                        mes: selectedMes,
                         valorTotal: 3500
                     }
             }
@@ -98,6 +100,7 @@ const ModalAgendamento = ({
                              <Options
                                  selectedPage={selectedPage}
                                  selectPage={selectPage}
+                                 selectMes={selectMes}
                                  selectTurno={selectTurno}/>
                          </div>}
                          footer={
