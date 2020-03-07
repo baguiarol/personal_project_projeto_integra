@@ -13,7 +13,6 @@ import ModoPaisagem from "../../../assets/component/modoPaisagem/modoPaisagem";
 import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
-import logDAO from "../../../DAO/logDAO";
 import {useHistory} from "react-router";
 
 const ClienteAgendamentos = props => {
@@ -75,6 +74,7 @@ const ClienteAgendamentos = props => {
                             sala={sala}
                             key={index}
                             onClickDetalhesListener={() => {
+                                props.selectSala(sala)
                                 props.openModal(ModalTypes.detalhesSala);
                             }}
                             addReservaListener={date => {

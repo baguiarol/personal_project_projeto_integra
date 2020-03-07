@@ -24,7 +24,7 @@ const CalendarAgendamentos = props => {
             <h1>
                 <span
                     onClick={() => {
-                        props.selectDate(moment(props.dateSelected).subtract(1, 'day'))
+                        props.selectDate(moment(props.dateSelected).subtract(1, 'day').toDate())
                     }}
                     className={'chevron_date'}
                     style={{float: 'left'}}>
@@ -33,7 +33,7 @@ const CalendarAgendamentos = props => {
                 {moment(props.dateSelected).locale('pt-BR').format(' DD MMMM YYYY')}
                 <span
                     onClick={() => {
-                        props.selectDate(moment(props.dateSelected).add(1, 'day'))
+                        props.selectDate(moment(props.dateSelected).add(1, 'day').toDate())
                     }}
                     className={'chevron_date'}
                     style={{float: 'right'}}>

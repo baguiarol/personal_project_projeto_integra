@@ -4,15 +4,22 @@ import Actions from "../../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import {transformStringToReais} from "../../../../../AuxFunctions";
 
-const selectOptions = (horaInicial, isHoraFinal = false) => {
-    let array = [];
-    for (let i = horaInicial; i < (isHoraFinal ? 21 : 20); i++) {
-        array.push({label: i+':00', value: i});
-    }
-    return array;
-};
 
-const HoraAvulsa = ({profissionais, selectProf, salaSelected}) => {
+
+const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => {
+
+    const eSabado = () => {
+        return (dateSelected.getDay() === 6);
+    }
+
+    const selectOptions = (horaInicial, isHoraFinal = false) => {
+        let array = [];
+        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 12 : 21 ) : (eSabado() ? 11 : 20)); i++) {
+            array.push({label: i+':00', value: i});
+        }
+        return array;
+    };
+
 
     const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
     const [horaInicial, setHoraInicial] = React.useState(0);
@@ -76,6 +83,7 @@ const mapStateToProps = state => ({
     mongoClient: state.general.mongoClient,
     profissionais: state.profissionais.profissionais,
     salaSelected: state.agendamentos.salaSelected,
+    dateSelected: state.general.dateSelected,
 });
 
 const mapDispatchToProps = dispatch => ({

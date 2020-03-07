@@ -4,9 +4,14 @@ import {connect} from "react-redux";
 import {transformStringToReais} from "../../../../../AuxFunctions";
 
 const HoraAvulsaCliente = props => {
+
+    const eSabado = () => {
+        return (props.dateSelected.getDay() === 6);
+    }
+
     const selectOptions = (horaInicial, isHoraFinal = false) => {
         let array = [];
-        for (let i = horaInicial; i < (isHoraFinal ? 21 : 20); i++) {
+        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 12 : 21 ) : (eSabado() ? 11 : 20)); i++) {
             array.push({label: i+':00', value: i});
         }
         return array;
@@ -53,6 +58,7 @@ const HoraAvulsaCliente = props => {
 
 const mapStateToProps = state => ({
     salaSelected: state.salas.salaSelected,
+    dateSelected: state.general.dateSelected,
 })
 
 export default connect(mapStateToProps)(HoraAvulsaCliente);
