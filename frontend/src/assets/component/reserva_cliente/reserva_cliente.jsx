@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import "./styles.sass";
-import moment from 'moment';
+import moment from 'moment/min/moment-with-locales.min';
 import {numberToHours} from "../../AuxFunctions";
 
 const ReservaCliente = props => {
@@ -12,7 +12,8 @@ const ReservaCliente = props => {
             <div className={props.executado ? 'container_reserva_cliente executado' : 'container_reserva_cliente'}>
                 <div>
                     <h1>{moment(props.reserva.data).format('DD/MM/YYYY')}</h1>
-                    <h4>{numberToHours(props.reserva.hora_inicio)} ~ {numberToHours(props.reserva.hora_fim)}</h4>
+                    <h4>{'mes' in props.reserva ? (<i>Alugado por todo o Mês de {moment(props.reserva.mes).locale('pt-BR').format('MMMM')}</i>) :
+                        <div>{numberToHours(props.reserva.hora_inicio)} ~ {numberToHours(props.reserva.hora_fim)}</div>}</h4>
                 </div>
                 <div>
                     <h4>Sala</h4>
