@@ -11,7 +11,7 @@ const HoraAvulsaCliente = props => {
 
     const selectOptions = (horaInicial, isHoraFinal = false) => {
         let array = [];
-        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 12 : 21 ) : (eSabado() ? 11 : 20)); i++) {
+        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 13 : 21 ) : (eSabado() ? 12 : 20)); i++) {
             array.push({label: i+':00', value: i});
         }
         return array;

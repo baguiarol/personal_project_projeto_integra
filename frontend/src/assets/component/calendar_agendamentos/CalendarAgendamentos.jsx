@@ -60,7 +60,7 @@ const CalendarAgendamentos = props => {
                                     let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
                                     let [isOccupied, isMonthly] = [false, false];
                                     let agnd = null;
-                                    agendamentosDaSala.forEach(agendamento => {
+                                    agendamentosDaSala.forEach((agendamento, index) => {
                                         if ('hora_inicio' in agendamento) {
                                             if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
                                                 && (moment(props.dateSelected).isSame(new Date(agendamento.data), 'day'))
@@ -76,7 +76,7 @@ const CalendarAgendamentos = props => {
                                     if (!isOccupied) {
                                         if (isMonthly) {
                                             return (<td key={indexSala} className={'alugado'}>
-                                                    <i>Alugado Mensalmente</i>
+                                                    <i>Alugado Mensalmente {index + 8}</i>
                                             </td>)
                                         } else {
                                             return (

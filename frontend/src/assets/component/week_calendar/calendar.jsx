@@ -51,6 +51,15 @@ const WeekCalendar = props => {
                         {
                             agendamentosDaSala.map((agendamento, index) => {
                                 if (date.isSame(agendamento.data, 'day') && !agendamento.cancelado) {
+                                    if ('mes' in agendamento) {
+                                        return (
+                                            <div
+                                                onClick={() => props.addReservaListener(date)}
+                                                className={'add'}>
+                                                <span>+</span>
+                                            </div>
+                                        )
+                                    }
                                     return <Reserva key={index} reserva={agendamento}/>
                                 } else {
                                     return <></>

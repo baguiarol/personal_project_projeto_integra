@@ -17,7 +17,8 @@ const Sala = props => {
     const verificaAluguelMensal = () => {
         for (let i = 0; i < props.agendamentos.length; i++) {
             if ('mes' in props.agendamentos[i]) {
-                if (props.agendamentos[i].sala_id.toString() === props.sala._id.toString())
+                if (props.agendamentos[i].sala_id.toString() === props.sala._id.toString()
+                    && props.agendamentos[i].mes.getMonth() === new Date().getMonth())
                     return true;
             }
         }

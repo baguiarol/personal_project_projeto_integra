@@ -4,8 +4,6 @@ import Actions from "../../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import {transformStringToReais} from "../../../../../AuxFunctions";
 
-
-
 const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => {
 
     const eSabado = () => {
@@ -14,7 +12,7 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
 
     const selectOptions = (horaInicial, isHoraFinal = false) => {
         let array = [];
-        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 12 : 21 ) : (eSabado() ? 11 : 20)); i++) {
+        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 13 : 21 ) : (eSabado() ? 12 : 20)); i++) {
             array.push({label: i+':00', value: i});
         }
         return array;
@@ -24,7 +22,7 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
     const [profissionaisOptions, setProfissionaisOptions] = React.useState([]);
     const [horaInicial, setHoraInicial] = React.useState(0);
     const [horaFinal, setHoraFinal] = React.useState(0);
-    const [horasFinais, setHorasFinais] = React.useState(selectOptions(8));
+    const [horasFinais, setHorasFinais] = React.useState(selectOptions(8, true));
     let selectedOption = null;
 
     React.useEffect(() => {
@@ -51,6 +49,7 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
                     <Select
                         name={'hora_inicio'}
                         onChange={e => {
+
                             setHorasFinais(selectOptions(e.value + 1, true));
                             setHoraInicial(e.value);
                         }}
