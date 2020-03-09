@@ -49,7 +49,6 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
                     <Select
                         name={'hora_inicio'}
                         onChange={e => {
-
                             setHorasFinais(selectOptions(e.value + 1, true));
                             setHoraInicial(e.value);
                         }}
@@ -71,7 +70,7 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
                 </div>
                 <div>
                     <h2>Valor Total:</h2>
-                    <h3>{transformStringToReais(salaSelected.valor_hora * (horaFinal - horaInicial))}</h3>
+                    <h3>{transformStringToReais(horaFinal === 0 ? 0 : salaSelected.valor_hora * (horaFinal - horaInicial))}</h3>
                 </div>
             </div>
         </div>

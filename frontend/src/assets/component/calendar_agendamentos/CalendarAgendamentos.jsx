@@ -76,7 +76,7 @@ const CalendarAgendamentos = props => {
                                     if (!isOccupied) {
                                         if (isMonthly) {
                                             return (<td key={indexSala} className={'alugado'}>
-                                                    <i>Alugado Mensalmente {index + 8}</i>
+                                                    <i>Alugado Mensalmente</i>
                                             </td>)
                                         } else {
                                             return (
