@@ -6,6 +6,7 @@ const ModalTypes = {
     adicionarAgendamentoAdm: 'ADD_TASK_ADM',
     adicionarSalas: 'ADD_SALAS',
     adicionarAgendamento: 'ADD_AGENDAMENTO',
+    editarAgendamento: 'EDIT_AGENDAMENTO_ADM',
 };
 
 export default ModalTypes;

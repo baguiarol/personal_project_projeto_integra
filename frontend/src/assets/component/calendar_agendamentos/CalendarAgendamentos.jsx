@@ -96,7 +96,14 @@ const CalendarAgendamentos = props => {
                                             </td>)
                                         } else {
                                             if (agnd.hora_inicio === hora.value) {
-                                                return (<td key={indexSala} rowSpan={agnd.hora_fim - agnd.hora_inicio} className={'occupied'}>
+                                                return (<td
+                                                            onClick={() => {
+                                                                props.openModal(ModalTypes.editarAgendamento);
+                                                                props.selectAgendamentos(agnd);
+                                                            }}
+                                                            key={indexSala}
+                                                            rowSpan={agnd.hora_fim - agnd.hora_inicio}
+                                                            className={'occupied'}>
                                                     {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                         <i>Usuário Excluído</i>) : ''}
                                                 </td>)
@@ -129,6 +136,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
+    selectAgendamentos: agendamento => dispatch({type: Actions.selectAgendamentos, payload: agendamento}),
     selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
 });
 

@@ -12,6 +12,7 @@ import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
 import logDAO from "../../../DAO/logDAO";
 import {useHistory} from "react-router";
+import ModalEditAgendamento from "../../../assets/component/modals/administrativo/modal_edit_agendamento/EditAgendamento";
 
 const AgendamentosAdministrador = props => {
 
@@ -45,6 +46,11 @@ const AgendamentosAdministrador = props => {
                     close={() => props.closeModal()}
                     show={props.showModal &&
                     props.modalType === ModalTypes.adicionarAgendamentoAdm}
+                />
+                <ModalEditAgendamento
+                    close={() => props.closeModal()}
+                    show={props.showModal &&
+                    props.modalType === ModalTypes.editarAgendamento}
                 />
                 <CalendarAgendamentos/>
             </div>

@@ -3,6 +3,7 @@ import Actions from "../actions/actions";
 const initialState = {
     salaSelected: {},
     agendamentos: [],
+    agendamentoSelected: {},
 };
 
 const AgendamentosReducer = (state = initialState, {type, payload}) => {
@@ -11,6 +12,8 @@ const AgendamentosReducer = (state = initialState, {type, payload}) => {
             return {...state, salaSelected: payload};
         case Actions.setAgendamentos:
             return {...state, agendamentos: payload};
+        case Actions.selectAgendamentos:
+            return {...state, agendamentoSelected: payload};
         default:
             return state;
     }

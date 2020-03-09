@@ -9,6 +9,7 @@ const Actions = {
     setSalas: 'SET_SALAS',
     selectDate: 'SELECT_DATE',
     selectSala: 'SELECT_SALA',
+    selectAgendamentos: 'SELECT_AGENDAMENTO',
     setAgendamentos: 'SET_AGENDAMENTOS',
     selectAdministrador: 'SELECT_ADM',
     selectProfissional: 'SELECT_PROF',
