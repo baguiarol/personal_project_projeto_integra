@@ -4,10 +4,15 @@ import Button from "../../../button/button";
 import {connect} from "react-redux";
 import moment from 'moment/min/moment-with-locales.min';
 import "./EditAgendamento.sass";
+import reservaDAO from "../../../../../DAO/reservaDAO";
+import Actions from "../../../../../redux/actions/actions";
 
 const ModalEditAgendamento = props => {
 
     const [loading, setLoading] = React.useState(false);
+    const [executing, setExecuting] = React.useState(false);
+    const [finalizado, setFinalizado] = React.useState(false);
+    const [pago, setPago] = React.useState(false);
 
     const setSubtitle = () => {
         if ('profissional' in props.agendamentoSelected) {
@@ -15,6 +20,20 @@ const ModalEditAgendamento = props => {
                 moment(props.dateSelected).locale('pt-BR').format('DD MMMM [de] YYYY');
         }
         return '';
+    };
+
+    React.useEffect(() => {
+        setExecuting(('execucao_inicio' in props.agendamentoSelected)
+            && !('execucao_fim' in props.agendamentoSelected));
+        setFinalizado(('execucao_inicio' in props.agendamentoSelected)
+            && ('execucao_fim' in props.agendamentoSelected));
+        setPago(props.agendamentoSelected.pago);
+    }, [props]);
+
+    const updateAgendamentos = async () => {
+        let agendamentos = await reservaDAO.findAll(props.mongoClient);
+        props.setAgendamentos(agendamentos);
+        props.selectAgendamentos(reservaDAO.getAgendamentosById(agendamentos, props.agendamentoSelected._id));
     }
 
     //Modal para fazer trocar pagamento, execução ou cancelar.
@@ -33,19 +52,50 @@ const ModalEditAgendamento = props => {
             body={<div className={'body_edit_agendamento'}>
                 <h2>Execução</h2>
                 <h3>
-                    Reserva ainda não executada. <br/><br/>
-                    <Button
-                        type={'button'}
-                        text={'Iniciar'}
-                        width={'30%'}/>
+                    {finalizado ? `Reserva já foi finalizada. Início às ${
+                        moment(props.agendamentoSelected.execucao_inicio).format('HH:mm')
+                    }, e fim às ${moment(props.agendamentoSelected.execucao_fim).format('HH:mm')}`
+                        : (executing ? 'Reserva está sendo executada' : 'Reserva ainda não executada')}
+                    <br/><br/>
+                    {
+                        finalizado ? <></> :
+                            <Button
+                                onClick={async () => {
+                                    setLoading(true);
+                                        if (executing) {
+                                            await reservaDAO.executaReserva(props.agendamentoSelected._id);
+                                            await updateAgendamentos();
+                                            alert('Execução Finalizada com Sucesso!');
+                                        } else {
+                                        await reservaDAO.comecaReserva(props.agendamentoSelected._id);
+                                        await updateAgendamentos();
+                                    }
+                                    setLoading(false);
+                                }}
+                                type={'button'}
+                                text={'execucao_inicio' in props.agendamentoSelected ?
+                                    'Finalizar' : 'Iniciar'
+                                }
+                                loading={loading}
+                                width={'30%'}/>
+                    }
                 </h3>
                 <h2>Pagamento</h2>
                 <h3>
-                    Reserva ainda não foi paga. <br/><br/>
-                    <Button
-                        type={'button'}
-                        text={'Pagar'}
-                        width={'30%'}/>
+                    {pago ? 'Reserva já foi paga.' : 'Reserva ainda não foi paga.'} <br/><br/>
+                    {pago ? <></>
+                        :<Button
+                            onClick={async () => {
+                                setLoading(true);
+                                await reservaDAO.pagaReserva(props.agendamentoSelected._id);
+                                await updateAgendamentos();
+                                setLoading(false);
+                            }}
+                            loading={loading}
+                            type={'button'}
+                            text={'Pagar'}
+                            width={'30%'}/> }
+
                 </h3>
             </div>}
             footer={
@@ -65,8 +115,12 @@ const ModalEditAgendamento = props => {
 const mapStateToProps = state => ({
     agendamentoSelected: state.agendamentos.agendamentoSelected,
     dateSelected: state.general.dateSelected,
+    mongoClient: state.general.mongoClient,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    setAgendamentos: agnds => dispatch({type: Actions.setAgendamentos, payload: agnds}),
+    selectAgendamentos: agnd => dispatch({type: Actions.selectAgendamentos, payload: agnd}),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalEditAgendamento);

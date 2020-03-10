@@ -32,7 +32,7 @@ const reservaDAO = {
     },
     executaReserva(id_reserva) {
         console.log('Executa reserva');
-        return this.update({_id: id_reserva}, {executado: true});
+        return this.update({_id: id_reserva}, {executado: true, execucao_fim: new Date()});
     },
     pagaReserva(id_reserva) {
         console.log('Paga reserva');
@@ -41,6 +41,10 @@ const reservaDAO = {
     editaReserva(id_reserva, edits) {
         console.log('Edita reserva');
         return this.update({_id: id_reserva}, edits);
+    },
+    comecaReserva(id_reserva) {
+        console.log('Começa a executar a reserva');
+        return this.update({_id: id_reserva}, {execucao_inicio: new Date()});
     },
     findReservaDeCliente(profissional_id, reservas) {
         console.log('Find Reserva de Cliente');
@@ -56,6 +60,15 @@ const reservaDAO = {
     findAll(client) {
         console.log('Find All de Cliente');
         return client.callFunction('getAgendamentos');
+    },
+    getAgendamentosById(agendamentos, agendamento_id) {
+        let agendamentoSelected = null;
+        agendamentos.forEach(agendamento => {
+            if (agendamento._id.toString() === agendamento_id.toString()) {
+                agendamentoSelected = agendamento;
+            }
+        });
+        return agendamentoSelected;
     },
     getAgendamentosFromSala(agendamentos, sala) {
         console.log('get Agendamentos da sala');
