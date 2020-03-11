@@ -1,10 +1,38 @@
 import React from 'react';
+import {connect} from 'react-redux'
+
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import "./dash.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
+import agendamentos from '../agendamentos';
+
+
+
 
 const DashboardPage = props => {
+    const [agendamentosPendentes, setAgendamentosPendentes] = React.useState([]);
+    React.useEffect(() => {
+        let agendamentos_nao_cancelados = []
+        for (let i = 0; i < props.agendamentos.length;i++) {
+            if(!props.agendamentos[i].cancelado && props.agendamentos[i].executado){
+                agendamentos_nao_cancelados.push(props.agendamentos[i]);
+            }
+        }
+        setAgendamentosPendentes(agendamentos_nao_cancelados)
+    })
+
+    const [agendamentosCancelados, setAgendamentosCancelados] = React.useState([]);
+    React.useEffect(() => {
+        let agendamentosCancelados = []
+        for (let i = 0; i < props.agendamentos.length;i++) {
+            if(props.agendamentos[i].cancelado){
+                agendamentosCancelados.push(props.agendamentos[i]);
+            }
+        }
+        setAgendamentosCancelados(agendamentosCancelados)
+    })
+
 
     React.useEffect(() => {
         let chart = am4core.create('chart_agendamentos', am4charts.XYChart);
@@ -59,16 +87,22 @@ const DashboardPage = props => {
                 </div>
                 <div className={'quickdetails_container'}>
                     <h2>Informações</h2>
-                    <h3>5 Novos Profissionais</h3>
-                    <h3>57 agendamentos</h3>
-                    <h3>15 usuários cadastrados</h3>
-                    <h3>183 agendamentos até o momento</h3>
+                    <h3>{props.profissionais.length} Novos Profissionais</h3>
+                    <h3>{props.agendamentos.length} agendamentos</h3>
+                    <h3>{props.profissionais.length + props.administradores.length} usuários cadastrados</h3>
+                    <h3>{agendamentosPendentes.length} agendamentos até o momento</h3>
                     <h3>5 pacientes para profissionais</h3>
-                    <h3>23 cancelamentos</h3>
+                    <h3>{agendamentosCancelados.length} cancelamentos</h3>
                 </div>
             </div>
         </div>
     )
 }
 
-export default DashboardPage;
+const mapStateToProps = state => ({
+    profissionais: state.profissionais.profissionais,
+    agendamentos: state.agendamentos.agendamentos,
+    administradores: state.administradores.administradores
+});
+
+export default connect(mapStateToProps)(DashboardPage);
