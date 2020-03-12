@@ -5,7 +5,6 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import "./dash.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
-import agendamentos from '../agendamentos';
 import moment from "moment";
 
 const DashboardPage = props => {
@@ -40,17 +39,27 @@ const DashboardPage = props => {
         let array = [];
         let date = moment("2020/03/01", "YYYY/MM/DD");
         while (!moment(new Date()).isSame(date, 'day')) {
-            array.push(date.toDate());
+            array.push({date: date.toDate(), value: 0});
             date.add(1, 'day');
         }
-        console.log(array);
+
         //Cria Frequency Table
-        const tabelaFreq = {};
-        array.forEach(dia => {
-            if (moment(dia).format('DD/MM/YYYY') in tabelaFreq) {
-                tabelaFreq[moment(dia).format('DD/MM/YYYY')] += 0;
+        let tabelaFreq = {};
+        props.agendamentos.forEach(agendamento => {
+            if (moment(new Date(agendamento.data)).format('DD/MM/YYYY') in tabelaFreq) {
+                tabelaFreq[moment(new Date(agendamento.data)).format('DD/MM/YYYY')] += 1;
             } else {
-                tabelaFreq[moment(dia).format('DD/MM/YYYY')] = 0;
+                tabelaFreq[moment(new Date(agendamento.data)).format('DD/MM/YYYY')] = 0;
+            }
+        });
+
+        //Criar o objeto de verdade {date: moment().toDate(), value: quantidadeDeAgendamentosDoDia }
+        Object.keys(tabelaFreq).forEach(key => {
+            for (let i = 0; i < array.length; i++) {
+                if (moment(array[i].date).isSame(moment(key, 'DD/MM/YYYY'), 'day')) {
+                    array[i].value = tabelaFreq[key];
+                    break;
+                }
             }
         });
 
