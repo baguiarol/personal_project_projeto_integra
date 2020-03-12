@@ -6,12 +6,12 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import "./dash.sass";
 import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
 import agendamentos from '../agendamentos';
-
-
-
+import moment from "moment";
 
 const DashboardPage = props => {
     const [agendamentosPendentes, setAgendamentosPendentes] = React.useState([]);
+    const [agendamentosNaoCancelados, setAgendamentosNaoCancelados] = React.useState([]);
+
     React.useEffect(() => {
         let agendamentos_nao_cancelados = []
         for (let i = 0; i < props.agendamentos.length;i++) {
@@ -20,7 +20,7 @@ const DashboardPage = props => {
             }
         }
         setAgendamentosPendentes(agendamentos_nao_cancelados)
-    })
+    }, [props])
 
     const [agendamentosCancelados, setAgendamentosCancelados] = React.useState([]);
     React.useEffect(() => {
@@ -30,23 +30,35 @@ const DashboardPage = props => {
                 agendamentosCancelados.push(props.agendamentos[i]);
             }
         }
-        setAgendamentosCancelados(agendamentosCancelados)
-    })
-
+        setAgendamentosCancelados(agendamentosCancelados);
+    }, [props]);
 
     React.useEffect(() => {
+
+        setAgendamentosNaoCancelados(props.agendamentos.filter(value => !value.cancelado));
+        //Cria array com datas
+        let array = [];
+        let date = moment("2020/03/01", "YYYY/MM/DD");
+        while (!moment(new Date()).isSame(date, 'day')) {
+            array.push(date.toDate());
+            date.add(1, 'day');
+        }
+        console.log(array);
+        //Cria Frequency Table
+        const tabelaFreq = {};
+        array.forEach(dia => {
+            if (moment(dia).format('DD/MM/YYYY') in tabelaFreq) {
+                tabelaFreq[moment(dia).format('DD/MM/YYYY')] += 0;
+            } else {
+                tabelaFreq[moment(dia).format('DD/MM/YYYY')] = 0;
+            }
+        });
+
         let chart = am4core.create('chart_agendamentos', am4charts.XYChart);
 
         chart.paddingRight = 20;
 
-        let data = [];
-        let visits = 10;
-        for (let i = 1; i < 366; i++) {
-            visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            data.push({ date: new Date(2018, 0, i), name: "name" + i, value: visits });
-        }
-
-        chart.data = data;
+        chart.data = array;
 
         let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.grid.template.location = 0;
@@ -73,10 +85,10 @@ const DashboardPage = props => {
             <div className={'indicators_container'}>
                 <div>
                     <h5>5,25% <i className={'fa fa-arrow-up'}/> &nbsp; que no mês anterior</h5>
-                    <h2>25 reservas no mês</h2>
+                    <h2>{agendamentosPendentes.length} reservas no mês</h2>
                 </div>
                 <div>
-                    <h2>35 reservas canceladas</h2>
+                    <h2>{agendamentosCancelados.length} reservas canceladas</h2>
                     <h5>5,25% <i className={'fa fa-arrow-up'}/> &nbsp; que no mês anterior</h5>
                 </div>
             </div>
