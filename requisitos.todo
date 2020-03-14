@@ -8,40 +8,43 @@ Projeto Integra:
     ✘ Para o desenvolvimento haverá migração da hospedagem do sistema. @started(20-02-14 21:15) @cancelled(20-02-14 21:15) @wasted(27s)
     ✔ A hospedagem do sistema será feita pelo Hostgator @started(20-02-14 21:15) @done(20-02-14 21:15) @lasted(43s)
     ✔ O sistema será colaborativo e automatizado pelo cliente, tendo acesso a edição por parte do Administrador. @done(20-02-14 21:16)
-    ☐ O sistema deve possuir uma autenticação (login e senha cadastrados via e-mail).
+    ✔ O sistema deve possuir uma autenticação (login e senha cadastrados via e-mail). @done(20-03-05 08:08)
     Utilizar o banco de dados da MongoDB.
-    ☐ Somente o administrador pode registrar novos clientes
-        ☐ Colocar isso no protótipo @started(20-01-30 11:19)
+    ✔ Somente o administrador pode registrar novos clientes @done(20-02-25 11:11)
+        ✔ Colocar isso no protótipo @started(20-01-30 11:19) @done(20-02-25 11:11) @lasted(3w4d23h52m50s)
     ☐ Um potencial cliente pode entrar em contato e solicitar cadastro pelo site.
-    ☐ O sistema deve ser capaz de agendar horas fixas disponíveis.
-    ☐ O sistema deve ser rigoroso em relação a tratamentos de erros e evitar inconsistências de dados.
+    ✔ O sistema deve ser capaz de agendar horas fixas disponíveis. @done(20-03-05 08:09)
+    ☐ O sistema deve ser rigoroso em relação a tratamentos de erros e evitar inconsistências de dados. @started(20-03-05 08:09)
     ☐ O administrador poderá bloquear salas e dias para agendamento.
         ✔ Colocar isso no protótipo @done(20-01-30 11:17) @done(Brian)
-    ☐ O limite para o agendamento é de 2 semanas após a data atual.
+    ✔ O limite para o agendamento é de 2 semanas após a data atual. @done(20-03-05 08:09)
         ✔ Colocar isso no protótipo @done(20-01-31 23:34)
-        ☐ Implantar isso no sistema real
-    ☐ O cliente poderá cancelar o agendamento
+        ✔ Implantar isso no sistema real @done(20-03-05 08:09)
+    ✔ O cliente poderá cancelar o agendamento @done(20-03-05 08:09)
         ✔ Colocar isso fixo no Protótipo @done(20-01-30 11:17) @done(Brian)
-    ☐ Deve haver planos de Hora Avulsa, por Turno e Mensal @started(20-02-14 21:16)
+    ✔ Deve haver planos de Hora Avulsa, por Turno e Mensal @started(20-02-14 21:16) @done(20-03-06 13:53) @lasted(2w6d16h37m11s)
         ✔ Colocar isso no protótipo @done(20-02-14 21:16)
     ☐ O sistema deverá ter um histórico do cliente e de utilização de todos os clientes para o administrador.
     ☐ O profissional e o administrador podem acompanhar seu uso da plataforma e indicadores-chave utilizando uma dashboard
-    ☐ O sistema deverá possibilitar o agendamento e a visualização de agendamentos
+    ✔ O sistema deverá possibilitar o agendamento e a visualização de agendamentos @started(20-03-05 08:09) @done(20-03-05 08:09) @lasted(37s)
     ☐ O Sistema deve ter 2 estados financeiros (pago e pendente) e 2 estados de execução. (executado e não executado) @started(20-01-30 11:18)
         ✔ Colocar isso no Diagrama ER @done(20-01-30 11:16) @done(Brian)
         ✔ Colocar isso no BD @started(20-01-30 11:18 Brenda) @done(20-01-31 23:33) @lasted(1d12h15m52s)
     ☐ O sistema deve possuir um timer para saber o tempo de uso do cliente para visualização de minutos extras.
-    ☐ O administrador pode ter um acesso de logs de todas transações dentro do sistema
+    ✔ O administrador pode ter um acesso de logs de todas transações dentro do sistema @done(20-03-06 13:53)
     ☐ Deve ser possível um cliente entrar em contato com um profissional pelo sistema e notificá-lo mediante mídia social
     Usar Twilio para resolver isso.
-    ☐ O sistema deve ser responsivo para celulares e tablets.
-        ☐ Colocar isso dentro do protótipo
-    ☐ O sistema pode fixar no topo da lista a sala preferida para cada cliente.
-    ☐ Deve haver uma pré-visualização das salas para que possam ver por meio de fotos e descrição.
+    ✔ O sistema deve ser responsivo para celulares e tablets. @done(20-02-25 11:12)
+        ✔ Colocar isso dentro do protótipo @started(20-02-25 11:12) @done(20-02-25 11:12) @lasted(29s)
+    ✔ O sistema pode fixar no topo da lista a sala preferida para cada cliente. @started(20-03-05 10:33) @done(20-03-05 11:32) @lasted(59m46s)
+    ✔ Deve haver uma pré-visualização das salas para que possam ver por meio de fotos e descrição. @started(20-03-05 08:09) @done(20-03-06 16:52) @lasted(1d8h43m40s)
     Usar o Firebase Storage para servir de armazenamento de fotos. Ou o próprio PHPzão, né.
-    ☐ O sistema deve entender os modelos de turno e mensais.
-    ☐ O aluguel por turno é de uma duração de 4 horas, e pode ser das 9h até as 13h, das 14h às 18h e das 15h às 19h e das 16h às 20h
-    ☐ O aluguel mensal funciona um aluguel da sala, todos os dias da semana das 9h às 20h e das 8h até as 12h do sábado
-    ☐ O estabelecimento não funciona nos sábados a tarde, noite e aos domingos.
-    ☐ Não há aluguéis com horas não-exatas. Por exemplo, não há um aluguel das 9h30 até às 10h45.
+    Acabei utilizando o próprio PHP e o servidor deles mesmo.
+    ✔ O sistema deve entender os modelos de turno e mensais. @started(20-03-05 08:10) @done(20-03-06 08:36) @lasted(1d26m27s)
+        ✔ Sistema implementado por turno @done(20-03-05 08:10)
+        ✔ Sistema implementado mensal @done(20-03-06 08:36)
+    ✔ O aluguel por turno é de uma duração de 4 horas, e pode ser das 9h até as 13h, das 14h às 18h e das 15h às 19h e das 16h às 20h @done(20-03-05 08:10)
+    ✔ O aluguel mensal funciona um aluguel da sala, todos os dias da semana das 9h às 20h e das 8h até as 12h do sábado @done(20-03-06 08:36)
+    ✔ O estabelecimento não funciona nos sábados a tarde, noite e aos domingos. @done(20-03-06 17:19)
+    ✔ Não há aluguéis com horas não-exatas. Por exemplo, não há um aluguel das 9h30 até às 10h45. @done(20-03-05 08:11)
     ☐ O sistema deve mostrar um relatório ao administrador de forma que ele possa ver indicadores-chave importantes da empresa.

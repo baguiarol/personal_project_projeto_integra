@@ -10,6 +10,7 @@ import {Redirect} from "react-router-dom";
 import ModoPaisagem from "../../assets/component/modoPaisagem/modoPaisagem";
 import clienteDAO from "../../DAO/clienteDAO";
 import {useHistory} from "react-router-dom";
+import moment from 'moment';
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
@@ -63,6 +64,26 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
             if (email && senha)
                 performLogin(email, senha);
     }, [mongoClient]);
+
+    let matrix = new Array(5);
+    for (let i = 0; i < 5; i++) {
+        matrix[i] = new Array(7).fill(0);
+    }
+    let iterador = moment(new Date()).startOf('month');
+    let dataInicial = moment()
+
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 7; j++) {
+            if (iterador.toDate().getDay() === j && iterador.isSame(dataInicial, 'month')) {
+                matrix[i][j] = iterador.date();
+                iterador.add(1, 'day');
+            } else {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+
+    console.log(matrix);
 
     const hist = useHistory();
 

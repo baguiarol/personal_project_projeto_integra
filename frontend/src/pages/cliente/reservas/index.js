@@ -11,7 +11,6 @@ import Button from "../../../assets/component/button/button";
 import CancelCheckbox from "../../../assets/component/cancel_checkbox/CancelCheckbox";
 import {removeElementFromArray} from "../../../assets/AuxFunctions";
 import reservaDAO from "../../../DAO/reservaDAO";
-import clienteDAO from "../../../DAO/clienteDAO";
 
 const MinhasReservasPage = props => {
 
@@ -34,7 +33,7 @@ const MinhasReservasPage = props => {
             if (reserva.executado)
                 arrayExecutados.push(reserva);
         });
-        if (arrayExecutados > 0) {
+        if (arrayExecutados.length > 0) {
             return arrayExecutados.map((reserva, index) => (
                 <ReservaCliente reserva={reserva} executado key={index}/>
             ))

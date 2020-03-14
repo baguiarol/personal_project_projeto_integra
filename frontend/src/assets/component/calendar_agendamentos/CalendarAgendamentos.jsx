@@ -69,7 +69,8 @@ const CalendarAgendamentos = props => {
                                                 agnd = agendamento;
                                                 console.log(agnd);
                                             }
-                                        } else if ('mes' in agendamento) {
+                                        } else if ('mes' in agendamento
+                                            && moment(agendamento["mes"]).isSame(props.dateSelected, 'month')) {
                                             isMonthly = true;
                                         }
                                     });
