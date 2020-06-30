@@ -5,9 +5,12 @@ import Button from "../../../button/button";
 import ModalParent from "../../modal_parent/modal";
 import Options from "./tipos/options";
 import {connect} from "react-redux";
-import moment from "moment/min/moment-with-locales";
+import Moment from "moment/min/moment-with-locales";
+import {extendMoment} from "moment-range";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
+
+const moment = extendMoment(Moment)
 
 const ModalAgendamento = ({
                               show,
@@ -25,6 +28,15 @@ const ModalAgendamento = ({
         const [selectedPage, selectPage] = React.useState('Hora Avulsa');
         const [selectedTurno, selectTurno] = React.useState({});
         const [selectedMes, selectMes] = React.useState(null);
+
+        const checkIfIsBetween = (actualDateBegin, actualDateEnds, dateOne, dateTwo) => {
+            let one = moment.range(actualDateBegin, actualDateEnds);
+            let two = moment.range(dateOne, dateTwo);
+            console.log(two)
+            console.log(one)
+            console.log('Checou, resultado: '+one.overlaps(two))
+            return one.overlaps(two)
+        }
 
         const prepareData = form => {
             let data = {
@@ -59,17 +71,48 @@ const ModalAgendamento = ({
             }
         }
 
+        const getStringDate = (date, hour) => (`${moment(date).format('yyyy-MM-DD')} ${hour}:00`)
+
         const handleSubmit = async e => {
             e.preventDefault();
             const form = e.target;
             setLoading(true);
             let data = prepareData(form);
-            await reservaDAO.create(data, userLogged);
-            let novasReservas = await reservaDAO.findAll(mongoClient);
-            setAgendamentos(novasReservas)
-            setLoading(false);
-            alert('Adicionado com sucesso!');
-            close();
+            if (selectedPage === 'Hora Avulsa') {
+                let dateBegin = new Date(getStringDate(dateSelected, data.hora_inicio))
+                let dateFim = new Date(getStringDate(dateSelected, data.hora_fim))
+                let passed = true
+                console.log('É hora avulsa')
+                for (let agendamento of agendamentos) {
+                    let dateInicioAgendamento =
+                            new Date(getStringDate(new Date(agendamento.data), agendamento.hora_inicio)),
+                        dateFimAgendamento =
+                            new Date(getStringDate(new Date(agendamento.data), agendamento.hora_fim))
+
+                        if (checkIfIsBetween(dateBegin, dateFim, dateInicioAgendamento, dateFimAgendamento)) {
+                            alert("Erro! O horário já se encontra reservado.");
+                            passed = false
+                            setLoading(false)
+                            close();
+                            break;
+                        }
+                }
+                if (passed) {
+                    await reservaDAO.create(data, userLogged);
+                    let novasReservas = await reservaDAO.findAll(mongoClient);
+                    setAgendamentos(novasReservas)
+                    setLoading(false);
+                    alert('Adicionado com sucesso!');
+                    close();
+                }
+            } else {
+                await reservaDAO.create(data, userLogged);
+                let novasReservas = await reservaDAO.findAll(mongoClient);
+                setAgendamentos(novasReservas)
+                setLoading(false);
+                alert('Adicionado com sucesso!');
+                close();
+            }
         };
 
         React.useEffect(() => {

@@ -43,7 +43,6 @@ const SalasPage = props => {
                         <h3>Abaixo seguem as salas possuídas pela Integra</h3>
                     </div>
                     <div>
-                        <Button width={'50%'} text={'Nova Sala'}/>
                     </div>
                 </div>
                 <div className={'salas'}>

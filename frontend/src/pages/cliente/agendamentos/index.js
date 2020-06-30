@@ -79,7 +79,6 @@ const ClienteAgendamentos = props => {
                             }}
                             addReservaListener={date => {
                                 props.selectDate(date.toDate());
-                                console.log(date.toDate());
                                 props.selectSala(sala);
                                 props.openModal(ModalTypes.reservaCliente)
                             }}/>
