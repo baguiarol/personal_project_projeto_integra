@@ -32,7 +32,10 @@ const HoraAvulsaCliente = props => {
                             setHoraInicial(e.value);
                         }}
                         classNamePrefix={'Select'}
-                        options={selectOptions(8)}/>
+                        options={
+                            //Não deixar fazer reserva um horário anterior ao que já passou.
+                            (props.dateSelected.getUTCDay() === new Date().getUTCDay())
+                                ? selectOptions(new Date().getHours()+1) : selectOptions(8)}/>
                 </div>
                 <div>
                     <h2>Hora Final</h2>

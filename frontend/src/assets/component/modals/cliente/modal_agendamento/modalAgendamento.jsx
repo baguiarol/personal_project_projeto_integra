@@ -65,6 +65,8 @@ const ModalAgendamento = ({
             setLoading(true);
             let data = prepareData(form);
             await reservaDAO.create(data, userLogged);
+            let novasReservas = await reservaDAO.findAll(mongoClient);
+            setAgendamentos(novasReservas)
             setLoading(false);
             alert('Adicionado com sucesso!');
             close();
