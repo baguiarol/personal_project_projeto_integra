@@ -38,21 +38,36 @@ const ModalNewAdministrativo = ({
     }
 
     const newAdministrativo = async form => {
-        if (checkIfURLIsImage(fileURL)) {
-            try {
-                await fileUpload(file);
-                await administradorDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-                    nome: form.nome.value,
-                    foto_url: fileURL,
-                    email: form.email.value,
-                });
-                checkIfURLIsImage(fileURL);
-                alert('Administrador adicionado com Sucesso!');
-                closeModal();
-            } catch (err) {
-                alert(err);
+        if (fileURL === '') {
+            await administradorDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                nome: form.nome.value,
+                foto_url: 'https://jsl-online.com/wp-content/uploads/2017/01/placeholder-user.png',
+                email: form.email.value,
+            });
+            alert('Administrador adicionado com Sucesso!');
+            const adms = await administradorDAO.findAll();
+            setAdministrativo(adms);
+            closeModal();
+        } else {
+            if (checkIfURLIsImage(fileURL)) {
+                try {
+                    await fileUpload(file);
+                    await administradorDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                        nome: form.nome.value,
+                        foto_url: fileURL,
+                        email: form.email.value,
+                    });
+                    checkIfURLIsImage(fileURL);
+                    alert('Administrador adicionado com Sucesso!');
+                    const adms = await administradorDAO.findAll();
+                    setAdministrativo(adms);
+                    closeModal();
+                } catch (err) {
+                    alert(err);
+                }
             }
         }
+
     };
 
     const editAdministrativo = async form => {

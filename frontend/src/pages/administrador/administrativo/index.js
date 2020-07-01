@@ -9,7 +9,7 @@ import ModalNewAdministrativo
     from "../../../assets/component/modals/administrativo/modal_new_administrativo/modal_new_administrativo";
 import {connect} from "react-redux";
 import administradorDAO from "../../../DAO/administradorDAO";
-import {useHistory} from "react-router";
+import {Redirect, useHistory} from "react-router";
 
 const AdministrativoPage = props => {
 
@@ -26,7 +26,7 @@ const AdministrativoPage = props => {
         }
     }, [props.client]);
 
-    return (
+    return ('nome' in props.userLogged) ? (
         <div>
             <ModalNewAdministrativo
                 close={() => props.closeModal()}
@@ -45,7 +45,7 @@ const AdministrativoPage = props => {
                 props.openModal(ModalTypes.adicionarAdministrador);
             }} />
         </div>
-    )
+    ) : <Redirect to={'/'} />
 }
 
 const mapStateToProps = state => ({

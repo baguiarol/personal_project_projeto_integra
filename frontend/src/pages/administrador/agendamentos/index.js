@@ -11,7 +11,7 @@ import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
 import logDAO from "../../../DAO/logDAO";
-import {useHistory} from "react-router";
+import {Redirect, useHistory} from "react-router";
 import ModalEditAgendamento from "../../../assets/component/modals/administrativo/modal_edit_agendamento/EditAgendamento";
 
 const AgendamentosAdministrador = props => {
@@ -38,7 +38,7 @@ const AgendamentosAdministrador = props => {
         }
     });
 
-    return (
+    return ('nome' in props.userLogged) ?
         <div>
             <AdministradorTopbar pageSelected={'agendamento_adm'} />
             <div className={'container_salas'}>
@@ -54,8 +54,8 @@ const AgendamentosAdministrador = props => {
                 />
                 <CalendarAgendamentos/>
             </div>
-        </div>
-    )
+        </div> : <Redirect to={'/'} />
+
 }
 
 const mapStateToProps = state => ({

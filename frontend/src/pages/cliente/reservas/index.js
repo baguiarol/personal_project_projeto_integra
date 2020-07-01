@@ -60,9 +60,12 @@ const MinhasReservasPage = props => {
     };
 
     const renderReservas = () => {
-        if (props.profissionalReservas.length > 0) {
-            return props.profissionalReservas.map((reserva, index) => {
-                if (!reserva.executado && !reserva.cancelado)
+        let reservasAvailable = props.profissionalReservas.filter(reserva => {
+            return (!reserva.executado && !reserva.cancelado)
+        })
+        console.log(reservasAvailable)
+        if (reservasAvailable.length > 0) {
+            return reservasAvailable.map((reserva, index) => {
                     return (
                         <div className={cancelando ? 'flex flex_margin' : 'flex'}>
                             {cancelando ? <CancelCheckbox onCheck={checked => {
@@ -77,8 +80,6 @@ const MinhasReservasPage = props => {
                             <ReservaCliente reserva={reserva} key={index}/>
                         </div>
                     );
-                else
-                    return <></>
             })
         } else {
             return <h2 className={'empty_array'}>Não há agendamentos marcados até o momento.</h2>

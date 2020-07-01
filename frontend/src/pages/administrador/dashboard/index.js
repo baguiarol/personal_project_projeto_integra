@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-
+import {Redirect} from 'react-router-dom'
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import "./dash.sass";
@@ -88,7 +88,8 @@ const DashboardPage = props => {
         chart.scrollbarX = scrollbarX;
     }, []);
 
-    return (
+
+    return (('nome' in props.userLogged) ? (
         <div>
             <AdministradorTopbar pageSelected={'dashboard'}/>
             <div className={'indicators_container'}>
@@ -116,13 +117,14 @@ const DashboardPage = props => {
                     <h3>{agendamentosCancelados.length} cancelamentos</h3>
                 </div>
             </div>
-        </div>
+        </div>) : <Redirect to={'/'} />
     )
 }
 
 const mapStateToProps = state => ({
     profissionais: state.profissionais.profissionais,
     agendamentos: state.agendamentos.agendamentos,
+    userLogged: state.general.userLogged,
     administradores: state.administradores.administradores
 });
 

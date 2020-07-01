@@ -34,25 +34,37 @@ const ModalNewProfissional = ({
     }
 
     const newProfissional = async form => {
-        if (checkIfURLIsImage(fileURL)) {
-            try {
-                await fileUpload(file);
-                await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-                    nome: form.nome.value,
-                    telefone: form.telefone.value,
-                    ocupacao: form.ocupacao.value,
-                    descricao: form.descricao.value,
-                    foto_url: fileURL,
-                    email: form.email.value,
-                });
-                setProfissionais(await clienteDAO.findAll());
-                checkIfURLIsImage(fileURL);
-                alert('Profissional Adicionado com Sucesso!')
-            } catch (err) {
-                alert(err);
-            }
+        if (fileURL === '') {
+            await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                nome: form.nome.value,
+                telefone: form.telefone.value,
+                ocupacao: form.ocupacao.value,
+                descricao: form.descricao.value,
+                foto_url: 'https://jsl-online.com/wp-content/uploads/2017/01/placeholder-user.png',
+                email: form.email.value,
+            });
+            setProfissionais(await clienteDAO.findAll());
+            alert('Profissional Adicionado com Sucesso!')
         } else {
-            alert('Informe uma imagem válida acima');
+            if (checkIfURLIsImage(fileURL)) {
+                try {
+                    await fileUpload(file);
+                    await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                        nome: form.nome.value,
+                        telefone: form.telefone.value,
+                        ocupacao: form.ocupacao.value,
+                        descricao: form.descricao.value,
+                        foto_url: fileURL,
+                        email: form.email.value,
+                    });
+                    setProfissionais(await clienteDAO.findAll());
+                    alert('Profissional Adicionado com Sucesso!')
+                } catch (err) {
+                    alert(err);
+                }
+            } else {
+                alert('Informe uma imagem válida acima. Caso não queira adicionar uma imagem, deixe o campo em branco.');
+            }
         }
     }
 
@@ -90,14 +102,24 @@ const ModalNewProfissional = ({
         setLoading(true);
         const form = e.target;
         if (!editing) {
-            await newProfissional(form);
+            if (form.senha.value !== form.confirmar_senha.value) {
+                alert('Confirmação de senha não é igual a senha definida.')
+            } else if (form.senha.value.length < 6 && form.senha.value.length > 128) {
+                alert('A senha necessita conter entre 6 e 128 caracteres.')
+            } else {
+                await newProfissional(form);
+                selectProfissional();
+                setEditing(false);
+                form.reset();
+                closeModal();
+            }
         } else {
             await editProfissional(form);
+            selectProfissional();
+            setEditing(false);
+            form.reset();
+            closeModal();
         }
-        selectProfissional();
-        setEditing(false);
-        form.reset();
-        closeModal();
         setLoading(false);
     }
 
@@ -154,7 +176,7 @@ const ModalNewProfissional = ({
                                  (
                                      <div className={'flex'}>
                                          <InputText label={'Senha'} name={'senha'}/>
-                                         <InputText label={'Confirmar Senha'}/>
+                                         <InputText name={'confirmar_senha'} label={'Confirmar Senha'}/>
                                      </div>)
                          }
                      </div>}

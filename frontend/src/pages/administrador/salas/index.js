@@ -9,6 +9,7 @@ import ModalTypes from "../../../assets/modal_types";
 import Actions from "../../../redux/actions/actions";
 import {connect} from "react-redux";
 import salaDAO from "../../../DAO/salaDAO";
+import {Redirect} from 'react-router-dom';
 import {useHistory} from "react-router";
 
 const SalasPage = props => {
@@ -27,8 +28,9 @@ const SalasPage = props => {
         }
     });
 
+    const sortSalas = (a, b) => a.nome.localeCompare(b.nome)
 
-    return (
+    return ('nome' in props.userLogged) ? (
         <div>
             <AdministradorTopbar pageSelected={'salas'}/>
             <ModalNewSalas
@@ -47,7 +49,7 @@ const SalasPage = props => {
                 </div>
                 <div className={'salas'}>
                     {
-                        props.salas.map((sala, index) => (
+                        props.salas.sort(sortSalas).map((sala, index) => (
                             <CardSala sala={sala} key={index}/>
                         ))
                     }
@@ -55,7 +57,7 @@ const SalasPage = props => {
             </div>
             <Fab onClick={() => props.openModal(ModalTypes.adicionarSalas)}/>
         </div>
-    )
+    ) : (<Redirect to={'/'} />)
 }
 
 const mapStateToProps = state => ({

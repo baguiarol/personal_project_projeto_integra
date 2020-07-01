@@ -100,6 +100,7 @@ const ModalAgendamento = ({
                 if (passed) {
                     await reservaDAO.create(data, userLogged);
                     let novasReservas = await reservaDAO.findAll(mongoClient);
+                    setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, novasReservas))
                     setAgendamentos(novasReservas)
                     setLoading(false);
                     alert('Adicionado com sucesso!');
