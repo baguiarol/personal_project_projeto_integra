@@ -30,7 +30,7 @@
     position: absolute
     right: 100px
     width: 450px
-    bottom: 100px
+    bottom: 45px
     h1
       color: #FFF
       font-size: 50px
@@ -41,7 +41,12 @@
       box-shadow: 0 3px 15px rgba(0,0,0,0.3)
       border-radius: 10px
       padding: 30px
-
+      @include putTransition(.2s)
+    .forgot_pwd
+      color: darken($darkerBlue, 15)
+      cursor: pointer
+      &:hover
+        color: darken($darkerBlue, 35)
 
 // para telas pequenas
 @media(max-width: 1380px)

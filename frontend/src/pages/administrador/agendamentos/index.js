@@ -13,10 +13,27 @@ import reservaDAO from "../../../DAO/reservaDAO";
 import logDAO from "../../../DAO/logDAO";
 import {Redirect, useHistory} from "react-router";
 import ModalEditAgendamento from "../../../assets/component/modals/administrativo/modal_edit_agendamento/EditAgendamento";
+import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
 
 const AgendamentosAdministrador = props => {
 
     const hist = useHistory();
+
+    const watcher = async () => {
+        const stream = await props.database.collection('reservas').watch()
+
+        stream.onNext((change) => {
+            reservaDAO.findAll(props.client).then(res => {
+                props.setAgendamentos(res);
+            });
+        });
+    }
+
+    React.useEffect(() => {
+        if (props.database) {
+            watcher().then(() => console.log('connection established'))
+        }
+    }, [props.database])
 
     React.useEffect(() => {
         if (clienteDAO.db) {
@@ -26,8 +43,19 @@ const AgendamentosAdministrador = props => {
             clienteDAO.findAll().then(res => {
                 props.setProfissionais(res);
             });
+
+            sala_bloqueioDAO.findAll().then(res => {
+                props.setBloqueiosSalas(res)
+            });
+
             salaDAO.findAll().then(res => {
-                props.setSalas(res);
+                let array = res.sort((a,b) => {
+                    let [first, second] = [ a.nome.split(' '), b.nome.split(' ') ]
+                    if (+first[1] > +second[1]) { return 1 }
+                    if (+first[1] < +second[1]) { return -1 }
+                    else return 0
+                })
+                props.setSalas(array);
             });
             reservaDAO.findAll(props.client).then(res => {
                 props.setAgendamentos(res);
@@ -36,7 +64,7 @@ const AgendamentosAdministrador = props => {
                 props.setLogs(res);
             })
         }
-    });
+    }, []);
 
     return ('nome' in props.userLogged) ?
         <div>
@@ -61,6 +89,7 @@ const AgendamentosAdministrador = props => {
 const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
+    database: state.general.database,
     userLogged: state.general.userLogged,
     client: state.general.mongoClient,
 });
@@ -72,6 +101,7 @@ const mapDispatchToProps = dispatch => ({
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
     setLogs: logs => dispatch({type: Actions.setLogs, payload: logs}),
+    setBloqueiosSalas: bloqueios => dispatch({type: Actions.setBloqueiosSalas, payload: bloqueios})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgendamentosAdministrador);

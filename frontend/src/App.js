@@ -20,6 +20,10 @@ import administradorDAO from "./DAO/administradorDAO";
 import salaDAO from "./DAO/salaDAO";
 import reservaDAO from "./DAO/reservaDAO";
 import logDAO from "./DAO/logDAO";
+import ResetPassword from "./pages/login/resetPassword/resetPassword";
+import Configuracoes from "./pages/cliente/configuracoes/Configuracoes";
+import tipoUsuario from "./pages/login/tipoUsuario";
+import sala_bloqueioDAO from "./DAO/sala_bloqueioDAO";
 
 function App() {
 
@@ -29,6 +33,7 @@ function App() {
         salaDAO.setDb(db);
         reservaDAO.setDb(db);
         logDAO.setDb(db);
+        sala_bloqueioDAO.setDb(db);
     }
 
     React.useEffect(() => {
@@ -53,7 +58,10 @@ function App() {
               <Route path={'/dashboard'} component={DashboardPage} />
               <Route path={'/administrativo'} component={AdministrativoPage} />
               <Route path={'/profissionais'} component={ProfissionaisPage} />
+              <Route path={'/tipoUsuario'} component={tipoUsuario} />
               <Route path={'/salas'} component={SalasPage} />
+              <Route path={'/configuracoes'} component={Configuracoes} />
+              <Route path={'/recuperarSenha'} component={ResetPassword} />
               <Route path={'/logs'} component={LogsPage} />
           </Router>
       </Provider>

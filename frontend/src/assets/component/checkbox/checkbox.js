@@ -8,7 +8,7 @@ const CheckBox = ({onCheck = () => {}, label}) => {
 
     return (
         <div className={'checkbox_container'}>
-            <div className={checked ? 'checkbox checked' : 'checkbox'} onClick={() => {
+            <div style={{flexGrow: 0}} className={checked ? 'checkbox checked' : 'checkbox'} onClick={() => {
                 setChecked(!checked);
                 onCheck(checked);
             }}>

@@ -11,6 +11,9 @@ import ModoPaisagem from "../../assets/component/modoPaisagem/modoPaisagem";
 import clienteDAO from "../../DAO/clienteDAO";
 import {useHistory} from "react-router-dom";
 import moment from 'moment';
+import ForgotPasswordModal from "../../assets/component/modals/login/ForgotPasswordModal";
+import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk";
+import TipoUsuarioModal from "../../assets/component/modals/login/TipoUsuarioModal/TipoUsuarioModal";
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
@@ -18,6 +21,13 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
     const [loggedAdm, setLoggedAdm] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [checked, setChecked] = React.useState(false);
+    const [modalForgotPassword, setModalForgotPassword] = React.useState(false)
+    const [tipoUsuarioShow, setTipoUsuario] = React.useState(false)
+
+    const [admArray, setAdmArray] = React.useState(null)
+    const [clientesArray, setClientesArray] = React.useState(null)
+
+    const story = useHistory()
 
     const saveUserLogged = (email, pwd) => {
         if (checked) {
@@ -33,26 +43,27 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
         try {
             await clienteDAO.login(mongoClient, email, senha);
             clientes = await clienteDAO.find({email: email});
-            if (clientes.length > 0) {
-                setLogged(true);
+            administradores = await administradorDAO.find({email: email});
+            if (clientes.length > 0 && administradores.length > 0) {
+                setTipoUsuario(true)
+                setAdmArray(administradores)
+                setClientesArray(clientes)
+            } else if (clientes.length > 0) {
                 setUserLogged(clientes[0]);
-                saveUserLogged(email, senha);
-            } else {
-                administradores = await administradorDAO.find({email: email});
-                if (administradores.length > 0) {
-                    setLoggedAdm(true);
-                    setUserLogged(administradores[0]);
-                    saveUserLogged(email, senha);
-                } else {
-                    alert('Erro interno. Por favor, contate os desenvolvedores.');
-                }
+                story.push('/agendamentos')
+            } else if (administradores.length > 0) {
+                setUserLogged(administradores[0])
+                story.push('/agendamento_adm')
+            }
+            if (administradores.length <= 0 && clientes.length <= 0) {
+                alert('Erro interno. Por favor, contate os desenvolvedores.');
             }
         } catch (err) {
             console.log(err);
             if (err.errorCode === 46) {
                 alert('Usuário ou senha inválidos.');
             } else {
-                alert('Erro desconhecido! Log do erro '+ err);
+                alert('Erro desconhecido! Log do erro ' + err);
             }
         }
         setLoading(false);
@@ -101,12 +112,44 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     return (
         <div className={'login_container'}>
-            <ModoPaisagem />
-            <div className={'ball'} />
+            <ModoPaisagem/>
+            <TipoUsuarioModal
+                show={tipoUsuarioShow}
+                onClose={() => setTipoUsuario(false)}
+                onClickAdm={() => {
+                    setUserLogged(admArray[0])
+                    story.push('/agendamento_adm')
+                }}
+                onClickProfissional={() => {
+                    setUserLogged(clientesArray[0])
+                    story.push('/agendamentos')
+                }}
+            />
+            <ForgotPasswordModal
+                onSubmit={async e => {
+                    e.preventDefault()
+                    const form = e.target;
+                    setLoading(true)
+                    try {
+                        await mongoClient
+                            .auth
+                            .getProviderClient(UserPasswordAuthProviderClient.factory)
+                            .sendResetPasswordEmail(form.email.value);
+                        alert('Por favor, cheque seu e-mail, enviamos um link para redefinição de senha.')
+                    } catch (e) {
+                        alert(e)
+                    }
+                    setModalForgotPassword(false)
+                    setLoading(false)
+                }}
+                loading={loading}
+                onClose={() => setModalForgotPassword(false)}
+                show={modalForgotPassword}/>
+            <div className={'ball'}/>
             <div className={'logo_container'}>
                 <img
                     alt={'integra_logo'}
-                    src={require('../../assets/integra_logo.png')} />
+                    src={require('../../assets/integra_logo.png')}/>
                 <p>Sistema de Gerenciamento</p>
             </div>
             <div className={'login'}>
@@ -121,22 +164,21 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                         <InputText
                             name={'email'}
                             label={'E-mail'}
-                            placeholder={'Ex: joao@example.com'} />
+                            placeholder={'Ex: joao@example.com'}/>
                         <InputText
                             name={'senha'}
                             label={'Senha'}
                             type={'password'}
-                            placeholder={'Informe sua senha'} />
+                            placeholder={'Informe sua senha'}/>
                         <CheckBox
-                            onCheck={ checked => {
+                            onCheck={checked => {
                                 setChecked(!checked)
                             }}
-                            label={'Manter-me Conectado'} />
+                            label={'Manter-me Conectado'}/>
                         <Button loading={loading} type={'submit'} text={'Confirmar'}/>
                     </form>
-                    {logged && <Redirect to={'/agendamentos'} />}
-                    {loggedAdm && <Redirect to={'/agendamento_adm'} />}
                 </div>
+                <p onClick={() => setModalForgotPassword(true)} className={'forgot_pwd'}>Esqueceu sua senha?</p>
             </div>
         </div>
     )

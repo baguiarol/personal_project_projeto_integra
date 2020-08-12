@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import Button from "../button/button";
 import Actions from "../../../redux/actions/actions";
 import {useHistory} from "react-router";
+import Menu from "./Menu/Menu";
 
 const ClienteTopbar = props => {
 
@@ -16,6 +17,8 @@ const ClienteTopbar = props => {
         localStorage.removeItem('pwd');
         hist.push('/');
     };
+
+    const [menuOpen, setMenuOpen] = React.useState(false)
 
     return (
         <div className={'topbar_container'}>
@@ -41,11 +44,13 @@ const ClienteTopbar = props => {
                         props.userLogged.foto_url : 'https://randomuser.me/api/portraits/women/43.jpg'} />
                         <Button
                             onClick={() => {
-                                logout();
+                                // logout();
+                                setMenuOpen(!menuOpen)
                             }}
                             width={'5%'}
-                            text={<i className={'fas fa-door-open'}/>}
+                            text={<i className={'fas ' + (menuOpen ? 'fa-chevron-up' : 'fa-chevron-down')}/>}
                             className={'log-off'}/>
+                            <Menu menuOpen={menuOpen} />
         </div>
     )
 }

@@ -5,7 +5,11 @@ import PropTypes from 'prop-types';
 
 const TurnoCliente = props => {
 
-    const optionsTurno = [{
+    const eSabado = () => (props.dateSelected.getDay() === 6)
+
+    const optionsTurno = eSabado() ?
+        [{label: '08:00h às 12:00h', value: { hora_inicio: 8, hora_fim: 12}}]
+        : [{
         label: '08:00h às 13:00h', value: {
             hora_inicio: 8,
             hora_fim: 13,
@@ -57,6 +61,7 @@ TurnoCliente.propTypes = {
 
 const mapStateToProps = state => ({
     profissionais: state.profissionais.profissionais,
+    dateSelected: state.general.dateSelected,
 });
 
 export default connect(mapStateToProps)(TurnoCliente);

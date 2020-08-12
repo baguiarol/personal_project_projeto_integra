@@ -38,6 +38,7 @@ const ModalNewAdministrativo = ({
     }
 
     const newAdministrativo = async form => {
+        try {
         if (fileURL === '') {
             await administradorDAO.addUser(mongoClient, form.email.value, form.senha.value, {
                 nome: form.nome.value,
@@ -67,7 +68,10 @@ const ModalNewAdministrativo = ({
                 }
             }
         }
-
+        } catch(e) {
+            setLoading(false)
+            alert(e)
+        }
     };
 
     const editAdministrativo = async form => {
@@ -148,8 +152,8 @@ const ModalNewAdministrativo = ({
                     'email' in administradorSelected ? <></> :
                         (
                             <div className={'flex'}>
-                                <InputText label={'Senha'} name={'senha'}/>
-                                <InputText label={'Confirmar Senha'}/>
+                                <InputText label={'Senha'} type={'password'} name={'senha'}/>
+                                <InputText label={'Confirmar Senha'} type={'password'}/>
                             </div>)
                 }
 

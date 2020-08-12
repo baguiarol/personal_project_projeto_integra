@@ -32,9 +32,6 @@ const ModalAgendamento = ({
         const checkIfIsBetween = (actualDateBegin, actualDateEnds, dateOne, dateTwo) => {
             let one = moment.range(actualDateBegin, actualDateEnds);
             let two = moment.range(dateOne, dateTwo);
-            console.log(two)
-            console.log(one)
-            console.log('Checou, resultado: '+one.overlaps(two))
             return one.overlaps(two)
         }
 
@@ -79,23 +76,37 @@ const ModalAgendamento = ({
             setLoading(true);
             let data = prepareData(form);
             if (selectedPage === 'Hora Avulsa') {
-                let dateBegin = new Date(getStringDate(dateSelected, data.hora_inicio))
-                let dateFim = new Date(getStringDate(dateSelected, data.hora_fim))
+                await reservaDAO.createHoraAvulsa(data, agendamentos, dateSelected, async () => {
+                    await reservaDAO.create(data, userLogged);
+                    let novasReservas = await reservaDAO.findAll(mongoClient);
+                    setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, novasReservas))
+                    setAgendamentos(novasReservas)
+                    setLoading(false);
+                    alert('Adicionado com sucesso!');
+                    close();
+                }, () => {
+                    alert("Erro! O horário já se encontra reservado ou horário inválido.");
+                    setLoading(false)
+                    close();
+                })
+            } else if (selectedPage === 'Turno') {
+                let dateBegin = new Date(getStringDate(dateSelected, selectedTurno.hora_inicio))
+                let dateFim = new Date(getStringDate(dateSelected, selectedTurno.hora_fim))
                 let passed = true
-                console.log('É hora avulsa')
                 for (let agendamento of agendamentos) {
+                    // Checagem de ERRO para AGENDAMENTO DE TURNO.
                     let dateInicioAgendamento =
                             new Date(getStringDate(new Date(agendamento.data), agendamento.hora_inicio)),
                         dateFimAgendamento =
                             new Date(getStringDate(new Date(agendamento.data), agendamento.hora_fim))
 
-                        if (checkIfIsBetween(dateBegin, dateFim, dateInicioAgendamento, dateFimAgendamento)) {
-                            alert("Erro! O horário já se encontra reservado.");
-                            passed = false
-                            setLoading(false)
-                            close();
-                            break;
-                        }
+                    if (checkIfIsBetween(dateBegin, dateFim, dateInicioAgendamento, dateFimAgendamento)) {
+                        alert("Erro! O horário já se encontra reservado.");
+                        passed = false
+                        setLoading(false)
+                        close();
+                        break;
+                    }
                 }
                 if (passed) {
                     await reservaDAO.create(data, userLogged);

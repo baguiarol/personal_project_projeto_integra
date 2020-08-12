@@ -6,10 +6,10 @@ import ModalParent from "../../modal_parent/modal";
 import Actions from "../../../../../redux/actions/actions";
 import {connect} from "react-redux";
 import Options from "./tipos/options";
-import moment from 'moment';
+import moment from "moment/min/moment-with-locales";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 
-const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected, userLogged}) => {
+const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelected, userLogged, agendamentos, setAgendamentos}) => {
 
     const [selectedProfissional, selectProf] = React.useState({});
     const [loading, setLoading] = React.useState(false);
@@ -19,7 +19,7 @@ const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected, userLogge
         const form = e.target;
         const profissional = selectedProfissional;
         setLoading(true);
-        await reservaDAO.create({
+        const data = {
             profissional_id: profissional._id,
             hora_inicio: Number(form.hora_inicio.value),
             hora_fim: Number(form.hora_fim.value),
@@ -29,10 +29,24 @@ const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected, userLogge
             cancelado: false,
             pago: false,
             executado: false,
-        }, userLogged);
-        setLoading(false);
-        alert('Adicionado com sucesso!');
-        close();
+        }
+        if ('_id' in selectedProfissional) {
+            await reservaDAO.createHoraAvulsa(data, agendamentos, dateSelected, async () => {
+                await reservaDAO.create(data, userLogged);
+                let novasReservas = await reservaDAO.findAll(mongoClient);
+                setAgendamentos(novasReservas)
+                setLoading(false);
+                alert('Adicionado com sucesso!');
+                close();
+            }, () => {
+                alert("Erro! O horário já se encontra reservado ou horário inválido.");
+                setLoading(false)
+                close();
+            })
+        } else {
+            alert('Por favor, selecione um profissional.')
+            setLoading(false)
+        }
     }
 
     return (
@@ -41,7 +55,10 @@ const ModalAgendamentoAdm = ({show, close, dateSelected, salaSelected, userLogge
                      header={<header>
                          <div>
                              <h1>Adicionar Reserva</h1>
-                             <h3>Sexta, 27 de Janeiro de 2019</h3>
+                             <h3>
+                                 {moment(dateSelected).locale('pt-BR')
+                                     .format('DD [de] MMMM [de] YYYY')} - {salaSelected.nome}
+                             </h3>
                          </div>
                          <div className={'close_container'} onClick={close}>
                              <i className={'fa fa-times'}/>
@@ -67,10 +84,12 @@ const mapStateToProps = state => ({
     dateSelected: state.general.dateSelected,
     salaSelected: state.agendamentos.salaSelected,
     userLogged: state.general.userLogged,
+    agendamentos: state.agendamentos.agendamentos,
 });
 
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
+    setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalAgendamentoAdm);

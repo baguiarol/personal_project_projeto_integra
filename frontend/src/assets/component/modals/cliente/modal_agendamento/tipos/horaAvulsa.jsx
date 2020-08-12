@@ -18,7 +18,14 @@ const HoraAvulsaCliente = props => {
     };
     const [horaInicial, setHoraInicial] = React.useState(0);
     const [horaFinal, setHoraFinal] = React.useState(0);
-    const [horasFinais, setHorasFinais] = React.useState(selectOptions(8));
+    const [horasFinais, setHorasFinais] = React.useState(selectOptions(8, true));
+
+    React.useEffect(() => {
+        setHoraInicial(0)
+        setHoraFinal(0)
+        setHorasFinais((props.dateSelected.getUTCDay() === new Date().getUTCDay())
+            ? selectOptions(new Date().getHours()+1, true) : selectOptions(8, true))
+    }, [props.dateSelected])
 
     return (
         <div>
@@ -27,21 +34,27 @@ const HoraAvulsaCliente = props => {
                     <h2>Hora Inicial</h2>
                     <Select
                         name={'hora_inicio'}
+                        value={horaInicial === 0 ?  '' : {label: horaInicial+':00', value: horaInicial}}
+                        style={{width: '100px'}}
                         onChange={e => {
-                            setHorasFinais(selectOptions(e.value + 1, true));
-                            setHoraInicial(e.value);
+                            setHorasFinais((e) ? selectOptions(e.value + 1, true) : selectOptions(
+                                props.dateSelected.getUTCDay() === new Date().getUTCDay())
+                                ? selectOptions(new Date().getHours()+1) : selectOptions(9)
+                            )
+                            setHoraInicial((e) ? e.value : 0);
                         }}
                         classNamePrefix={'Select'}
                         options={
                             //Não deixar fazer reserva um horário anterior ao que já passou.
                             (props.dateSelected.getUTCDay() === new Date().getUTCDay())
-                                ? selectOptions(new Date().getHours()+1) : selectOptions(8)}/>
+                                ? selectOptions(new Date().getHours() + 1) : selectOptions(9)}/>
                 </div>
                 <div>
                     <h2>Hora Final</h2>
                     <Select
-                        onChange={e => setHoraFinal(e.value)}
+                        onChange={e => setHoraFinal((e) ? e.value : 0)}
                         name={'hora_fim'}
+                        value={horaFinal === 0 ?  '' : {label: horaFinal+':00', value: horaFinal}}
                         classNamePrefix={'Select'} options={horasFinais}/>
                 </div>
             </div>

@@ -30,11 +30,23 @@ const administradorDAO = {
         console.log('find administrador');
         return this.db.collection(COLLECTION).find({}).toArray();
     },
-    async addUser(client, email, password, clienteData){
+    async addUser(client, email, password, clienteData) {
         console.log('add User');
         const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
-        await emailPasswordClient.registerWithEmail(email, password);
-        return this.create({ ...clienteData, email });
+        try {
+            const array = await administradorDAO.find({email: email})
+            if (array.length > 0) {
+                alert('Administrador já existe com esse email.');
+            } else {
+                await emailPasswordClient.registerWithEmail(email, password);
+                return this.create({...clienteData, email});
+            }
+        } catch (e) {
+            alert('ATENÇÃO: Já existe um profissional com esse e-mail, ' +
+                'por favor, considere a SENHA do profissional já cadastrado. Essa conta agora terá ' +
+                'privilégios administrativos.')
+            return this.create({...clienteData, email});
+        }
     },
     anonymousLogin(client) {
         console.log('Anonymous Login');

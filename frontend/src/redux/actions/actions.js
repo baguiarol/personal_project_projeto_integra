@@ -15,6 +15,7 @@ const Actions = {
     selectProfissional: 'SELECT_PROF',
     setLogs: 'SET_LOGS',
     setProfissionalReservas: 'SET_PROF_RESERVAS',
+    setBloqueiosSalas: 'SET_BLOQ_SALAS',
 }
 
 export default Actions;

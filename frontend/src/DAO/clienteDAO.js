@@ -25,7 +25,12 @@ const clienteDAO = {
     async addUser(client, email, password, clienteData){
         console.log('add cliente user');
         const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
-        await emailPasswordClient.registerWithEmail(email, password);
+        try {
+            await emailPasswordClient.registerWithEmail(email, password);
+        } catch (err) {
+            alert('O usuário de e-mail já foi definido e talvez deletado anteriormente. Para redefinir ' +
+                'senha, por favor, peça ao usuário que vá em "Esqueceu sua Senha?" na tela de Login.')
+        }
         return this.create({ ...clienteData, email });
     },
     login(client, email, password){
@@ -41,6 +46,11 @@ const clienteDAO = {
         return this.db.collection(COLLECTION).find(query).toArray();
     },
     fixarSalaNoTopo(sala, user) {
+        if (user.sala_fixa) {
+            if (user.sala_fixa.toString() === sala._id.toString()) {
+                return this.db.collection(COLLECTION).updateOne({_id: user._id}, {$set: {sala_fixa: null}})
+            }
+        }
         return this.db.collection(COLLECTION).updateOne({_id: user._id}, {$set: {sala_fixa: sala._id}});
     },
 };

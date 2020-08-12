@@ -33,7 +33,7 @@
         td:not(:first-child)
           cursor: pointer
           @include putTransition()
-          &:hover
+          &:hover:not(.alugado)
             box-shadow: 0 3px 4px rgba(0,0,0,0.2)
         .alugado
           box-shadow: transparent
@@ -64,3 +64,6 @@
     h1
       font-size: 20px
       padding: 25px 15px
+    .container_table
+      .calendar_table
+        width: 1000px

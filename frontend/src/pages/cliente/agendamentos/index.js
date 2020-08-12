@@ -14,6 +14,7 @@ import clienteDAO from "../../../DAO/clienteDAO";
 import salaDAO from "../../../DAO/salaDAO";
 import reservaDAO from "../../../DAO/reservaDAO";
 import {useHistory} from "react-router";
+import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
 
 const ClienteAgendamentos = props => {
 
@@ -26,21 +27,41 @@ const ClienteAgendamentos = props => {
             story.push('/');
     })
 
+    const sortSalas = (a,b) => {
+        let [first, second] = [ a.nome.split(' '), b.nome.split(' ') ]
+        if (+first[1] > +second[1]) { return 1 }
+        if (+first[1] < +second[1]) { return -1 }
+        else return 0
+    }
+
     React.useEffect(() => {
         if (clienteDAO.db && 'nome' in props.userLogged) {
             salaDAO.findAll().then(res => {
-                if ('sala_fixa' in props.userLogged) {
-                    let salaFixa = props.userLogged.sala_fixa.toString();
-                    res.sort(function(x,y){ return x._id.toString() == salaFixa ? -1 : y._id.toString() == salaFixa ? 1 : 0; });
+                if (props.userLogged.sala_fixa) {
+                    res.sort(sortSalas);
+                    // coloca no topo. Função Swap
+                    for (let i = 0; i < res.length; i++) {
+                        if (props.userLogged.sala_fixa.toString() === res[i]._id.toString()) {
+                            let aux = res[0]
+                            res[0] = res[i]
+                            res[i] = aux
+                        }
+                    }
+                } else {
+                    res.sort(sortSalas)
                 }
+                console.log(res)
                 props.setSalas(res);
             });
+            sala_bloqueioDAO.findAll().then(res => {
+                props.setBloqueiosSalas(res)
+            })
             reservaDAO.findAll(props.client).then(res => {
                 props.setAgendamentos(res);
                 props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, res));
             });
         }
-    }, [props.client]);
+    }, [props.client, props.userLogged]);
 
     return (
         <div>
@@ -96,6 +117,7 @@ const mapStateToProps = state => ({
     client: state.general.mongoClient,
     userLogged: state.general.userLogged,
     agendamentos: state.agendamentos.agendamentos,
+    salaBloqueios: state.salas.salaBloqueios,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -103,6 +125,7 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
     selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
+    setBloqueiosSalas: bloqueios => dispatch({type: Actions.setBloqueiosSalas, payload: bloqueios}),
     selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
     setProfissionalReservas: reservas => dispatch({type: Actions.setProfissionalReservas, payload: reservas}),

@@ -27,11 +27,12 @@ const Sala = props => {
 
 
     React.useEffect(() => {
-        if ('sala_fixa' in props.userLogged && '_id' in props.sala) {
+        if (props.userLogged.sala_fixa && '_id' in props.sala) {
             setSalaFixa(props.sala._id.toString() === props.userLogged.sala_fixa.toString());
         }
         setMensal(verificaAluguelMensal());
     }, [props]);
+
     return (
         <div className={'sala_content'}>
             <ReactTooltip id='main' place={'left'} type={'info'} effect={'solid'}/>
@@ -41,8 +42,17 @@ const Sala = props => {
                         <span
                             className={salaFixa ? 'fixa' : ''}
                             onClick={async () => {
-                                await clienteDAO.fixarSalaNoTopo(props.sala, props.userLogged);
-                                props.setUserLogged({...props.userLogged, sala_fixa: props.sala._id});
+                                if (salaFixa) {
+                                    await clienteDAO.fixarSalaNoTopo(props.sala, props.userLogged);
+                                    let aux = {...props.userLogged};
+                                    delete aux.sala_fixa
+                                    props.setUserLogged(aux);
+                                    setSalaFixa(false)
+                                } else {
+                                    await clienteDAO.fixarSalaNoTopo(props.sala, props.userLogged);
+                                    props.setUserLogged({...props.userLogged, sala_fixa: props.sala._id});
+                                    setSalaFixa(true)
+                                }
                             }}
                             data-for={'main'} data-tip={'Fixar no Topo'} data-iscapture={'true'}>
                              <i className={'fas fa-thumbtack'}/> {'\u00A0'}

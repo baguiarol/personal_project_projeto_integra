@@ -6,19 +6,41 @@ import Actions from "../../../redux/actions/actions";
 import ModalTypes from "../../modal_types";
 import {numberIsBetween} from "../../AuxFunctions";
 import reservaDAO from "../../../DAO/reservaDAO";
-import moment from "moment/min/moment-with-locales";
+import Moment from "moment/min/moment-with-locales";
+import {extendMoment} from "moment-range";
+import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
+
+const moment = extendMoment(Moment)
 
 const fillHoras = () => {
     let array = [];
     for (let i = 0; i < 13; i++)
-        array.push({label: i + 8 + ':00', value: i + 8});
+        array.push({label: i + 9 + ':00', value: i + 9});
     return array;
 }
 
 const horas = fillHoras();
-const salas = new Array(8).fill('Sala 02');
 
 const CalendarAgendamentos = props => {
+
+    React.useEffect(() => {
+        sala_bloqueioDAO.findAll().then(res => {
+            props.setBloqueiosSalas(res)
+        })
+    }, [])
+
+    const checkBloqueado = (bloqueios, sala) => {
+        for (let bloqueio of bloqueios) {
+            if (bloqueio.sala.toString() === sala._id.toString() &&
+                moment(new Date(bloqueio.dia)).isSame(props.dateSelected, 'day')) {
+                if (bloqueio.wholeDay) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     return (
         <div className={'calendar_agendamentos_container'}>
             <h1>
@@ -67,7 +89,6 @@ const CalendarAgendamentos = props => {
                                                 && !agendamento.cancelado) {
                                                 isOccupied = true;
                                                 agnd = agendamento;
-                                                console.log(agnd);
                                             }
                                         } else if ('mes' in agendamento
                                             && moment(agendamento["mes"]).isSame(props.dateSelected, 'month')) {
@@ -77,8 +98,12 @@ const CalendarAgendamentos = props => {
                                     if (!isOccupied) {
                                         if (isMonthly) {
                                             return (<td key={indexSala} className={'alugado'}>
-                                                    <i>Alugado Mensalmente</i>
+                                                <i>Alugado Mensalmente</i>
                                             </td>)
+                                        } else if (checkBloqueado(props.bloqueiosSalas, sala)) {
+                                            return <td className={'alugado'} key={indexSala}>
+                                                <i>Bloqueada</i>
+                                            </td>
                                         } else {
                                             return (
                                                 <td key={indexSala} className={'free'} onClick={() => {
@@ -98,13 +123,13 @@ const CalendarAgendamentos = props => {
                                         } else {
                                             if (agnd.hora_inicio === hora.value) {
                                                 return (<td
-                                                            onClick={() => {
-                                                                props.openModal(ModalTypes.editarAgendamento);
-                                                                props.selectAgendamentos(agnd);
-                                                            }}
-                                                            key={indexSala}
-                                                            rowSpan={agnd.hora_fim - agnd.hora_inicio}
-                                                            className={'occupied'}>
+                                                    onClick={() => {
+                                                        props.openModal(ModalTypes.editarAgendamento);
+                                                        props.selectAgendamentos(agnd);
+                                                    }}
+                                                    key={indexSala}
+                                                    rowSpan={agnd.hora_fim - agnd.hora_inicio}
+                                                    className={'occupied'}>
                                                     {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                         <i>Usuário Excluído</i>) : ''}
                                                 </td>)
@@ -132,11 +157,14 @@ const mapStateToProps = state => ({
     salas: state.salas.salas,
     agendamentos: state.agendamentos.agendamentos,
     dateSelected: state.general.dateSelected,
+    bloqueiosSalas: state.salas.bloqueiosSalas,
 });
 
 const mapDispatchToProps = dispatch => ({
     selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
+    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
+    setBloqueiosSalas: bloqueios => dispatch({type: Actions.setBloqueiosSalas, payload: bloqueios}),
     selectAgendamentos: agendamento => dispatch({type: Actions.selectAgendamentos, payload: agendamento}),
     selectSala: sala => dispatch({type: Actions.selectSala, payload: sala}),
 });

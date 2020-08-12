@@ -19,9 +19,11 @@ const LogsPage = props => {
             <AdministradorTopbar pageSelected={'logs'} />
             <div className={'logs'}>
                 {
-                    props.logs.map(log => (
-                        <CardLog log={log}/>
-                    ))
+                    (props.logs.length === 0) ?
+                        (<h2 style={{color: '#888'}}>Ainda não há logs para exibir.</h2>) :
+                        props.logs.map(log => (
+                            <CardLog log={log}/>
+                        ))
                 }
             </div>
         </div>

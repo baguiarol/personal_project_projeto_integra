@@ -35,16 +35,20 @@ const ModalNewProfissional = ({
 
     const newProfissional = async form => {
         if (fileURL === '') {
-            await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
-                nome: form.nome.value,
-                telefone: form.telefone.value,
-                ocupacao: form.ocupacao.value,
-                descricao: form.descricao.value,
-                foto_url: 'https://jsl-online.com/wp-content/uploads/2017/01/placeholder-user.png',
-                email: form.email.value,
-            });
-            setProfissionais(await clienteDAO.findAll());
-            alert('Profissional Adicionado com Sucesso!')
+            try {
+                await clienteDAO.addUser(mongoClient, form.email.value, form.senha.value, {
+                    nome: form.nome.value,
+                    telefone: form.telefone.value,
+                    ocupacao: form.ocupacao.value,
+                    descricao: form.descricao.value,
+                    foto_url: 'https://jsl-online.com/wp-content/uploads/2017/01/placeholder-user.png',
+                    email: form.email.value,
+                });
+                setProfissionais(await clienteDAO.findAll());
+                alert('Profissional Adicionado com Sucesso!')
+            } catch(e) {
+                alert(e)
+            }
         } else {
             if (checkIfURLIsImage(fileURL)) {
                 try {
@@ -149,11 +153,13 @@ const ModalNewProfissional = ({
                          <InputText
                              disabled={'nome' in profissionalSelected && !editing}
                              defaultValue={profissionalSelected.nome}
+                             required={true}
                              name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
                              <InputText
                                  disabled={'nome' in profissionalSelected && !editing}
                                  defaultValue={profissionalSelected.telefone}
+                                 required={true}
                                  name={'telefone'}
                                  label={'Telefone'}/>
                              <InputText
@@ -163,10 +169,12 @@ const ModalNewProfissional = ({
                                  label={'Ocupação'}/>
                          </div>
                          <InputText
+                             required={true}
                              disabled={'nome' in profissionalSelected && !editing}
                              defaultValue={profissionalSelected.descricao}
                              name={'descricao'} label={'Descrição'}/>
                          <InputText name={'email'}
+                                    required={true}
                                     disabled={'nome' in profissionalSelected && !editing}
                                     defaultValue={profissionalSelected.email}
                                     label={'Email'}
@@ -175,8 +183,8 @@ const ModalNewProfissional = ({
                              'email' in profissionalSelected ? <></> :
                                  (
                                      <div className={'flex'}>
-                                         <InputText label={'Senha'} name={'senha'}/>
-                                         <InputText name={'confirmar_senha'} label={'Confirmar Senha'}/>
+                                         <InputText label={'Senha'} name={'senha'} type={'password'} required={true} />
+                                         <InputText name={'confirmar_senha'} label={'Confirmar Senha'} type={'password'} required={true}/>
                                      </div>)
                          }
                      </div>}
@@ -188,6 +196,7 @@ const ModalNewProfissional = ({
                                          if (window.confirm("Tem certeza que deseja apagar esse profissional do sistema?")) {
                                              await removeProfissional();
                                              closeModal();
+                                             selectProfissional()
                                              setEditing(false);
                                          }
                                      }}/>

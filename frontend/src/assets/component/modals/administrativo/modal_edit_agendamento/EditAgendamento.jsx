@@ -53,49 +53,66 @@ const ModalEditAgendamento = props => {
                 <h2>Execução</h2>
                 <h3>
                     {finalizado ? `Reserva já foi finalizada. Início às ${
-                        moment(props.agendamentoSelected.execucao_inicio).format('HH:mm')
-                    }, e fim às ${moment(props.agendamentoSelected.execucao_fim).format('HH:mm')}`
+                            moment(props.agendamentoSelected.execucao_inicio).format('HH:mm')
+                        }, e fim às ${moment(props.agendamentoSelected.execucao_fim).format('HH:mm')}`
                         : (executing ? 'Reserva está sendo executada' : 'Reserva ainda não executada')}
                     <br/><br/>
                     {
                         finalizado ? <></> :
-                            <Button
-                                onClick={async () => {
-                                    setLoading(true);
+                            <div style={{display: 'flex'}}>
+                                <Button
+                                    onClick={async () => {
+                                        setLoading(true);
                                         if (executing) {
                                             await reservaDAO.executaReserva(props.agendamentoSelected._id);
                                             await updateAgendamentos();
                                             alert('Execução Finalizada com Sucesso!');
                                         } else {
-                                        await reservaDAO.comecaReserva(props.agendamentoSelected._id);
-                                        await updateAgendamentos();
+                                            await reservaDAO.comecaReserva(props.agendamentoSelected._id);
+                                            await updateAgendamentos();
+                                        }
+                                        setLoading(false);
+                                    }}
+                                    type={'button'}
+                                    text={'execucao_inicio' in props.agendamentoSelected ?
+                                        'Finalizar' : 'Iniciar'
                                     }
-                                    setLoading(false);
-                                }}
-                                type={'button'}
-                                text={'execucao_inicio' in props.agendamentoSelected ?
-                                    'Finalizar' : 'Iniciar'
-                                }
-                                loading={loading}
-                                width={'30%'}/>
+                                    loading={loading}
+                                    width={'30%'}/> &nbsp; &nbsp;
+                                <Button text={'Cancelar Reserva'}
+                                        width={'45%'}
+                                        onClick={async () => {
+                                            if (window.confirm('Tem certeza que deseja cancelar a reserva?')) {
+                                                await reservaDAO.cancelaReserva(props.agendamentoSelected._id)
+                                                props.close()
+                                            }
+                                        }}/>
+                            </div>
                     }
                 </h3>
                 <h2>Pagamento</h2>
                 <h3>
                     {pago ? 'Reserva já foi paga.' : 'Reserva ainda não foi paga.'} <br/><br/>
                     {pago ? <></>
-                        :<Button
+                        : <Button
                             onClick={async () => {
                                 setLoading(true);
-                                await reservaDAO.pagaReserva(props.agendamentoSelected._id);
+                                await reservaDAO.pagaReserva(props.agendamentoSelected._id, true);
                                 await updateAgendamentos();
                                 setLoading(false);
                             }}
                             loading={loading}
                             type={'button'}
                             text={'Pagar'}
-                            width={'30%'}/> }
-
+                            width={'45%'}/>}
+                    {pago ?
+                        <Button onClick={async () => {
+                            setLoading(true);
+                            await reservaDAO.pagaReserva(props.agendamentoSelected._id, false)
+                            await updateAgendamentos();
+                            setLoading(false)
+                        }} text={'Desfazer'}
+                                width={'45%'}/> : <></>}
                 </h3>
             </div>}
             footer={

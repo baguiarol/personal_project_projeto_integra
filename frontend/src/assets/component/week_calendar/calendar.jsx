@@ -15,7 +15,7 @@ const Reserva = props => {
     )
 }
 
-const days = ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
 const WeekCalendar = props => {
 
@@ -24,7 +24,18 @@ const WeekCalendar = props => {
 
     React.useEffect(() => {
         setAgendamentosDaSala(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
-    }, [props]);
+    }, [props.agendamentos]);
+
+    const verificarBloqueio = (date, sala, bloqueios) => {
+        console.log(bloqueios)
+        for (let bloqueio of bloqueios) {
+            if (bloqueio.sala.toString() === sala._id.toString()
+                && moment(date).isSame(new Date(bloqueio.dia), 'day')) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     return (
         <div className={'container_week'}>
@@ -46,10 +57,10 @@ const WeekCalendar = props => {
                     <div
                         key={day}
                         className={'week_day'}>
-                        <h1 className={date.isSame(new Date(), 'day') ? 'today': ''}>{day}</h1>
-                        <h3 className={date.isSame(new Date(), 'day') ? 'today': ''}>{date.format('DD/MMM')}</h3>
+                        <h1 className={date.isSame(new Date(), 'day') ? 'today' : ''}>{day}</h1>
+                        <h3 className={date.isSame(new Date(), 'day') ? 'today' : ''}>{date.format('DD/MMM')}</h3>
                         {
-                            agendamentosDaSala.map((agendamento, index) => {
+                             (agendamentosDaSala.map((agendamento, index) => {
                                 if (date.isSame(agendamento.data, 'day') && !agendamento.cancelado) {
                                     if ('mes' in agendamento) {
                                         if (date.isSame(new Date(), 'day')) {
@@ -68,15 +79,18 @@ const WeekCalendar = props => {
                                 } else {
                                     return <></>
                                 }
-                            })
+                            }))
                         }
                         {
                             date.isSameOrAfter(new Date(), 'day') ?
-                            (<div
-                            onClick={() => props.addReservaListener(date)}
-                            className={'add'}>
-                            <span>+</span>
-                            </div>) : <></>
+                                verificarBloqueio(date, props.sala, props.bloqueiosSalas) ? <div
+                                style={{backgroundColor: 'transparent', display: 'flex'}}>
+                                    <i style={{color: '#CCC', margin: 'auto'}}>Sala Indisponível</i>
+                                </div> : (<div
+                                    onClick={() => props.addReservaListener(date)}
+                                    className={'add'}>
+                                    <span>+</span>
+                                </div>) : <></>
                         }
 
                     </div>
@@ -104,6 +118,7 @@ WeekCalendar.propTypes = {
 
 const mapStateToProps = state => ({
     agendamentos: state.agendamentos.agendamentos,
+    bloqueiosSalas: state.salas.bloqueiosSalas,
 });
 
 export default connect(mapStateToProps)(WeekCalendar);
