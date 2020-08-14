@@ -2,6 +2,7 @@ import React from 'react';
 import Select from "react-select";
 import {connect} from "react-redux";
 import {transformStringToReais} from "../../../../../AuxFunctions";
+import moment from 'moment'
 
 const HoraAvulsaCliente = props => {
 
@@ -18,14 +19,30 @@ const HoraAvulsaCliente = props => {
     };
     const [horaInicial, setHoraInicial] = React.useState(0);
     const [horaFinal, setHoraFinal] = React.useState(0);
-    const [horasFinais, setHorasFinais] = React.useState(selectOptions(8, true));
+    const [horasFinais, setHorasFinais] = React.useState(selectOptions(10, true));
+    const [bloqueioSelecionado, setBloqueio] = React.useState(null)
 
     React.useEffect(() => {
         setHoraInicial(0)
         setHoraFinal(0)
         setHorasFinais((props.dateSelected.getUTCDay() === new Date().getUTCDay())
-            ? selectOptions(new Date().getHours()+1, true) : selectOptions(8, true))
-    }, [props.dateSelected])
+            ? selectOptions(new Date().getHours()+1, true) : selectOptions(10, true))
+        setBloqueio(checkIfBlocked())
+    }, [props.dateSelected, props.salaSelected])
+
+    const checkIfBlocked = () => {
+        console.log('here I am')
+        console.log(props.salaBloqueios)
+        if (Array.isArray(props.salaBloqueios)) {
+            console.log('here')
+            for (let bloqueio of props.salaBloqueios) {
+                if ( bloqueio.sala.toString() === props.salaSelected._id.toString()
+                    && moment(new Date(bloqueio.dia)).add(1, 'day').isSame( props.dateSelected, 'day'))
+                    return bloqueio
+            }
+        }
+        return null;
+    }
 
     return (
         <div>
@@ -47,7 +64,9 @@ const HoraAvulsaCliente = props => {
                         options={
                             //Não deixar fazer reserva um horário anterior ao que já passou.
                             (props.dateSelected.getUTCDay() === new Date().getUTCDay())
-                                ? selectOptions(new Date().getHours() + 1) : selectOptions(9)}/>
+                                ? selectOptions(new Date().getHours() + 1) : selectOptions(
+                                    bloqueioSelecionado ? bloqueioSelecionado.horaFim : 9
+                                )}/>
                 </div>
                 <div>
                     <h2>Hora Final</h2>
@@ -57,6 +76,10 @@ const HoraAvulsaCliente = props => {
                         value={horaFinal === 0 ?  '' : {label: horaFinal+':00', value: horaFinal}}
                         classNamePrefix={'Select'} options={horasFinais}/>
                 </div>
+            </div>
+            <div>
+                {bloqueioSelecionado ? <p style={{textAlign: 'center', color: '#888'}}><b>Atenção</b>, a sala estará indisponível nesse
+                    dia das {bloqueioSelecionado.horaInicio}h às {bloqueioSelecionado.horaFim}h</p> : <></>}
             </div>
             <div className={'resume_container'}>
                 <div>
@@ -75,6 +98,7 @@ const HoraAvulsaCliente = props => {
 const mapStateToProps = state => ({
     salaSelected: state.salas.salaSelected,
     dateSelected: state.general.dateSelected,
+    salaBloqueios: state.salas.bloqueiosSalas,
 })
 
 export default connect(mapStateToProps)(HoraAvulsaCliente);

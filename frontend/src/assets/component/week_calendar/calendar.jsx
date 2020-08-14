@@ -27,11 +27,20 @@ const WeekCalendar = props => {
     }, [props.agendamentos]);
 
     const verificarBloqueio = (date, sala, bloqueios) => {
-        console.log(bloqueios)
         for (let bloqueio of bloqueios) {
-            if (bloqueio.sala.toString() === sala._id.toString()
-                && moment(date).isSame(new Date(bloqueio.dia), 'day')) {
-                return true;
+            if (Array.isArray(bloqueio.sala)) {
+                for (let currentSala of bloqueio.sala) {
+                    if (currentSala.toString() === sala._id.toString()
+                    && moment(date).subtract(1, 'day').isSame(new Date(bloqueio.dia), 'day')
+                    && bloqueio.wholeDay) {
+                        return true;
+                    }
+                }
+            } else {
+                if (bloqueio.sala.toString() === sala._id.toString()
+                    && moment(date).isSame(new Date(bloqueio.dia), 'day')) {
+                    return true;
+                }
             }
         }
         return false;

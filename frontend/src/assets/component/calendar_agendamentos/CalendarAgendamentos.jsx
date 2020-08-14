@@ -29,12 +29,29 @@ const CalendarAgendamentos = props => {
         })
     }, [])
 
-    const checkBloqueado = (bloqueios, sala) => {
+    const checkIfItsBetween = (num, intervalBegin, intervalEnd) => {
+        return (num >= intervalBegin && num < intervalEnd)
+    }
+
+    const checkBloqueado = (bloqueios, sala, hora) => {
         for (let bloqueio of bloqueios) {
-            if (bloqueio.sala.toString() === sala._id.toString() &&
-                moment(new Date(bloqueio.dia)).isSame(props.dateSelected, 'day')) {
-                if (bloqueio.wholeDay) {
-                    return true
+            if (Array.isArray(bloqueio.sala)) {
+                for (let currentSala of bloqueio.sala) {
+                    if (currentSala.toString() === sala._id.toString() &&
+                        moment(new Date(bloqueio.dia)).add(1, 'day').isSame(props.dateSelected, 'day')) {
+                        if (bloqueio.wholeDay) {
+                            return true
+                        } else if (checkIfItsBetween(hora, bloqueio.horaInicio, bloqueio.horaFim)) {
+                            return true
+                        }
+                    }
+                }
+            } else {
+                if (bloqueio.sala.toString() === sala._id.toString() &&
+                    moment(new Date(bloqueio.dia)).isSame(props.dateSelected, 'day')) {
+                    if (bloqueio.wholeDay) {
+                        return true
+                    }
                 }
             }
         }
@@ -100,7 +117,7 @@ const CalendarAgendamentos = props => {
                                             return (<td key={indexSala} className={'alugado'}>
                                                 <i>Alugado Mensalmente</i>
                                             </td>)
-                                        } else if (checkBloqueado(props.bloqueiosSalas, sala)) {
+                                        } else if (checkBloqueado(props.bloqueiosSalas, sala, hora.value)) {
                                             return <td className={'alugado'} key={indexSala}>
                                                 <i>Bloqueada</i>
                                             </td>

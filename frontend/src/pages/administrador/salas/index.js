@@ -33,6 +33,8 @@ const SalasPage = props => {
         }
     }, []);
 
+    const [salas, selectSalas] = React.useState([])
+
     const sortSalas = (a, b) => {
         let [first, second] = [a.nome.split(' '), b.nome.split(' ')]
         if (+first[1] > +second[1]) return 1
@@ -40,30 +42,45 @@ const SalasPage = props => {
         else return 0
     }
 
+    const handleChange = (selectedSalas) => {selectSalas(selectedSalas)}
+
+
     return ('nome' in props.userLogged) ? (
         <div>
             <AdministradorTopbar pageSelected={'salas'}/>
             <ModalBloquearSala
                 setWholeDay={setWholeDay}
                 loading={loading}
+                handleChange={handleChange}
                 onSubmit={async e => {
                     e.preventDefault()
                     setLoading(true)
                     const form = e.target;
+
+                    let getSalas = () => {
+                        if (salas.length === 0) {
+                            return {$oid: salas[0].value}
+                        } else {
+                            let newArray = []
+                            salas.forEach(sala => newArray.push({$oid: sala.value}))
+                            return newArray
+                        }
+                    }
+
                     let data = {
-                        sala: {$oid: form.select_salas.value},
+                        sala: getSalas(),
                         dia: new Date(form.date.value),
+                        wholeDay: wholeDay,
                     }
                     if (!wholeDay)
                         data = {...data, horaInicio: form.hora_inicio.value, horaFim: form.hora_fim.value}
-                    else
-                        data = {...data, wholeDay: wholeDay}
                     try {
                         await sala_bloqueioDAO.create(data)
                         props.closeModal()
-                    } catch(e) {
-                        alert('Erro: '+e)
+                    } catch (e) {
+                        alert('Erro: ' + e)
                     }
+
                     setLoading(false)
                 }}
                 close={() => props.closeModal()}

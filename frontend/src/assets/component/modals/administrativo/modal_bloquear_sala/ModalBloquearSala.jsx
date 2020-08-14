@@ -47,6 +47,7 @@ const ModalBloquearSala = props => {
                 <Select
                     closeMenuOnSelect={false}
                     name={'select_salas'}
+                    onChange={props.handleChange}
                     classNamePrefix={'select_salas'}
                     isMulti={true}
                     options={salasOpcoes}/>
