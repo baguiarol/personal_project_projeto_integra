@@ -12,8 +12,8 @@ const HoraAvulsaCliente = props => {
 
     const selectOptions = (horaInicial, isHoraFinal = false) => {
         let array = [];
-        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 13 : 21 ) : (eSabado() ? 12 : 20)); i++) {
-            array.push({label: i+':00', value: i});
+        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 13 : 21) : (eSabado() ? 12 : 20)); i++) {
+            array.push({label: i + ':00', value: i});
         }
         return array;
     };
@@ -26,19 +26,21 @@ const HoraAvulsaCliente = props => {
         setHoraInicial(0)
         setHoraFinal(0)
         setHorasFinais((props.dateSelected.getUTCDay() === new Date().getUTCDay())
-            ? selectOptions(new Date().getHours()+1, true) : selectOptions(10, true))
+            ? selectOptions(new Date().getHours() + 1, true) : selectOptions(10, true))
         setBloqueio(checkIfBlocked())
     }, [props.dateSelected, props.salaSelected])
 
     const checkIfBlocked = () => {
         console.log('here I am')
         console.log(props.salaBloqueios)
-        if (Array.isArray(props.salaBloqueios)) {
+        if (Array.isArray(props.salaBloqueios) && props.salaSelected) {
             console.log('here')
             for (let bloqueio of props.salaBloqueios) {
-                if ( bloqueio.sala.toString() === props.salaSelected._id.toString()
-                    && moment(new Date(bloqueio.dia)).add(1, 'day').isSame( props.dateSelected, 'day'))
-                    return bloqueio
+                if (bloqueio.sala && props.salaSelected._id) {
+                    if (bloqueio.sala.toString() === props.salaSelected._id.toString()
+                        && moment(new Date(bloqueio.dia)).add(1, 'day').isSame(props.dateSelected, 'day'))
+                        return bloqueio
+                }
             }
         }
         return null;
@@ -51,12 +53,12 @@ const HoraAvulsaCliente = props => {
                     <h2>Hora Inicial</h2>
                     <Select
                         name={'hora_inicio'}
-                        value={horaInicial === 0 ?  '' : {label: horaInicial+':00', value: horaInicial}}
+                        value={horaInicial === 0 ? '' : {label: horaInicial + ':00', value: horaInicial}}
                         style={{width: '100px'}}
                         onChange={e => {
                             setHorasFinais((e) ? selectOptions(e.value + 1, true) : selectOptions(
                                 props.dateSelected.getUTCDay() === new Date().getUTCDay())
-                                ? selectOptions(new Date().getHours()+1) : selectOptions(9)
+                                ? selectOptions(new Date().getHours() + 1) : selectOptions(9)
                             )
                             setHoraInicial((e) ? e.value : 0);
                         }}
@@ -65,7 +67,7 @@ const HoraAvulsaCliente = props => {
                             //Não deixar fazer reserva um horário anterior ao que já passou.
                             (props.dateSelected.getUTCDay() === new Date().getUTCDay())
                                 ? selectOptions(new Date().getHours() + 1) : selectOptions(
-                                    bloqueioSelecionado ? bloqueioSelecionado.horaFim : 9
+                                bloqueioSelecionado ? bloqueioSelecionado.horaFim : 9
                                 )}/>
                 </div>
                 <div>
@@ -73,13 +75,14 @@ const HoraAvulsaCliente = props => {
                     <Select
                         onChange={e => setHoraFinal((e) ? e.value : 0)}
                         name={'hora_fim'}
-                        value={horaFinal === 0 ?  '' : {label: horaFinal+':00', value: horaFinal}}
+                        value={horaFinal === 0 ? '' : {label: horaFinal + ':00', value: horaFinal}}
                         classNamePrefix={'Select'} options={horasFinais}/>
                 </div>
             </div>
             <div>
-                {bloqueioSelecionado ? <p style={{textAlign: 'center', color: '#888'}}><b>Atenção</b>, a sala estará indisponível nesse
-                    dia das {bloqueioSelecionado.horaInicio}h às {bloqueioSelecionado.horaFim}h</p> : <></>}
+                {bloqueioSelecionado ?
+                    <p style={{textAlign: 'center', color: '#888'}}><b>Atenção</b>, a sala estará indisponível nesse
+                        dia das {bloqueioSelecionado.horaInicio}h às {bloqueioSelecionado.horaFim}h</p> : <></>}
             </div>
             <div className={'resume_container'}>
                 <div>

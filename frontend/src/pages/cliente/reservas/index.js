@@ -11,6 +11,7 @@ import Button from "../../../assets/component/button/button";
 import CancelCheckbox from "../../../assets/component/cancel_checkbox/CancelCheckbox";
 import {removeElementFromArray} from "../../../assets/AuxFunctions";
 import reservaDAO from "../../../DAO/reservaDAO";
+import moment from 'moment'
 
 const MinhasReservasPage = props => {
 
@@ -42,17 +43,32 @@ const MinhasReservasPage = props => {
         }
     };
 
+    const checaSeNaoEDaquiA2Horas = () => {
+        let data = new Date()
+        for (let reserva of selectedReservas) {
+            if (moment(data).isSame(new Date(reserva.data), 'day')
+            && (reserva.horaInicio - data.getHours()) < 2)
+            return false
+        }
+        return true;
+    }
+
     const handleConfirmCancelamento = async () => {
         if (window.confirm("Você tem certeza que deseja cancelar esses agendamentos?")) {
             setLoading(true);
-            try {
-                await reservaDAO.cancelaMuitasReservas(selectedReservas);
-                const reservas = await reservaDAO.findAll(props.mongoClient);
-                props.setAgendamentos(reservas);
-                props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, reservas));
-                alert("Cancelamento realizado com sucesso!");
-            } catch (err) {
-                alert("Erro! Informações: "+err);
+            if (checaSeNaoEDaquiA2Horas()) {
+                 alert("Um dos seus agendamentos selecionados será em menos de 2 horas, para " +
+                     "realizar esse cancelamento, por favor, fale com nossos administradores.")
+            } else {
+                try {
+                    await reservaDAO.cancelaMuitasReservas(selectedReservas);
+                    const reservas = await reservaDAO.findAll(props.mongoClient);
+                    props.setAgendamentos(reservas);
+                    props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, reservas));
+                    alert("Cancelamento realizado com sucesso!");
+                } catch (err) {
+                    alert("Erro! Informações: "+err);
+                }
             }
             setLoading(false);
             setCancelando(false);
