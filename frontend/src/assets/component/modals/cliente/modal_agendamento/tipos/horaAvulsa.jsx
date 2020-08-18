@@ -26,15 +26,12 @@ const HoraAvulsaCliente = props => {
         setHoraInicial(0)
         setHoraFinal(0)
         setHorasFinais((props.dateSelected.getUTCDay() === new Date().getUTCDay())
-            ? selectOptions(new Date().getHours() + 1, true) : selectOptions(10, true))
+            ? selectOptions(new Date().getHours() + 1, true) : selectOptions(9, true))
         setBloqueio(checkIfBlocked())
     }, [props.dateSelected, props.salaSelected])
 
     const checkIfBlocked = () => {
-        console.log('here I am')
-        console.log(props.salaBloqueios)
         if (Array.isArray(props.salaBloqueios) && props.salaSelected) {
-            console.log('here')
             for (let bloqueio of props.salaBloqueios) {
                 if (bloqueio.sala && props.salaSelected._id) {
                     if (bloqueio.sala.toString() === props.salaSelected._id.toString()
@@ -58,7 +55,7 @@ const HoraAvulsaCliente = props => {
                         onChange={e => {
                             setHorasFinais((e) ? selectOptions(e.value + 1, true) : selectOptions(
                                 props.dateSelected.getUTCDay() === new Date().getUTCDay())
-                                ? selectOptions(new Date().getHours() + 1) : selectOptions(9)
+                                ? selectOptions(new Date().getHours() + 1) : selectOptions(8)
                             )
                             setHoraInicial((e) ? e.value : 0);
                         }}

@@ -33,6 +33,10 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
         setProfissionaisOptions(array);
     }, [profissionais]);
 
+    React.useEffect(() => {
+        setHorasFinais(selectOptions(9, true));
+    }, [dateSelected])
+
     return (
         <div>
             <div className={'select_profissionais_container'}>
@@ -54,7 +58,7 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
                             setHoraInicial(e.value);
                         }}
                         classNamePrefix={'Select'}
-                        options={selectOptions(9)}/>
+                        options={selectOptions((dateSelected.getDay() === 6 ? 8 : 9))}/>
                 </div>
                 <div>
                     <h2>Hora Final</h2>

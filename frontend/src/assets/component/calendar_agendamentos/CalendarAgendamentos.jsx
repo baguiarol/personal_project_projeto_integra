@@ -12,22 +12,34 @@ import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
 
 const moment = extendMoment(Moment)
 
-const fillHoras = () => {
+const fillHoras = (sabado) => {
     let array = [];
-    for (let i = 0; i < 13; i++)
-        array.push({label: i + 9 + ':00', value: i + 9});
+    let [horaInicial, horaFinal] = [9, 21]
+    if (sabado)
+        [horaInicial, horaFinal] = [8, 13]
+    for (let i = 0; i < horaFinal - horaInicial; i++)
+        array.push({label: i + horaInicial + ':00', value: i + horaInicial});
     return array;
 }
 
-const horas = fillHoras();
+const days = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
+
 
 const CalendarAgendamentos = props => {
+
+    const [horas, setHoras] = React.useState(fillHoras(props.dateSelected.getDay() === 6))
 
     React.useEffect(() => {
         sala_bloqueioDAO.findAll().then(res => {
             props.setBloqueiosSalas(res)
         })
     }, [])
+
+    //Atualiza lista de horas do dia.
+    React.useEffect(() => {
+        //Condição verifica se é um sábado.
+        setHoras(fillHoras(props.dateSelected.getDay() === 6))
+    }, [props.dateSelected])
 
     const checkIfItsBetween = (num, intervalBegin, intervalEnd) => {
         return (num >= intervalBegin && num < intervalEnd)
@@ -60,22 +72,29 @@ const CalendarAgendamentos = props => {
 
     return (
         <div className={'calendar_agendamentos_container'}>
-            <h1>
+            <h1 style={{display: 'flex'}}>
                 <span
                     onClick={() => {
                         props.selectDate(moment(props.dateSelected).subtract(1, 'day').toDate())
                     }}
                     className={'chevron_date'}
-                    style={{float: 'left'}}>
+                    style={{float: 'left', margin: 'auto 0'}}>
                     <i className={'fa fa-chevron-left'}/>
                 </span>
-                {moment(props.dateSelected).locale('pt-BR').format(' DD MMMM YYYY')}
+                <span style={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
+                    <span style={{margin: 0}}>
+                        {moment(props.dateSelected).locale('pt-BR').format(' DD MMMM YYYY')}
+                    </span>
+                    <span style={{fontSize: 13, color: '#CCC', margin: 4, fontWeight: 'normal'}}>
+                        {days[props.dateSelected.getDay()]}
+                    </span>
+                </span>
                 <span
                     onClick={() => {
                         props.selectDate(moment(props.dateSelected).add(1, 'day').toDate())
                     }}
                     className={'chevron_date'}
-                    style={{float: 'right'}}>
+                    style={{float: 'right', margin: 'auto 0'}}>
                     <i className={'fa fa-chevron-right'}/>
                 </span>
             </h1>
