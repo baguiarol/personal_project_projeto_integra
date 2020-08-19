@@ -74,13 +74,22 @@ const ModalNewProfissional = ({
 
     const editProfissional = async form => {
         try {
-            await clienteDAO.update({_id: profissionalSelected._id}, {
+            let changes = {
                 nome: form.nome.value,
                 telefone: form.telefone.value,
                 ocupacao: form.ocupacao.value,
                 descricao: form.descricao.value,
                 email: form.email.value,
-            });
+            }
+
+            if (checkIfURLIsImage(fileURL)) {
+                await fileUpload(file)
+                changes["foto_url"] = fileURL
+            } else {
+                alert('Erro! Imagem posta não tem formato correto.');
+                return ;
+            }
+            await clienteDAO.update({_id: profissionalSelected._id}, changes);
             const profs = await clienteDAO.findAll();
             setProfissionais(profs);
             selectProfissional();
@@ -148,6 +157,7 @@ const ModalNewProfissional = ({
                                  setFile(file);
                                  setFileURL(url);
                              }}
+                             disabled={!(editing && 'nome' in profissionalSelected) || !('nome' in profissionalSelected)}
                              urlName={'foto_url'}
                              fileName={'userfile'}/>
                          <InputText

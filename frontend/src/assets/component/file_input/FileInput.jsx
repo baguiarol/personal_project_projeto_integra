@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import "./FileInput.sass";
 import InputText from "../inputText/input";
+import {connect} from "react-redux";
 
 const FileInput = props => {
 
@@ -10,7 +11,18 @@ const FileInput = props => {
     let realUploadButton = React.createRef();
     const [fileName, setFileName] = React.useState('Nenhum arquivo selecionado.');
     const [fileURL, setFileURL] = React.useState('');
+
+    //Limpa dados toda vez que a sala troca.
+    React.useEffect(() => {
+        setFileURL('');
+        setFileName('Nenhum arquivo selecionado.')
+    }, [props.salaSelected, props.administradorSelected, props.profissionalSelected])
+
     const onChange = e => {
+        if (props.disabled) {
+            alert('Função temporariamente desabilitada. Experimente clicar em "Editar" abaixo.')
+            return;
+        }
         // Verifica se é URL ou Arquivo
         if (e.target.files) {
             if (e.target.files[0]) {
@@ -79,7 +91,13 @@ FileInput.propTypes = {
     setData: PropTypes.func,
     fileName: PropTypes.string.isRequired,
     urlName: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
 }
 
+const mapStateToProps = state => ({
+    salaSelected: state.salas.salaSelected,
+    profissionalSelected: state.profissionais.profissionalSelected,
+    administradorSelected: state.administradores.administradorSelected,
+})
 
-export default FileInput;
+export default connect(mapStateToProps)(FileInput);

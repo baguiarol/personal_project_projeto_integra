@@ -58,7 +58,6 @@ const ModalNewAdministrativo = ({
                         foto_url: fileURL,
                         email: form.email.value,
                     });
-                    checkIfURLIsImage(fileURL);
                     alert('Administrador adicionado com Sucesso!');
                     const adms = await administradorDAO.findAll();
                     setAdministrativo(adms);
@@ -76,10 +75,19 @@ const ModalNewAdministrativo = ({
 
     const editAdministrativo = async form => {
         try {
-            await administradorDAO.update({_id: administradorSelected._id}, {
+            let changes = {
                 nome: form.nome.value,
                 email: form.email.value,
-            });
+            }
+            if (checkIfURLIsImage(fileURL)) {
+                try {
+                    await fileUpload(file)
+                    changes["foto_url"] = fileURL
+                } catch(e) {
+                    alert(e)
+                }
+            }
+            await administradorDAO.update({_id: administradorSelected._id}, changes);
             const adms = await administradorDAO.findAll();
             setAdministrativo(adms);
             alert('Administrador editado com Sucesso!');
@@ -136,6 +144,7 @@ const ModalNewAdministrativo = ({
                         setFile(file);
                         setFileURL(url);
                     }}
+                    disabled={'nome' in administradorSelected && !editing}
                     urlName={'foto_url'}
                     fileName={'userfile'}/>
                 <InputText

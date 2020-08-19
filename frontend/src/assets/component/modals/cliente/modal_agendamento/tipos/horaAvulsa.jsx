@@ -26,7 +26,8 @@ const HoraAvulsaCliente = props => {
         setHoraInicial(0)
         setHoraFinal(0)
         setHorasFinais((props.dateSelected.getUTCDay() === new Date().getUTCDay())
-            ? selectOptions(new Date().getHours() + 1, true) : selectOptions(9, true))
+            ? selectOptions(new Date().getHours() + 1, true)
+            : selectOptions(eSabado() ? 9 : 10, true))
         setBloqueio(checkIfBlocked())
     }, [props.dateSelected, props.salaSelected])
 
@@ -64,7 +65,8 @@ const HoraAvulsaCliente = props => {
                             //Não deixar fazer reserva um horário anterior ao que já passou.
                             (props.dateSelected.getUTCDay() === new Date().getUTCDay())
                                 ? selectOptions(new Date().getHours() + 1) : selectOptions(
-                                bloqueioSelecionado ? bloqueioSelecionado.horaFim : 9
+                                bloqueioSelecionado ? bloqueioSelecionado.horaFim
+                                    : eSabado() ? 8 : 9 
                                 )}/>
                 </div>
                 <div>

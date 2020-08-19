@@ -16,6 +16,12 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
     const [editing, setEditing] = React.useState(false);
     const [fileURL, setFileURL] = React.useState('');
 
+    React.useEffect(() => {
+        //Limpa dados do Input File quando troca de sala.
+        setFile(null)
+        setFileURL('')
+    }, [salaSelected])
+
     const fileUpload = async (file) => {
         const url = 'https://teste.integracps.com.br/imageUpload.php';
         const formData = new FormData();
@@ -45,11 +51,18 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
 
     const editSala = async form => {
         try {
-            await salaDAO.update({_id: salaSelected._id}, {
+            let changes = {
                 nome: form.nome.value,
                 descricao: form.descricao.value,
                 valor_hora: Number(form.valor_hora.value),
-            });
+            }
+            if (file) {
+                if (checkIfURLIsImage(fileURL)) {
+                    await fileUpload(file)
+                    changes["fotos"] = [fileURL]
+                }
+            }
+            await salaDAO.update({_id: salaSelected._id}, changes);
             alert('Sala editada com sucesso!');
             closeModal();
         } catch (err) {
@@ -103,7 +116,11 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
                          <FileInput onChangeFile={(file, url) => {
                              setFile(file);
                              setFileURL(url);
-                         }} fileName={'userfile'} urlName={'file_url'} />
+                         }}
+
+                                    disabled={!(editing && 'nome' in salaSelected) || !('nome' in salaSelected)}
+                                    fileName={'userfile'}
+                                    urlName={'file_url'}/>
                          <InputText
                              disabled={'nome' in salaSelected && !editing}
                              defaultValue={salaSelected.nome}
@@ -111,11 +128,11 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
                          <InputText
                              disabled={'nome' in salaSelected && !editing}
                              defaultValue={salaSelected.descricao}
-                             label={"Descrição"} name={'descricao'} required />
+                             label={"Descrição"} name={'descricao'} required/>
                          <InputText
                              disabled={'nome' in salaSelected && !editing}
                              defaultValue={salaSelected.valor_hora}
-                             label={'Valor da Hora'} name={'valor_hora'} type={'number'} required />
+                             label={'Valor da Hora'} name={'valor_hora'} type={'number'} required/>
                      </div>}
                      footer={
                          <div className={'footer'}>
