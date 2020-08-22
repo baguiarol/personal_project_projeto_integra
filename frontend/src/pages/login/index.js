@@ -48,12 +48,18 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                 setTipoUsuario(true)
                 setAdmArray(administradores)
                 setClientesArray(clientes)
+                if (checked)
+                    saveUserLogged(email, senha);
             } else if (clientes.length > 0) {
                 setUserLogged(clientes[0]);
                 story.push('/agendamentos')
+                if (checked)
+                    saveUserLogged(email, senha);
             } else if (administradores.length > 0) {
                 setUserLogged(administradores[0])
                 story.push('/agendamento_adm')
+                if (checked)
+                    saveUserLogged(email, senha);
             }
             if (administradores.length <= 0 && clientes.length <= 0) {
                 alert('Erro interno. Por favor, contate os desenvolvedores.');
@@ -71,9 +77,16 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     React.useEffect(() => {
         let [email, senha] = [localStorage.getItem('email'), localStorage.getItem('pwd')];
-        if (mongoClient)
-            if (email && senha)
-                performLogin(email, senha);
+        if (mongoClient) {
+            if (email && senha) {
+                setLoading(true)
+                performLogin(email, senha).then(() => {
+                    setLoading("false")
+                }).catch(e => setLoading(false));
+            } else {
+                setLoading(false)
+            }
+        }
     }, [mongoClient]);
 
     let matrix = new Array(5);
@@ -98,17 +111,17 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     const hist = useHistory();
 
-    React.useEffect(() => {
-        if ('nome' in userLogged) {
-            setLoading(true);
-            if ('ocupacao' in userLogged)
-                hist.push('/agendamentos');
-            else
-                hist.push('/agendamento_adm');
-        } else {
-            setLoading(false);
-        }
-    }, [userLogged]);
+    // React.useEffect(() => {
+    //     if ('nome' in userLogged) {
+    //         setLoading(true);
+    //         if ('ocupacao' in userLogged)
+    //             hist.push('/agendamentos');
+    //         else
+    //             hist.push('/agendamento_adm');
+    //     } else {
+    //         setLoading(false);
+    //     }
+    // }, [userLogged]);
 
     return (
         <div className={'login_container'}>

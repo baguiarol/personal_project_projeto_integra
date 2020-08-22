@@ -9,7 +9,7 @@ import salaDAO from "../../../../../DAO/salaDAO";
 import {post} from "axios";
 import {checkIfURLIsImage} from "../../../../AuxFunctions";
 
-const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unselectSala}) => {
+const ModalNewSalas = ({show, closeModal, mongoClient, close, setSalas, salaSelected, unselectSala}) => {
 
     const [loading, setLoading] = React.useState(false);
     const [file, setFile] = React.useState(null);
@@ -92,6 +92,8 @@ const ModalNewSalas = ({show, closeModal, mongoClient, close, salaSelected, unse
         } else {
             await editSala(form);
         }
+        const salas = await salaDAO.findAll();
+        setSalas(salas)
         unselectSala();
         setEditing(false);
         closeModal();
@@ -162,7 +164,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
-    unselectSala: () => dispatch({type: Actions.selectSala, payload: {}})
+    unselectSala: () => dispatch({type: Actions.selectSala, payload: {}}),
+    setSalas: () => dispatch({type: Actions.setSalas, payload: {}})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalNewSalas)
