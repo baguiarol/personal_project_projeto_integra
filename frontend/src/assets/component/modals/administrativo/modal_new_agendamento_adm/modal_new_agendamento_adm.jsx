@@ -27,7 +27,7 @@ const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelect
             data: moment(dateSelected).toDate(),
             valorTotal: Number((salaSelected.valor_hora * (Number(form.hora_fim.value) - Number(form.hora_inicio.value))).toFixed(2)),
             cancelado: false,
-            pago: false,
+            pago: form.sit_pagamento.value == 0,
             executado: false,
         }
         if ('_id' in selectedProfissional) {

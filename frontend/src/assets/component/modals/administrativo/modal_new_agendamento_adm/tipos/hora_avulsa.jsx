@@ -12,8 +12,8 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
 
     const selectOptions = (horaInicial, isHoraFinal = false) => {
         let array = [];
-        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 13 : 21 ) : (eSabado() ? 12 : 20)); i++) {
-            array.push({label: i+':00', value: i});
+        for (let i = horaInicial; i < (isHoraFinal ? (eSabado() ? 13 : 21) : (eSabado() ? 12 : 20)); i++) {
+            array.push({label: i + ':00', value: i});
         }
         return array;
     };
@@ -43,7 +43,9 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
                 <Select
                     required
                     name={'profissional'}
-                    onChange={e => { selectProf(e.value) }}
+                    onChange={e => {
+                        selectProf(e.value)
+                    }}
                     style={{marginLeft: '5%', marginRight: '5%'}}
                     placeholder={'Profissional'}
                     options={profissionaisOptions}/>
@@ -67,6 +69,22 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
                         name={'hora_fim'}
                         classNamePrefix={'Select'} options={horasFinais}/>
                 </div>
+            </div>
+            <div className={'pago select_profissionais_container'}>
+                <h2 style={{color: '#707070', textAlign: 'center'}}>Situação de Pagamento</h2>
+                <Select name={'sit_pagamento'}
+                        classNamePrefix={'Select'}
+                        options={
+                [{
+                    label: 'Pago',
+                    value: 0,
+                }, {
+                    label: 'Pendente',
+                    value: 1,
+                }, {
+                    label: 'Em aberto',
+                    value: 2,
+                }]}/>
             </div>
             <div className={'resume_container'}>
                 <div>

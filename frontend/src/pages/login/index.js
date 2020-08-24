@@ -33,7 +33,6 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
         if (checked) {
             localStorage.setItem('email', email);
             localStorage.setItem('pwd', pwd);
-            alert("Adicionado ao local storage");
         }
     }
 
@@ -128,7 +127,10 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
             <ModoPaisagem/>
             <TipoUsuarioModal
                 show={tipoUsuarioShow}
-                onClose={() => setTipoUsuario(false)}
+                onClose={() => {
+                    setTipoUsuario(false)
+                    setLoading(false)
+                }}
                 onClickAdm={() => {
                     setUserLogged(admArray[0])
                     story.push('/agendamento_adm')
@@ -156,7 +158,7 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                     setLoading(false)
                 }}
                 loading={loading}
-                onClose={() => setModalForgotPassword(false)}
+                onClose={() => {setModalForgotPassword(false)}}
                 show={modalForgotPassword}/>
             <div className={'ball'}/>
             <div className={'logo_container'}>
