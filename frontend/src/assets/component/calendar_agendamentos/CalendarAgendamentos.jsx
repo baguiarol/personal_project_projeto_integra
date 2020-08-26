@@ -35,6 +35,28 @@ const CalendarAgendamentos = props => {
         })
     }, [])
 
+    const setClassStringByTheData = agendamento => {
+        if ('execucao_inicio' in agendamento && !('execucao_fim' in agendamento)) {
+            //Se estiver sendo executada, sempre será amarelo.
+            return ' amarelo';
+        } else if ((!agendamento.pago && agendamento.executado)
+            || moment(new Date()).isSame(new Date(agendamento.data), 'day') && (agendamento.hora_inicio <= new Date().getHours())
+                && !agendamento.pago && !agendamento.executado
+        || agendamento.pago && !('execucao_inicio' in agendamento) && (moment(new Date()).isSame(agendamento.data, 'day')
+                && new Date().getHours() >= agendamento.hora_inicio)) {
+            //Executada e não paga,
+            // Não executada & não paga & o horário já passou
+            // ou paga e não executada.
+            return ' vermelho';
+        } else if ((agendamento.executado && agendamento.pago)
+            || (!agendamento.executado && agendamento.pago && !(moment(new Date()).isSame(agendamento.data, 'day')
+                && new Date().getHours() >= agendamento.hora_inicio))) {
+            //Executada e paga.
+            //ou não executada, mas fora do período de reserva, e paga.
+            return ' verde';
+        }
+        return '';
+    }
     //Atualiza lista de horas do dia.
     React.useEffect(() => {
         //Condição verifica se é um sábado.
@@ -165,7 +187,8 @@ const CalendarAgendamentos = props => {
                                                     }}
                                                     key={indexSala}
                                                     rowSpan={agnd.hora_fim - agnd.hora_inicio}
-                                                    className={'occupied'}>
+                                                    className={
+                                                        'occupied '+setClassStringByTheData(agnd)}>
                                                     {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                         <i>Usuário Excluído</i>) : ''}
                                                 </td>)
