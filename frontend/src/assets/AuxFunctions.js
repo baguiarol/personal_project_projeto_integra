@@ -33,6 +33,11 @@ const numberIsBetween = (number, start, end) => {
     return (number >= start) && (number < end);
 }
 
+const overlaps = (interval1begin, interval1end, interval2begin, interval2end) => {
+    return (numberIsBetween(interval1begin, interval2begin, interval2end)
+        || numberIsBetween(interval1end, interval2begin, interval2end))
+}
+
 const numberToHours = number => {
     return number+":00";
 }
@@ -60,4 +65,5 @@ export {checkIfURLIsImage,
     transformStringToReais,
     transformReaisToFloat,
     numberIsBetween,
+    overlaps,
     numberToHours};

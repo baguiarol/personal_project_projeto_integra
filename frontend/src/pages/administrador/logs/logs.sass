@@ -1,7 +1,26 @@
+@import "../../../assets/variables"
+
 .logs
   margin-left: 5%
   width: 90%
+  display: flex
+  flex-direction: column
   margin-top: 2%
+  .pages
+    display: flex
+    margin: auto
+    div
+      width: 25px
+      margin: 25px 0
+      align-self: flex-end
+    .page
+      color: #888
+      cursor: pointer
+      @include putTransition(.2s)
+      &.selected
+        font-size: 20px
+        color: $primaryBlue
+        font-weight: 700
 
 
 @media (max-width: 655px)

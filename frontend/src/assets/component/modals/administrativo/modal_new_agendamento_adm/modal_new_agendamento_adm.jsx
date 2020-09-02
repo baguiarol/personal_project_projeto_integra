@@ -38,10 +38,17 @@ const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelect
                 setLoading(false);
                 alert('Adicionado com sucesso!');
                 close();
-            }, () => {
-                alert("Erro! O horário já se encontra reservado ou horário inválido.");
-                setLoading(false)
-                close();
+            }, async () => {
+                if (window.confirm("O horário já se encontra reservado ou horário inválido. Deseja sobrepor?")) {
+                    reservaDAO.create(data, userLogged);
+                    let novasReservas = await reservaDAO.findAll(mongoClient);
+                    setAgendamentos(novasReservas)
+                    alert("Adicionado com sucesso")
+                    setLoading(false);
+                    close();
+                } else {
+                    setLoading(false);
+                }
             })
         } else {
             alert('Por favor, selecione um profissional.')

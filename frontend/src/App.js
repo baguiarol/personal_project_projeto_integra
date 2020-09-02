@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Stitch, RemoteMongoClient} from 'mongodb-stitch-browser-sdk';
+import {Stitch, RemoteMongoClient} from 'mongodb-stitch-browser-sdk';
 import {Provider} from 'react-redux';
 import Store from "./redux/store";
 import Actions from "./redux/actions/actions";
@@ -38,7 +38,7 @@ function App() {
 
     React.useEffect(() => {
         //Inicializa o Banco de Dados.
-        const client = Stitch.initializeDefaultAppClient('integra-rhnuz');
+        const client = Stitch.initializeDefaultAppClient(process.env.REACT_APP_DATABASE_NAME);
         const db = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db('Integra');
 
         //Coloca ambos dentro da Store.
@@ -48,24 +48,24 @@ function App() {
         setDatabaseIntoDAOs(db);
     }, []);
 
-  return (
-      <Provider store={Store}>
-          <Router>
-              <Route path={'/'} exact={true} component={LoginPage} />
-              <Route path={'/agendamentos'} component={ClienteAgendamentos} />
-              <Route path={'/minhas_reservas'} component={MinhasReservasPage} />
-              <Route path={'/agendamento_adm'} component={AgendamentosAdministrador} />
-              <Route path={'/dashboard'} component={DashboardPage} />
-              <Route path={'/administrativo'} component={AdministrativoPage} />
-              <Route path={'/profissionais'} component={ProfissionaisPage} />
-              <Route path={'/tipoUsuario'} component={tipoUsuario} />
-              <Route path={'/salas'} component={SalasPage} />
-              <Route path={'/configuracoes'} component={Configuracoes} />
-              <Route path={'/recuperarSenha'} component={ResetPassword} />
-              <Route path={'/logs'} component={LogsPage} />
-          </Router>
-      </Provider>
-  );
+    return (
+        <Provider store={Store}>
+            <Router>
+                <Route path={'/'} exact={true} component={LoginPage}/>
+                <Route path={'/agendamentos'} component={ClienteAgendamentos}/>
+                <Route path={'/minhas_reservas'} component={MinhasReservasPage}/>
+                <Route path={'/agendamento_adm'} component={AgendamentosAdministrador}/>
+                <Route path={'/dashboard'} component={DashboardPage}/>
+                <Route path={'/administrativo'} component={AdministrativoPage}/>
+                <Route path={'/profissionais'} component={ProfissionaisPage}/>
+                <Route path={'/tipoUsuario'} component={tipoUsuario}/>
+                <Route path={'/salas'} component={SalasPage}/>
+                <Route path={'/configuracoes'} component={Configuracoes}/>
+                <Route path={'/recuperarSenha'} component={ResetPassword}/>
+                <Route path={'/logs'} component={LogsPage}/>
+            </Router>
+        </Provider>
+    );
 }
 
 export default App;

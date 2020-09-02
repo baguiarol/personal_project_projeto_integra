@@ -1,4 +1,5 @@
 import { UserPasswordCredential, UserPasswordAuthProviderClient } from "mongodb-stitch-browser-sdk";
+import logDAO from "./logDAO";
 
 const COLLECTION = 'clientes'
 const clienteDAO = {
@@ -22,8 +23,11 @@ const clienteDAO = {
         console.log('edit cliente');
         return this.update({_id: id_cliente}, edits);
     },
-    async addUser(client, email, password, clienteData){
+    async addUser(client, email, password, clienteData, userLogged){
         console.log('add cliente user');
+        if (userLogged) {
+            logDAO.create({usuario: userLogged, log: 'Adicionou ' + clienteData.nome + ' a lista de profissionais.', data_hora: new Date()})
+        }
         const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
         try {
             await emailPasswordClient.registerWithEmail(email, password);
@@ -34,15 +38,12 @@ const clienteDAO = {
         return this.create({ ...clienteData, email });
     },
     login(client, email, password){
-        console.log('login cliente');
         return client.auth.loginWithCredential(new UserPasswordCredential(email, password));
     },
     findAll(){
-        console.log('find all clientes');
         return this.db.collection(COLLECTION).find({}, {sort: {'nome': 1}}).toArray();
     },
     find(query) {
-        console.log('find query clientes');
         return this.db.collection(COLLECTION).find(query).toArray();
     },
     fixarSalaNoTopo(sala, user) {

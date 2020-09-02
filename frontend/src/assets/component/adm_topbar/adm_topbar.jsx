@@ -38,6 +38,14 @@ const AdministradorTopbar = ({pageSelected, userLogged, setUserLogged}) => {
         <div className={'topbar_container topbar_container_adm'}>
             <HamburgerMenu onClick={() => setHambOpen(true)}/>
             <ResponsiveMenu open={hambOpen} pageSelected={pageSelected} onClick={() => setHambOpen(false)}/>
+            {/*<div className={'img_container'}>*/}
+            {/*    <div className={'hamb'}>*/}
+            {/*        <div/>*/}
+            {/*        <div/>*/}
+            {/*        <div/>*/}
+            {/*    </div>*/}
+            {/*    <img src={require('../../integra_g.png')} alt={''} />*/}
+            {/*</div>*/}
             <div className={'img_container'}>
                 <img
                     alt={'integra_logo'}

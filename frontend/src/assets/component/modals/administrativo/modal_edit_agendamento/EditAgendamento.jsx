@@ -2,10 +2,12 @@ import React from 'react';
 import ModalParent from "../../modal_parent/modal";
 import Button from "../../../button/button";
 import {connect} from "react-redux";
+import CheckBox from "../../../checkbox/checkbox";
 import moment from 'moment/min/moment-with-locales.min';
 import "./EditAgendamento.sass";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
+import Select from "react-select";
 
 const ModalEditAgendamento = props => {
 
@@ -13,6 +15,11 @@ const ModalEditAgendamento = props => {
     const [executing, setExecuting] = React.useState(false);
     const [finalizado, setFinalizado] = React.useState(false);
     const [pago, setPago] = React.useState(false);
+    const [cancelamentoData, setCancelamentoData] = React.useState({
+        hora_inicio: 0,
+        hora_fim: 0,
+        reservaInteira: false,
+    })
 
     const setSubtitle = () => {
         if ('profissional' in props.agendamentoSelected) {
@@ -22,11 +29,24 @@ const ModalEditAgendamento = props => {
         return '';
     };
 
+    const populateHorasArray = (horaInicio, horaFim) => {
+        let arr = [];
+        for (let i = horaInicio; i < horaFim; i++) {
+            arr.push({label: i + ':00', value: i})
+        }
+        return arr;
+    }
+
     React.useEffect(() => {
         setExecuting(('execucao_inicio' in props.agendamentoSelected)
             && !('execucao_fim' in props.agendamentoSelected));
         setFinalizado(('execucao_inicio' in props.agendamentoSelected)
             && ('execucao_fim' in props.agendamentoSelected));
+        setCancelamentoData({
+            ...cancelamentoData,
+            hora_inicio: props.agendamentoSelected.hora_inicio,
+            hora_fim: props.agendamentoSelected.hora_fim
+        })
         setPago(props.agendamentoSelected.pago);
     }, [props]);
 
@@ -79,17 +99,57 @@ const ModalEditAgendamento = props => {
                                     }
                                     loading={loading}
                                     width={'30%'}/> &nbsp; &nbsp;
-                                <Button text={'Cancelar Reserva'}
-                                        width={'45%'}
-                                        onClick={async () => {
-                                            if (window.confirm('Tem certeza que deseja cancelar a reserva?')) {
-                                                await reservaDAO.cancelaReserva(props.agendamentoSelected._id)
-                                                props.close()
-                                            }
-                                        }}/>
                             </div>
                     }
                 </h3>
+                <div>
+                    <h2>Cancalemento</h2>
+                    <CheckBox label={"Reserva Inteira"}
+                              onCheck={(checked) =>
+                                  setCancelamentoData({...cancelamentoData, reservaInteira: !checked})}/>
+                    <div style={{display: 'flex', marginBottom: 20}}>
+                        <div style={{flexGrow: 1, marginRight: 20}}>
+                            <h3 style={{marginTop: 0}}>Hora Início</h3>
+                            <Select
+                                value={cancelamentoData.hora_inicio === 0 ? ''
+                                    : {
+                                        label: cancelamentoData.hora_inicio + ':00',
+                                        value: cancelamentoData.hora_inicio
+                                    }}
+                                onChange={(e) => setCancelamentoData({...cancelamentoData, hora_inicio: e.value})}
+                                options={populateHorasArray(props.agendamentoSelected.hora_inicio,
+                                    props.agendamentoSelected.hora_fim)}/>
+                        </div>
+                        <div style={{flexGrow: 1}}>
+                            <h3 style={{marginTop: 0}}>Hora Fim</h3>
+                            <Select
+                                value={cancelamentoData.hora_fim === 0 ? ''
+                                    : {label: cancelamentoData.hora_fim + ':00', value: cancelamentoData.hora_fim}}
+                                onChange={(e) => setCancelamentoData({...cancelamentoData, hora_fim: e.value})}
+                                options={populateHorasArray(cancelamentoData.hora_inicio + 1,
+                                    props.agendamentoSelected.hora_fim + 1)}/>
+                        </div>
+                    </div>
+                    <Button text={'Cancelar Reserva'}
+                            width={'45%'}
+                            onClick={async () => {
+                                if (cancelamentoData.reservaInteira) {
+                                    if (window.confirm('Tem certeza que deseja cancelar toda a reserva?')) {
+                                        await reservaDAO.cancelaReserva(props.agendamentoSelected._id, props.userLogged)
+                                        props.close()
+                                    }
+                                } else {
+                                    if (window.confirm(
+                                        `Tem certeza que deseja cancelar a reserva das ${cancelamentoData.hora_inicio}h até às ${cancelamentoData.hora_fim}h`)) {
+                                        await reservaDAO
+                                            .cancelaParteDaReserva(props.agendamentoSelected._id,
+                                                cancelamentoData.hora_inicio,
+                                                cancelamentoData.hora_fim);
+                                        props.close()
+                                    }
+                                }
+                            }}/>
+                </div>
                 <h2>Pagamento</h2>
                 <h3>
                     {pago ? 'Reserva já foi paga.' : 'Reserva ainda não foi paga.'} <br/><br/>
@@ -97,7 +157,7 @@ const ModalEditAgendamento = props => {
                         : <Button
                             onClick={async () => {
                                 setLoading(true);
-                                await reservaDAO.pagaReserva(props.agendamentoSelected._id, true);
+                                await reservaDAO.pagaReserva(props.agendamentoSelected._id, true, props.userLogged,);
                                 await updateAgendamentos();
                                 setLoading(false);
                             }}
@@ -108,7 +168,7 @@ const ModalEditAgendamento = props => {
                     {pago ?
                         <Button onClick={async () => {
                             setLoading(true);
-                            await reservaDAO.pagaReserva(props.agendamentoSelected._id, false)
+                            await reservaDAO.pagaReserva(props.agendamentoSelected._id, false, props.userLogged)
                             await updateAgendamentos();
                             setLoading(false)
                         }} text={'Desfazer'}
@@ -133,6 +193,7 @@ const mapStateToProps = state => ({
     agendamentoSelected: state.agendamentos.agendamentoSelected,
     dateSelected: state.general.dateSelected,
     mongoClient: state.general.mongoClient,
+    userLogged: state.general.userLogged,
 });
 
 const mapDispatchToProps = dispatch => ({

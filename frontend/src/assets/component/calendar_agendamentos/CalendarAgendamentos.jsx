@@ -9,6 +9,9 @@ import reservaDAO from "../../../DAO/reservaDAO";
 import Moment from "moment/min/moment-with-locales";
 import {extendMoment} from "moment-range";
 import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
+import {replace} from "@amcharts/amcharts4/.internal/core/utils/Array";
+import NovoAgendamento from "./components/NovoAgendamento";
+import {checkBloqueado, checkIfItsBetween, setClassStringByTheData} from "./components/AuxFunctions";
 
 const moment = extendMoment(Moment)
 
@@ -24,7 +27,6 @@ const fillHoras = (sabado) => {
 
 const days = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
 
-
 const CalendarAgendamentos = props => {
 
     const [horas, setHoras] = React.useState(fillHoras(props.dateSelected.getDay() === 6))
@@ -35,62 +37,11 @@ const CalendarAgendamentos = props => {
         })
     }, [])
 
-    const setClassStringByTheData = agendamento => {
-        if ('execucao_inicio' in agendamento && !('execucao_fim' in agendamento)) {
-            //Se estiver sendo executada, sempre será amarelo.
-            return ' amarelo';
-        } else if ((!agendamento.pago && agendamento.executado)
-            || moment(new Date()).isSame(new Date(agendamento.data), 'day') && (agendamento.hora_inicio <= new Date().getHours())
-                && !agendamento.pago && !agendamento.executado
-        || agendamento.pago && !('execucao_inicio' in agendamento) && (moment(new Date()).isSame(agendamento.data, 'day')
-                && new Date().getHours() >= agendamento.hora_inicio)) {
-            //Executada e não paga,
-            // Não executada & não paga & o horário já passou
-            // ou paga e não executada.
-            return ' vermelho';
-        } else if ((agendamento.executado && agendamento.pago)
-            || (!agendamento.executado && agendamento.pago && !(moment(new Date()).isSame(agendamento.data, 'day')
-                && new Date().getHours() >= agendamento.hora_inicio))) {
-            //Executada e paga.
-            //ou não executada, mas fora do período de reserva, e paga.
-            return ' verde';
-        }
-        return '';
-    }
     //Atualiza lista de horas do dia.
     React.useEffect(() => {
         //Condição verifica se é um sábado.
         setHoras(fillHoras(props.dateSelected.getDay() === 6))
     }, [props.dateSelected])
-
-    const checkIfItsBetween = (num, intervalBegin, intervalEnd) => {
-        return (num >= intervalBegin && num < intervalEnd)
-    }
-
-    const checkBloqueado = (bloqueios, sala, hora) => {
-        for (let bloqueio of bloqueios) {
-            if (Array.isArray(bloqueio.sala)) {
-                for (let currentSala of bloqueio.sala) {
-                    if (currentSala.toString() === sala._id.toString() &&
-                        moment(new Date(bloqueio.dia)).add(1, 'day').isSame(props.dateSelected, 'day')) {
-                        if (bloqueio.wholeDay) {
-                            return true
-                        } else if (checkIfItsBetween(hora, bloqueio.horaInicio, bloqueio.horaFim)) {
-                            return true
-                        }
-                    }
-                }
-            } else {
-                if (bloqueio.sala.toString() === sala._id.toString() &&
-                    moment(new Date(bloqueio.dia)).isSame(props.dateSelected, 'day')) {
-                    if (bloqueio.wholeDay) {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
 
     return (
         <div className={'calendar_agendamentos_container'}>
@@ -133,13 +84,17 @@ const CalendarAgendamentos = props => {
                     </thead>
                     <tbody>
                     {
+                        //A tabela é composta por horas x salas;
                         horas.map((hora, index) => (
                             <tr key={index}>
                                 <td>{hora.label}</td>
+                                {/* Início da declaração das salas */}
                                 {props.salas.map((sala, indexSala) => {
+                                    // A função abaixo recebe todos os agendamentos da sala.
                                     let agendamentosDaSala = reservaDAO.getAgendamentosFromSala(props.agendamentos, sala);
                                     let [isOccupied, isMonthly] = [false, false];
                                     let agnd = null;
+                                    // Cada agendamento é verificado em cada bloco de horas.
                                     agendamentosDaSala.forEach((agendamento, index) => {
                                         if ('hora_inicio' in agendamento) {
                                             if (numberIsBetween(hora.value, agendamento.hora_inicio, agendamento.hora_fim)
@@ -148,6 +103,7 @@ const CalendarAgendamentos = props => {
                                                 isOccupied = true;
                                                 agnd = agendamento;
                                             }
+                                            //Verificação de aluguéis mensais.
                                         } else if ('mes' in agendamento
                                             && moment(agendamento["mes"]).isSame(props.dateSelected, 'month')) {
                                             isMonthly = true;
@@ -158,19 +114,12 @@ const CalendarAgendamentos = props => {
                                             return (<td key={indexSala} className={'alugado'}>
                                                 <i>Alugado Mensalmente</i>
                                             </td>)
-                                        } else if (checkBloqueado(props.bloqueiosSalas, sala, hora.value)) {
+                                        } else if (checkBloqueado(props.bloqueiosSalas, sala, hora.value, props.dateSelected)) {
                                             return <td className={'alugado'} key={indexSala}>
                                                 <i>Bloqueada</i>
                                             </td>
                                         } else {
-                                            return (
-                                                <td key={indexSala} className={'free'} onClick={() => {
-                                                    props.openModal(ModalTypes.adicionarAgendamentoAdm);
-                                                    props.selectSala(sala);
-                                                }}>
-                                                    <i className={'fa fa-plus'}/>
-                                                </td>
-                                            )
+                                            return (<NovoAgendamento sala={sala}/>)
                                         }
                                     } else if (agnd) {
                                         if (isMonthly) {
@@ -179,7 +128,7 @@ const CalendarAgendamentos = props => {
                                                     <i>Usuário Excluído</i>) : ''}
                                             </td>)
                                         } else {
-                                            if (agnd.hora_inicio === hora.value) {
+                                            if (agnd.hora_inicio === hora.value && !('horasCanceladas' in agnd)) {
                                                 return (<td
                                                     onClick={() => {
                                                         props.openModal(ModalTypes.editarAgendamento);
@@ -188,10 +137,41 @@ const CalendarAgendamentos = props => {
                                                     key={indexSala}
                                                     rowSpan={agnd.hora_fim - agnd.hora_inicio}
                                                     className={
-                                                        'occupied '+setClassStringByTheData(agnd)}>
+                                                        'occupied ' + setClassStringByTheData(agnd)}>
                                                     {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                         <i>Usuário Excluído</i>) : ''}
                                                 </td>)
+                                            } else if ('horasCanceladas' in agnd) {
+                                                if ((agnd.hora_inicio === hora.value) &&
+                                                    (agnd.hora_inicio < agnd.horasCanceladas[0])) {
+                                                    return (<td
+                                                        onClick={() => {
+                                                            props.openModal(ModalTypes.editarAgendamento);
+                                                            props.selectAgendamentos(agnd);
+                                                        }}
+                                                        rowSpan={agnd.horasCanceladas[0] - agnd.hora_inicio}
+                                                        className={
+                                                            'occupied ' + setClassStringByTheData(agnd)}>
+                                                        {agnd ? (agnd.profissional ? agnd.profissional.nome :
+                                                            <i>Usuário Excluído</i>) : ''}
+                                                    </td>)
+                                                }
+                                                if (numberIsBetween(hora.value, agnd.horasCanceladas[0], agnd.horasCanceladas[1])) {
+                                                    return (<NovoAgendamento sala={sala}/>)
+                                                } else if ((agnd.horasCanceladas[1] === hora.value) &&
+                                                    (agnd.horasCanceladas[1] !== agnd.hora_fim)) {
+                                                    return (<td
+                                                        onClick={() => {
+                                                            props.openModal(ModalTypes.editarAgendamento);
+                                                            props.selectAgendamentos(agnd);
+                                                        }}
+                                                        rowSpan={agnd.hora_fim - agnd.horasCanceladas[1]}
+                                                        className={
+                                                            'occupied ' + setClassStringByTheData(agnd)}>
+                                                        {agnd ? (agnd.profissional ? agnd.profissional.nome :
+                                                            <i>Usuário Excluído</i>) : ''}
+                                                    </td>)
+                                                }
                                             } else {
                                                 return <></>
                                             }

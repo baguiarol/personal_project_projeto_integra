@@ -1,6 +1,8 @@
 import logDAO from "./logDAO";
 import Moment from 'moment/min/moment-with-locales'
 import {extendMoment} from "moment-range";
+import {overlaps} from "../assets/AuxFunctions";
+
 const COLLECTION = 'reservas'
 
 const moment = extendMoment(Moment)
@@ -20,21 +22,21 @@ const reservaDAO = {
     },
     create(reserva, userLogged = null) {
         if (userLogged) {
-            console.log('Create reserva');
             logDAO.create({usuario: userLogged, log: 'Adicionou uma reserva', data_hora: new Date()})
         }
         return this.db.collection(COLLECTION).insertOne(reserva);
     },
-    update(query, changes) {
-        console.log('Update reserva');
+    update(query, changes, userLogged) {
+        if (userLogged) {
+            logDAO.create({usuario: userLogged, log: 'Editou uma reserva', data_hora: new Date()})
+        }
         return this.db.collection(COLLECTION).updateMany(query, {$set: changes});
     },
-    cancelaReserva(id_reserva) {
-        console.log('Cancela reserva');
+    cancelaReserva(id_reserva, userLogged) {
+        if (userLogged) { logDAO.create({usuario: userLogged, log: 'Cancelou uma reserva', data_hora: new Date()}) }
         return this.update({_id: id_reserva}, {cancelado: true});
     },
     cancelaMuitasReservas(reservas) {
-        console.log('Cancela muita reserva');
         const promises = [];
         for (let i = 0; i < reservas.length; i++) {
             promises.push(this.cancelaReserva(reservas[i]._id));
@@ -42,10 +44,12 @@ const reservaDAO = {
         return Promise.all(promises);
     },
     executaReserva(id_reserva) {
-        console.log('Executa reserva');
         return this.update({_id: id_reserva}, {executado: true, execucao_fim: new Date()});
     },
-    pagaReserva(id_reserva, pago) {
+    pagaReserva(id_reserva, pago, userLogged) {
+        if (userLogged) {
+            logDAO.create({usuario: userLogged, log: 'Colocou uma reserva em situação de '+ (pago ? 'pago' : 'pendência de pagamento'), data_hora: new Date()})
+        }
         console.log('Paga reserva');
         return this.update({_id: id_reserva}, {pago: pago});
     },
@@ -81,6 +85,9 @@ const reservaDAO = {
         });
         return agendamentoSelected;
     },
+    async cancelaParteDaReserva(reserva_id, horaInicio, horaFim) {
+        await reservaDAO.editaReserva(reserva_id, {horasCanceladas: [horaInicio, horaFim]})
+    },
     async createHoraAvulsa(data, agendamentos, dateSelected, successCallback, failCallback) {
             let dateBegin = new Date(getStringDate(dateSelected, data.hora_inicio))
             let dateFim = new Date(getStringDate(dateSelected, data.hora_fim))
@@ -99,9 +106,20 @@ const reservaDAO = {
                             new Date(getStringDate(new Date(agendamento.data), agendamento.hora_fim))
                     if (!agendamento.cancelado && agendamento.sala_id.toString() === data.sala_id.toString()) {
                         if (checkIfIsBetween(dateBegin, dateFim, dateInicioAgendamento, dateFimAgendamento)) {
-                            passed = false
-                            failCallback()
-                            break;
+                            if ('horasCanceladas' in agendamento) {
+                                let inicioDateCancelada = new Date(getStringDate(agendamento.data, agendamento.horasCanceladas[0]))
+                                let fimDateCancelada = new Date(getStringDate(agendamento.data, agendamento.horasCanceladas[1]))
+                                if (!checkIfIsBetween(dateBegin, dateFim, inicioDateCancelada, fimDateCancelada)) {
+                                    console.log(dateBegin, dateFim, inicioDateCancelada, fimDateCancelada)
+                                    passed = false
+                                    failCallback()
+                                    break;
+                                }
+                            } else {
+                                passed = false
+                                failCallback()
+                                break;
+                            }
                         }
                     }
 
