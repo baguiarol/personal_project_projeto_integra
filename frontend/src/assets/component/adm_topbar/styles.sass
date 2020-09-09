@@ -21,16 +21,83 @@
         border-bottom: 2px solid $primaryBlue
       &:hover:not(.selected)
         border-bottom: 2px solid $grey
+.topbar_container_adm
+  .sidebar_adm
+    position: fixed
+    top: 0
+    left: -350px
+    height: 100%
+    padding-top: 80px
+    width: 350px
+    background-color: #FFFFFF
+    z-index: 1000
+    box-shadow: 2px 3px 6px rgba(0,0,0,0.1)
+    @include putTransition(.3s)
+    .tab
+      padding: 1px 20px
+      cursor: pointer
+      color: #888
+      @include putTransition(.2s)
+      &:hover
+        color: #BFBFBF
+      &.selected
+        border-left: 5px solid $primaryBlue
+        color: $primaryBlue
+        font-weight: 500
+    &.open
+      left: 0
+  .img_container_resp
+    display: none
+  .img_container
+    background-color: transparent
+    .hamb
+      cursor: pointer
+      margin: auto
+      z-index: 1001
+      &.open
+        div:first-child
+          transform: rotate(45deg)
+        div:nth-child(2)
+          opacity: 0
+        div:last-child
+          width: 40px
+          margin-top: -15px
+          transform: rotate(-45deg)
+      &:hover
+        div
+          box-shadow: inset 40px 0px 0px darken($primaryBlue, 10)
+      div
+        width: 40px
+        height: 4px
+        border-radius: 5px
+        @include putTransition(.2s)
+        background-color: $primaryBlue
+        &:not(:last-child)
+          margin-bottom: 3px
+        &:nth-child(2)
+          @include putTransition(.3s)
+          width: 35px
+        &:last-child
+          @include putTransition(.4s)
+          width: 27px
+    img
+      width: 24px
+      margin: auto
 
 @media (max-width: 655px)
   .topbar_container_adm
     margin-bottom: 20px
+    .sidebar_adm
+      display: none
     .img_container
-      width: 90px
+      display: none
+    .img_container_resp
+      margin: auto
+      display: flex
+      height: 75px
       img
         margin: auto
         width: 150px
-        margin-left: 10px
     .tabs
       display: inline-block
       visibility: hidden

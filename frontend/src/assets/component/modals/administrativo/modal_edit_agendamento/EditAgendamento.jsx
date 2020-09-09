@@ -144,7 +144,8 @@ const ModalEditAgendamento = props => {
                                         await reservaDAO
                                             .cancelaParteDaReserva(props.agendamentoSelected._id,
                                                 cancelamentoData.hora_inicio,
-                                                cancelamentoData.hora_fim);
+                                                cancelamentoData.hora_fim,
+                                                props.agendamentos);
                                         props.close()
                                     }
                                 }
@@ -194,6 +195,7 @@ const mapStateToProps = state => ({
     dateSelected: state.general.dateSelected,
     mongoClient: state.general.mongoClient,
     userLogged: state.general.userLogged,
+    agendamentos: state.agendamentos.agendamentos,
 });
 
 const mapDispatchToProps = dispatch => ({

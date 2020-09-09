@@ -141,7 +141,9 @@ const CalendarAgendamentos = props => {
                                                     {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                         <i>Usuário Excluído</i>) : ''}
                                                 </td>)
-                                            } else if ('horasCanceladas' in agnd) {
+                                            }
+                                            // LEGACY ----------- FAVOR NÃO EXCLUIR, apesar de parecer que precise.
+                                            else if ('horasCanceladas' in agnd) {
                                                 if ((agnd.hora_inicio === hora.value) &&
                                                     (agnd.hora_inicio < agnd.horasCanceladas[0])) {
                                                     return (<td
@@ -172,6 +174,7 @@ const CalendarAgendamentos = props => {
                                                             <i>Usuário Excluído</i>) : ''}
                                                     </td>)
                                                 }
+                                            // FIM DO LEGACY ----------- FAVOR NÃO EXCLUIR, apesar de parecer que precise.
                                             } else {
                                                 return <></>
                                             }

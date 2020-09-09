@@ -1,7 +1,6 @@
 import logDAO from "./logDAO";
 import Moment from 'moment/min/moment-with-locales'
 import {extendMoment} from "moment-range";
-import {overlaps} from "../assets/AuxFunctions";
 
 const COLLECTION = 'reservas'
 
@@ -25,6 +24,9 @@ const reservaDAO = {
             logDAO.create({usuario: userLogged, log: 'Adicionou uma reserva', data_hora: new Date()})
         }
         return this.db.collection(COLLECTION).insertOne(reserva);
+    },
+    delete(agendamentoId) {
+        return this.db.collection(COLLECTION).deleteMany(agendamentoId)
     },
     update(query, changes, userLogged) {
         if (userLogged) {
@@ -85,8 +87,21 @@ const reservaDAO = {
         });
         return agendamentoSelected;
     },
-    async cancelaParteDaReserva(reserva_id, horaInicio, horaFim) {
-        await reservaDAO.editaReserva(reserva_id, {horasCanceladas: [horaInicio, horaFim]})
+    async cancelaParteDaReserva(reserva_id, horaInicio, horaFim, reservas) {
+        let auxReserva = reservaDAO.getAgendamentosById(reservas, reserva_id);
+        delete auxReserva.profissional;
+        delete auxReserva.sala;
+        if (horaInicio  === auxReserva.hora_inicio && horaFim === auxReserva.hora_fim) {
+            reservaDAO.editaReserva(reserva_id, {cancelado: true});
+        } else {
+            console.log(auxReserva._id.toString())
+            await reservaDAO.delete({_id: auxReserva._id})
+            delete auxReserva._id;
+            await reservaDAO.create({...auxReserva, hora_fim: horaInicio});
+            await reservaDAO.create({...auxReserva, hora_inicio: horaInicio, hora_fim: horaFim, cancelado: true})
+            await reservaDAO.create({...auxReserva, hora_inicio: horaFim});
+        }
+        // await reservaDAO.editaReserva(reserva_id, {horasCanceladas: [horaInicio, horaFim]})
     },
     async createHoraAvulsa(data, agendamentos, dateSelected, successCallback, failCallback) {
             let dateBegin = new Date(getStringDate(dateSelected, data.hora_inicio))
@@ -106,24 +121,12 @@ const reservaDAO = {
                             new Date(getStringDate(new Date(agendamento.data), agendamento.hora_fim))
                     if (!agendamento.cancelado && agendamento.sala_id.toString() === data.sala_id.toString()) {
                         if (checkIfIsBetween(dateBegin, dateFim, dateInicioAgendamento, dateFimAgendamento)) {
-                            if ('horasCanceladas' in agendamento) {
-                                let inicioDateCancelada = new Date(getStringDate(agendamento.data, agendamento.horasCanceladas[0]))
-                                let fimDateCancelada = new Date(getStringDate(agendamento.data, agendamento.horasCanceladas[1]))
-                                if (!checkIfIsBetween(dateBegin, dateFim, inicioDateCancelada, fimDateCancelada)) {
-                                    console.log(dateBegin, dateFim, inicioDateCancelada, fimDateCancelada)
-                                    passed = false
-                                    failCallback()
-                                    break;
-                                }
-                            } else {
                                 passed = false
                                 failCallback()
                                 break;
                             }
                         }
                     }
-
-                }
                 if (passed) {
                     successCallback()
                 }
