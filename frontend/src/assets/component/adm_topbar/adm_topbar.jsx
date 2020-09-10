@@ -32,6 +32,7 @@ const AdministradorTopbar = ({pageSelected, userLogged, setUserLogged}) => {
         agendamento_adm: 'Agendamentos',
         profissionais: 'Profissionais',
         administrativo: 'Administrativo',
+        cancelamentos: 'Cancelamentos',
         salas: 'Salas',
         logs: 'Logs',
     }

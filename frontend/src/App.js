@@ -24,6 +24,7 @@ import ResetPassword from "./pages/login/resetPassword/resetPassword";
 import Configuracoes from "./pages/cliente/configuracoes/Configuracoes";
 import tipoUsuario from "./pages/login/tipoUsuario";
 import sala_bloqueioDAO from "./DAO/sala_bloqueioDAO";
+import Cancelamentos from "./pages/administrador/cancelamentos/Cancelamentos";
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
                 <Route path={'/agendamentos'} component={ClienteAgendamentos}/>
                 <Route path={'/minhas_reservas'} component={MinhasReservasPage}/>
                 <Route path={'/agendamento_adm'} component={AgendamentosAdministrador}/>
+                <Route path={'/cancelamentos'} component={Cancelamentos}/>
                 <Route path={'/dashboard'} component={DashboardPage}/>
                 <Route path={'/administrativo'} component={AdministrativoPage}/>
                 <Route path={'/profissionais'} component={ProfissionaisPage}/>

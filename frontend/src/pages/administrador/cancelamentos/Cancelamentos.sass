@@ -1,0 +1,33 @@
+@import "../../../assets/variables"
+
+.cancelamentos_container
+  margin: 20px 35px
+  .cancelamento
+    display: flex
+    background-color: $primaryBlue
+    padding: 8px 15px
+    margin: 10px 5px
+    border-radius: 5px
+    box-shadow: 0 3px 5px rgba(0,0,0,0.1)
+    width: 95%
+    div
+      color: darken($primaryBlue, 30)
+      h1
+        font-size: 24px
+      h2
+        font-size: 18px
+      h1, h2
+        margin: 0
+        font-weight: 500
+      &:first-child
+        flex: 1
+      &:last-child
+        margin: 10px
+        display: flex
+        justify-content: flex-end
+        align-items: center
+
+@media (max-width: 641px)
+  .cancelamentos_container
+    .cancelamento
+      margin: 10px -5px

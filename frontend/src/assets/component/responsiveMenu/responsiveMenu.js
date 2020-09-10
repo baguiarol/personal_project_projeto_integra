@@ -10,14 +10,17 @@ const pages = [{
     pageName: 'agendamento_adm',
     pageLabel: 'Agendamentos',
 }, {
+    pageName: 'cancelamentos',
+    pageLabel: 'Cancelamentos',
+}, {
     pageName: 'administrativo',
     pageLabel: 'Administrativo',
 }, {
     pageName: 'logs',
     pageLabel: 'Logs'
 }, {
-  pageName: 'Salas',
-  pageLabel: 'Salas',
+    pageName: 'Salas',
+    pageLabel: 'Salas',
 }, {
     pageName: 'profissionais',
     pageLabel: 'Profissionais'
@@ -27,7 +30,7 @@ const ResponsiveMenu = ({pageSelected, onClick, open}) => {
 
     const history = useHistory();
     return (
-        <div className={'responsive_menu ' + (open ? 'open': '')}>
+        <div className={'responsive_menu ' + (open ? 'open' : '')}>
             <ul>
                 {pages.map((page, index) => (
                     <li
