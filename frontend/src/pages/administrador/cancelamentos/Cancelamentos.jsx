@@ -7,19 +7,23 @@ import PropTypes from 'prop-types'
 import moment from 'moment/min/moment-with-locales'
 
 const Cancelamento = ({agendamento}) => {
-    return (
-        <div className={'cancelamento'}>
-            <div>
-            <h1>{agendamento.profissional.nome}</h1>
-            <h2>{moment(new Date(agendamento.data)).locale('pt-BR').format('ll')},
-                &nbsp;
-                {agendamento.hora_inicio}:00 às {agendamento.hora_fim}:00</h2>
+    if ('profissional' in agendamento) {
+        return (
+            <div className={'cancelamento'}>
+                <div>
+                    <h1>{agendamento.profissional.nome}</h1>
+                    <h2>{moment(new Date(agendamento.data)).locale('pt-BR').format('ll')},
+                        &nbsp;
+                        {agendamento.hora_inicio}:00 às {agendamento.hora_fim}:00</h2>
+                </div>
+                <div>
+                    <h1>Sala 03</h1>
+                </div>
             </div>
-            <div>
-                <h1>Sala 03</h1>
-            </div>
-        </div>
-    )
+        )
+    } else {
+        return <></>
+    }
 }
 
 Cancelamento.propTypes = {
@@ -39,7 +43,7 @@ const Cancelamentos = props => {
                 <div className={'cancelamentos_container'}>
                     {
                         props.agendamentos.reverse().map(agendamento => {
-                            if (agendamento.cancelado) {
+                            if (agendamento.cancelado && 'profissional' in agendamento) {
                                 return (<Cancelamento
                                     key={agendamento._id.toString()}
                                     agendamento={agendamento}/>)
