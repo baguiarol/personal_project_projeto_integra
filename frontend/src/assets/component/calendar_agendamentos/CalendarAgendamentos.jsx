@@ -43,6 +43,12 @@ const CalendarAgendamentos = props => {
         setHoras(fillHoras(props.dateSelected.getDay() === 6))
     }, [props.dateSelected])
 
+    React.useEffect(() => {
+        console.log('Sala 07', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 7'))
+        console.log('Sala 06', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 6'))
+
+    }, [props.agendamentos])
+
     return (
         <div className={'calendar_agendamentos_container'}>
             <h1 style={{display: 'flex'}}>

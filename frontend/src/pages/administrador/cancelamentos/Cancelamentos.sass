@@ -2,6 +2,22 @@
 
 .cancelamentos_container
   margin: 20px 35px
+  .pages
+    display: flex
+    margin: auto
+    justify-content: center
+    div
+      width: 25px
+      margin: 25px 0
+      align-self: flex-end
+    .page
+      color: #888
+      cursor: pointer
+      @include putTransition(.2s)
+      &.selected
+        font-size: 20px
+        color: $primaryBlue
+        font-weight: 700
   .cancelamento
     display: flex
     background-color: $primaryBlue

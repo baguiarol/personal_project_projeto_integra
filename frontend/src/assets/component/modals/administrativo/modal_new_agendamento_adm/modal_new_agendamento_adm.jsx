@@ -30,6 +30,11 @@ const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelect
             pago: form.sit_pagamento.value == 0,
             executado: false,
         }
+        if (data.hora_inicio >= data.hora_fim) {
+            setLoading(false)
+            alert("A hora inicial não pode ser maior ou igual a hora final.");
+            return;
+        }
         if ('_id' in selectedProfissional) {
             await reservaDAO.createHoraAvulsa(data, agendamentos, dateSelected, async () => {
                 await reservaDAO.create(data, userLogged);

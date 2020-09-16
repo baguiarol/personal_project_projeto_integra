@@ -17,7 +17,7 @@ const Cancelamento = ({agendamento}) => {
                         {agendamento.hora_inicio}:00 às {agendamento.hora_fim}:00</h2>
                 </div>
                 <div>
-                    <h1>Sala 03</h1>
+                    <h1>{agendamento.sala.nome}</h1>
                 </div>
             </div>
         )
@@ -32,9 +32,26 @@ Cancelamento.propTypes = {
 
 const Cancelamentos = props => {
 
+    const [pages, setPages] = React.useState([])
+    const [selectedPage, setPage] = React.useState(1)
+    const [cancelados, putCancelados] = React.useState([]);
+
     React.useEffect(() => {
-        console.log(props.agendamentos)
-    })
+        if (props.agendamentos) {
+            putCancelados(getCancelados(props.agendamentos))
+        }
+    }, [props.agendamentos])
+
+    React.useEffect(() => {
+        setPages(Array.from(Array(Math.ceil(cancelados.length / 15)), (_, i) => i + 1))
+    }, [cancelados])
+
+    const getCancelados = agendamentos => {
+        let array = [];
+        agendamentos.forEach((el) => el.cancelado ? array.push(el) : null)
+        console.log(array)
+        return array;
+    }
 
     if ('nome' in props.userLogged) {
         return (
@@ -42,8 +59,9 @@ const Cancelamentos = props => {
                 <AdministradorTopbar pageSelected={'cancelamentos'} />
                 <div className={'cancelamentos_container'}>
                     {
-                        props.agendamentos.reverse().map(agendamento => {
-                            if (agendamento.cancelado && 'profissional' in agendamento) {
+                        cancelados.reverse().map((agendamento, index) => {
+                            if ('profissional' in agendamento &&
+                                index < (15 * selectedPage) && (index > (15 * (selectedPage - 1)))) {
                                 return (<Cancelamento
                                     key={agendamento._id.toString()}
                                     agendamento={agendamento}/>)
@@ -52,6 +70,15 @@ const Cancelamentos = props => {
                             }
                         })
                     }
+                    <div className={'pages'}>
+                        {pages.map(page => <div
+                            className={page === selectedPage ? 'page selected': 'page'}
+                            onClick={() => {
+                                setPage(page)
+                            }}>
+                            {page}
+                        </div>)}
+                    </div>
                 </div>
             </div>
         );
