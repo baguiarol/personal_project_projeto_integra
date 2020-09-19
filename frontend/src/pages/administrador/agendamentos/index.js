@@ -14,6 +14,7 @@ import logDAO from "../../../DAO/logDAO";
 import {Redirect, useHistory} from "react-router";
 import ModalEditAgendamento from "../../../assets/component/modals/administrativo/modal_edit_agendamento/EditAgendamento";
 import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
+import ModalSelectDay from "../../../assets/component/modals/administrativo/modal_select_day/ModalSelectDay";
 
 const AgendamentosAdministrador = props => {
 
@@ -70,6 +71,13 @@ const AgendamentosAdministrador = props => {
         <div>
             <AdministradorTopbar pageSelected={'agendamento_adm'} />
             <div className={'container_salas'}>
+                <ModalSelectDay
+                    show={props.showModal && props.modalType === ModalTypes.selectDay}
+                    close={() => props.closeModal()}
+                    onChangeDay={(day) =>  {
+                    if (day)
+                        props.selectDate(day)
+                }} />
                 <ModalAgendamentoAdm
                     close={() => props.closeModal()}
                     show={props.showModal &&
@@ -80,7 +88,7 @@ const AgendamentosAdministrador = props => {
                     show={props.showModal &&
                     props.modalType === ModalTypes.editarAgendamento}
                 />
-                <CalendarAgendamentos/>
+                <CalendarAgendamentos />
             </div>
         </div> : <Redirect to={'/'} />
 
@@ -99,6 +107,7 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
+    selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
     setLogs: logs => dispatch({type: Actions.setLogs, payload: logs}),
     setBloqueiosSalas: bloqueios => dispatch({type: Actions.setBloqueiosSalas, payload: bloqueios})

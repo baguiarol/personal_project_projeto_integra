@@ -18,6 +18,7 @@ const ModalAgendamento = ({
                               dateSelected,
                               userLogged,
                               salaSelected,
+                              profissionalReservas,
                               setAgendamentos,
                               mongoClient,
                               agendamentos,
@@ -77,6 +78,22 @@ const ModalAgendamento = ({
             let data = prepareData(form);
             if (selectedPage === 'Hora Avulsa') {
                 await reservaDAO.createHoraAvulsa(data, agendamentos, dateSelected, async () => {
+                    /* Checa se o Usuário não tem uma reserva igual em outra sala */
+                    /* Reserva igual: Overlaps horário e dia, e diferente sala */
+                    let actualDateBegin = new Date(getStringDate(data.data, data.hora_inicio));
+                    let actualDateEnd = new Date(getStringDate(data.data, data.hora_fim));
+                    for (let reserva of profissionalReservas) {
+                        let thisDateBegin = new Date(getStringDate(reserva.data, reserva.hora_inicio));
+                        let thisDateEnd = new Date(getStringDate(reserva.data, reserva.hora_fim));
+                        if (moment(data.data).isSame(new Date(reserva.data), 'day') &&
+                            checkIfIsBetween(actualDateBegin, actualDateEnd, thisDateBegin, thisDateEnd)) {
+                            alert("O horário selecionado já se encontra reservado " +
+                                "por você em outra sala. Por favor, cancele a anterior para fazer " +
+                                "esse agendamento.");
+                            setLoading(false)
+                            return;
+                        }
+                    }
                     await reservaDAO.create(data, userLogged);
                     let novasReservas = await reservaDAO.findAll(mongoClient);
                     setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, novasReservas))
@@ -177,6 +194,7 @@ const mapStateToProps = state => ({
     dateSelected: state.general.dateSelected,
     salaSelected: state.salas.salaSelected,
     userLogged: state.general.userLogged,
+    profissionalReservas: state.profissionais.profissionalReservas,
     mongoClient: state.general.mongoClient,
     agendamentos: state.agendamentos.agendamentos,
 });

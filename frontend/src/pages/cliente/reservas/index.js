@@ -44,11 +44,12 @@ const MinhasReservasPage = props => {
     };
 
     const checaSeNaoEDaquiA2Horas = () => {
-        let data = new Date()
         for (let reserva of selectedReservas) {
-            if (moment(data).isSame(new Date(reserva.data), 'day')
-            && (reserva.horaInicio - data.getHours()) < 2)
-            return false
+            if (moment(new Date()).isSame(new Date(reserva.data), 'day')
+            && (reserva.horaInicio - new Date().getHours()) <= 2) {
+                console.log('Data é a mesma: ', moment(new Date()).isSame(new Date(reserva.data), 'day'))
+                return false
+            }
         }
         return true;
     }
@@ -56,7 +57,7 @@ const MinhasReservasPage = props => {
     const handleConfirmCancelamento = async () => {
         if (window.confirm("Você tem certeza que deseja cancelar esses agendamentos?")) {
             setLoading(true);
-            if (checaSeNaoEDaquiA2Horas()) {
+            if (!checaSeNaoEDaquiA2Horas()) {
                  alert("Um dos seus agendamentos selecionados será em menos de 2 horas, para " +
                      "realizar esse cancelamento, por favor, fale com nossos administradores.")
             } else {

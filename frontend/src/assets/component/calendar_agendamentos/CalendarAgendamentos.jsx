@@ -60,7 +60,8 @@ const CalendarAgendamentos = props => {
                     style={{float: 'left', margin: 'auto 0'}}>
                     <i className={'fa fa-chevron-left'}/>
                 </span>
-                <span style={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
+                <span style={{flexGrow: 1, display: 'flex', flexDirection: 'column', cursor: 'pointer'}}
+                      onClick={() => props.openModal(ModalTypes.selectDay)}>
                     <span style={{margin: 0}}>
                         {moment(props.dateSelected).locale('pt-BR').format(' DD MMMM YYYY')}
                     </span>
