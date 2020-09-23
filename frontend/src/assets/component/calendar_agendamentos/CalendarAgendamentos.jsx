@@ -44,8 +44,11 @@ const CalendarAgendamentos = props => {
     }, [props.dateSelected])
 
     React.useEffect(() => {
-        console.log('Sala 07', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 7'))
-        console.log('Sala 06', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 6'))
+        // console.log('Sala 07', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 7'));
+        // console.log('Sala 06', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 6'))
+        // console.log('Sala 10', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 10'))
+        // console.log('Sala 09', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 9'))
+        // console.log('Sala 08', props.agendamentos.filter((value) => moment(new Date(value.data)).isSame(new Date(), 'day') && value.sala.nome === 'Sala 8'))
 
     }, [props.agendamentos])
 

@@ -165,7 +165,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
     unselectSala: () => dispatch({type: Actions.selectSala, payload: {}}),
-    setSalas: () => dispatch({type: Actions.setSalas, payload: {}})
+    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalNewSalas)

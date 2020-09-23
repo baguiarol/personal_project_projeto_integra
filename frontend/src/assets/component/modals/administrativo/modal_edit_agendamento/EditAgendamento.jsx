@@ -24,7 +24,7 @@ const ModalEditAgendamento = props => {
     const setSubtitle = () => {
         if ('profissional' in props.agendamentoSelected) {
             return props.agendamentoSelected.profissional.nome + ' - ' +
-                moment(props.dateSelected).locale('pt-BR').format('DD MMMM [de] YYYY');
+                moment(props.dateSelected).locale('pt-BR').format('DD MMMM [de] YYYY')+' - '+props.agendamentoSelected.sala.nome;
         }
         return '';
     };
