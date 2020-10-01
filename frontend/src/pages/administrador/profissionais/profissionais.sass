@@ -8,6 +8,24 @@
   margin-left: 5%
   flex-wrap: wrap
 
+.visualizacao
+  width: 90%
+  margin-left: 5%
+  color: #888
+  .change_list
+    font-style: italic
+    cursor: pointer
+    @include putTransition()
+    &:hover
+      color: #333
+
+.profissionais_list_container
+  width: 90%
+  margin: 2%
+  margin-left: 5%
+  table
+    width: 100%
+
 
 //para celular
 @media (max-width: 655px)

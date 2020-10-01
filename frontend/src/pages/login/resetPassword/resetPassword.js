@@ -13,6 +13,7 @@ const ResetPassword = props => {
 
     const [tokens, setTokens] = React.useState(null)
     const [loading, setLoading] = React.useState(false)
+    const [succeded, setSucceded] =React.useState(false);
 
     React.useEffect(() => {
         const tokens = {
@@ -40,7 +41,8 @@ const ResetPassword = props => {
             setLoading(true)
             try {
                 const emailPassClient = props.mongoClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory)
-                await emailPassClient.resetPassword(tokens.token, tokens.tokenId, senha)
+                await emailPassClient.resetPassword(tokens.token, tokens.tokenId, senha);
+                setSucceded(true);
             } catch (e) {
                 alert(e)
             }
@@ -51,12 +53,17 @@ const ResetPassword = props => {
  return (
     <div className={'reset_password_container'}>
         <img src={require('../../../assets/integra_logo.png')} alt={''}/>
-        <form onSubmit={onSubmit}>
-            <h1 style={{color: '#888', marginTop: 0}}>Redefinir Senha</h1>
-            <InputText label={'Nova Senha'} type={'password'} name={'nova_senha'}/>
-            <InputText label={'Confirmar Senha'} type={'password'} name={'conf_senha'}/>
-            <Button text={'Confirmar'} type={'submit'} loading={loading} />
-        </form>
+        {succeded ? (<div>
+            <h1 style={{color: '#888', marginTop: 0}}>Sucesso!</h1>
+        </div>) : (
+            <form onSubmit={onSubmit}>
+                <h1 style={{color: '#888', marginTop: 0}}>Redefinir Senha</h1>
+                <InputText label={'Nova Senha'} type={'password'} name={'nova_senha'}/>
+                <InputText label={'Confirmar Senha'} type={'password'} name={'conf_senha'}/>
+                <Button text={'Confirmar'} type={'submit'} loading={loading} />
+            </form>
+        )}
+
     </div>
  );
 }

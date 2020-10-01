@@ -11,11 +11,13 @@ import ModalTypes from "../../../assets/modal_types";
 import clienteDAO from "../../../DAO/clienteDAO";
 import {useHistory} from "react-router";
 import CsvDownload from 'react-json-to-csv';
+import ProfissionalList from "./components/ProfissionalList";
 
 const ProfissionaisPage = props => {
 
     const hist = useHistory();
     const [profExport, setProfExport] = React.useState([]);
+    const [view, setView] = React.useState(true); /* false -> grid | true -> list */
 
     React.useEffect(() => {
 
@@ -48,13 +50,43 @@ const ProfissionaisPage = props => {
             <CsvDownload style={{width: 220, marginTop: 20, marginLeft: 20}} className={'button'} data={profExport} filename={'profissionais.csv'}>
                 Exportar Dados
             </CsvDownload>
-            <div className={'profissionais_container'}>
-                {
-                    props.profissionais.map(profissional => (
-                        <CardProfissional profissional={profissional}/>
-                    ))
-                }
+            <div className={'visualizacao'}>
+                <p>Visualização em <span className={'grid'}>{view ? 'Lista' : 'Grade'}</span><br/>
+                    <span
+                        onClick={() => setView(!view)}
+                        className={'change_list'}>
+                        Trocar para {view ? 'Grade' : 'Lista'}.
+                    </span>
+                </p>
             </div>
+            {
+                view ? (
+                    <div className={'profissionais_list_container'}>
+                        <table>
+                            <thead>
+                            <td> </td>
+                            <td>Nome</td>
+                            <td>Ocupação</td>
+                            <td>Telefone</td>
+                            <td>E-mail</td>
+                            <td></td>
+                            </thead>
+                            {
+                                props.profissionais.map(profissional => <ProfissionalList profissional={profissional}/>)
+                            }
+                        </table>
+                    </div>
+                ) : (
+                    <div className={'profissionais_container'}>
+                        {
+                            props.profissionais.map(profissional => (
+                                <CardProfissional profissional={profissional}/>
+                            ))
+                        }
+                    </div>
+                )
+
+            }
             <Fab onClick={() => { props.openModal(ModalTypes.adicionarProfissional)}} />
         </div>
     )
