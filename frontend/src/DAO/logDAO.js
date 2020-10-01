@@ -11,7 +11,7 @@ const logDAO = {
     },
     findAll(){
         console.log('find all logs');
-        return this.db.collection(COLLECTION).find({}).toArray();
+        return this.db.collection(COLLECTION).find({}, { $sort: { data: -1}}).toArray();
     }
 };
 export default logDAO;

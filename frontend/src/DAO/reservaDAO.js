@@ -6,9 +6,9 @@ const COLLECTION = 'reservas'
 
 const moment = extendMoment(Moment)
 
-const getStringDate = (date, hour) => (`${moment(date).format('yyyy-MM-DD')} ${hour}:00`)
+export const getStringDate = (date, hour) => (`${moment(date).format('yyyy-MM-DD')} ${hour}:00`)
 
-const checkIfIsBetween = (actualDateBegin, actualDateEnds, dateOne, dateTwo) => {
+export const checkIfIsBetween = (actualDateBegin, actualDateEnds, dateOne, dateTwo) => {
     let one = moment.range(actualDateBegin, actualDateEnds);
     let two = moment.range(dateOne, dateTwo);
     return one.overlaps(two)
@@ -134,7 +134,6 @@ const reservaDAO = {
 
     },
     getAgendamentosFromSala(agendamentos, sala) {
-        console.log('get Agendamentos da sala');
         let array = [];
         agendamentos.forEach(agendamento => {
             if ('sala' in agendamento) {

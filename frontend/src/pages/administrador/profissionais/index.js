@@ -10,10 +10,12 @@ import ModalNewProfissional
 import ModalTypes from "../../../assets/modal_types";
 import clienteDAO from "../../../DAO/clienteDAO";
 import {useHistory} from "react-router";
+import CsvDownload from 'react-json-to-csv';
 
 const ProfissionaisPage = props => {
 
     const hist = useHistory();
+    const [profExport, setProfExport] = React.useState([]);
 
     React.useEffect(() => {
 
@@ -27,6 +29,14 @@ const ProfissionaisPage = props => {
             })
         }
     }, [props.client]);
+
+    React.useEffect(() => {
+        let array = []
+        props.profissionais.forEach((prof) => {
+            array.push({nome: prof.nome, email: prof.email});
+        })
+        setProfExport(array);
+    }, [props.profissionais])
     
     return (
         <div>
@@ -35,6 +45,9 @@ const ProfissionaisPage = props => {
                 show={props.showModal &&
                 props.modalType === ModalTypes.adicionarProfissional}/>
             <AdministradorTopbar pageSelected={'profissionais'}/>
+            <CsvDownload style={{width: 220, marginTop: 20, marginLeft: 20}} className={'button'} data={profExport} filename={'profissionais.csv'}>
+                Exportar Dados
+            </CsvDownload>
             <div className={'profissionais_container'}>
                 {
                     props.profissionais.map(profissional => (

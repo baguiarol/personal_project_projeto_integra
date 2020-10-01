@@ -3,11 +3,14 @@ import ModalParent from "../../modal_parent/modal";
 import Button from "../../../button/button";
 import {connect} from "react-redux";
 import CheckBox from "../../../checkbox/checkbox";
-import moment from 'moment/min/moment-with-locales.min';
+import Moment from 'moment/min/moment-with-locales.min';
 import "./EditAgendamento.sass";
-import reservaDAO from "../../../../../DAO/reservaDAO";
+import reservaDAO, {checkIfIsBetween, getStringDate} from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
 import Select from "react-select";
+import {extendMoment} from "moment-range";
+
+const moment = extendMoment(Moment)
 
 const ModalEditAgendamento = props => {
 
@@ -20,6 +23,7 @@ const ModalEditAgendamento = props => {
         hora_fim: 0,
         reservaInteira: false,
     })
+    const [editarSala, setEditarSala] = React.useState(null);
 
     const setSubtitle = () => {
         if ('profissional' in props.agendamentoSelected) {
@@ -31,9 +35,14 @@ const ModalEditAgendamento = props => {
 
     const populateHorasArray = (horaInicio, horaFim) => {
         let arr = [];
-        for (let i = horaInicio; i < horaFim; i++) {
+        for (let i = horaInicio; i < horaFim; i++)
             arr.push({label: i + ':00', value: i})
-        }
+        return arr;
+    }
+
+    const populateSalas = (salas) => {
+        let arr = []
+        salas.forEach(sala => arr.push({label: sala.nome, value: sala._id}));
         return arr;
     }
 
@@ -70,6 +79,41 @@ const ModalEditAgendamento = props => {
                 </div>
             </header>}
             body={<div className={'body_edit_agendamento'}>
+                <h2>Sala</h2>
+                <Select
+                    onChange={e => setEditarSala({id: e.value, label: e.label})}
+                    options={populateSalas(props.salas)}/><br/>
+                <Button
+                        loading={loading}
+                        width={'45%'}
+                        style={{marginTop: 15}}
+                        type={"button"}
+                        text={'Trocar Sala'}
+                        onClick={async () => {
+                        if (editarSala) {
+                            setLoading(true);
+                            let agendamentos = reservaDAO.getAgendamentosFromSala(props.agendamentos, {nome: editarSala.label});
+                            let r2 = moment.range(
+                                new Date(getStringDate(
+                                    new Date(props.agendamentoSelected.data), props.agendamentoSelected.hora_inicio)),
+                                new Date(getStringDate(
+                                    new Date(props.agendamentoSelected.data), props.agendamentoSelected.hora_fim)),
+                            );
+                            console.log("Range ", r2);
+                            for (let agendamento of agendamentos) {
+                                let r1 = moment.range(
+                                    new Date(getStringDate(new Date(agendamento.data), agendamento.hora_inicio)),
+                                    new Date(getStringDate(new Date(agendamento.data), agendamento.hora_fim)));
+                                if (r1.overlaps(r2)) {
+                                    alert("O horário já se encontra reservado na sala requerida.")
+                                    setLoading(false)
+                                    return;
+                                }
+                            }
+                            await reservaDAO.editaReserva(props.agendamentoSelected._id,{ sala_id: editarSala.id});
+                            setLoading(false);
+                        }
+                    }}/>
                 <h2>Execução</h2>
                 <h3>
                     {finalizado ? `Reserva já foi finalizada. Início às ${
@@ -194,6 +238,7 @@ const mapStateToProps = state => ({
     agendamentoSelected: state.agendamentos.agendamentoSelected,
     dateSelected: state.general.dateSelected,
     mongoClient: state.general.mongoClient,
+    salas: state.salas.salas,
     userLogged: state.general.userLogged,
     agendamentos: state.agendamentos.agendamentos,
 });
