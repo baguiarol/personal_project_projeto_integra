@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import Options from "./tipos/options";
 import moment from "moment/min/moment-with-locales";
 import reservaDAO from "../../../../../DAO/reservaDAO";
+import logDAO from "../../../../../DAO/logDAO";
 
 const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelected, userLogged, agendamentos, setAgendamentos}) => {
 
@@ -37,24 +38,19 @@ const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelect
         }
         if ('_id' in selectedProfissional) {
             await reservaDAO.createHoraAvulsa(data, agendamentos, dateSelected, async () => {
-                await reservaDAO.create(data, userLogged);
+                await logDAO.create({usuario: userLogged,
+                    log: `Nova reserva ${selectedProfissional.nome} ${moment(dateSelected).format('DD-MM-YYYY')} ${data.hora_inicio}h-${data.hora_fim}h ${salaSelected.nome}`,
+                    data_hora: new Date()})
+                await reservaDAO.create(data);
                 let novasReservas = await reservaDAO.findAll(mongoClient);
                 setAgendamentos(novasReservas)
                 setLoading(false);
                 alert('Adicionado com sucesso!');
                 close();
             }, async () => {
-                if (window.confirm("O horário já se encontra reservado ou horário inválido. Deseja sobrepor?")) {
-                    reservaDAO.create(data, userLogged);
-                    let novasReservas = await reservaDAO.findAll(mongoClient);
-                    setAgendamentos(novasReservas)
-                    alert("Adicionado com sucesso")
+                alert("O horário já se encontra reservado!")
                     setLoading(false);
-                    close();
-                } else {
-                    setLoading(false);
-                }
-            })
+            });
         } else {
             alert('Por favor, selecione um profissional.')
             setLoading(false)

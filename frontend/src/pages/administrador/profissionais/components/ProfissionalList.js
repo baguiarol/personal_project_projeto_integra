@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import "./ProfissionalList.sass"
 import ModalTypes from "../../../../assets/modal_types";
 import Button from "../../../../assets/component/button/button";
+import Actions from "../../../../redux/actions/actions";
 
 const ProfissionalList = props => {
     return (
@@ -29,6 +30,10 @@ ProfissionalList.propTypes = {
 
 const mapStateToProps = state => ({})
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+    openModal: type => dispatch({type: Actions.showModal, payload: type}),
+    selectProfissional: prof => dispatch({type: Actions.selectProfissional, payload: prof}),
+});
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalList)

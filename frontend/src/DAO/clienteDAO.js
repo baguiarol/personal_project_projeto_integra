@@ -23,11 +23,7 @@ const clienteDAO = {
         console.log('edit cliente');
         return this.update({_id: id_cliente}, edits);
     },
-    async addUser(client, email, password, clienteData, userLogged){
-        console.log('add cliente user');
-        if (userLogged) {
-            logDAO.create({usuario: userLogged, log: 'Adicionou ' + clienteData.nome + ' a lista de profissionais.', data_hora: new Date()})
-        }
+    async registerAuth(client, email, password) {
         const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
         try {
             await emailPasswordClient.registerWithEmail(email, password);
@@ -35,6 +31,13 @@ const clienteDAO = {
             alert('O usuário de e-mail já foi definido e talvez deletado anteriormente. Para redefinir ' +
                 'senha, por favor, peça ao usuário que vá em "Esqueceu sua Senha?" na tela de Login.')
         }
+    },
+    async addUser(client, email, password, clienteData, userLogged){
+        console.log('add cliente user');
+        if (userLogged) {
+            logDAO.create({usuario: userLogged, log: 'Adicionou ' + clienteData.nome + ' a lista de profissionais.', data_hora: new Date()})
+        }
+        await this.registerAuth(client, email, password);
         return this.create({ ...clienteData, email });
     },
     login(client, email, password){

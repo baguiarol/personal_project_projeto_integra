@@ -74,7 +74,7 @@ const WeekCalendar = props => {
                                     if ('mes' in agendamento) {
                                         if (date.isSame(new Date(), 'day')) {
                                             return (
-                                                <div
+                                                !props.fetchedAgendamentos ? <p>Carregando...</p> : <div
                                                     onClick={() => props.addReservaListener(date)}
                                                     className={'add'}>
                                                     <span>+</span>
@@ -95,7 +95,7 @@ const WeekCalendar = props => {
                                 verificarBloqueio(date, props.sala, props.bloqueiosSalas) ? <div
                                 style={{backgroundColor: 'transparent', display: 'flex'}}>
                                     <i style={{color: '#CCC', margin: 'auto'}}>Sala Indisponível</i>
-                                </div> : (<div
+                                </div> : (!props.fetchedAgendamentos ? <p>Carregando...</p> : <div
                                     onClick={() => props.addReservaListener(date)}
                                     className={'add'}>
                                     <span>+</span>
@@ -128,6 +128,7 @@ WeekCalendar.propTypes = {
 const mapStateToProps = state => ({
     agendamentos: state.agendamentos.agendamentos,
     bloqueiosSalas: state.salas.bloqueiosSalas,
+    fetchedAgendamentos: state.agendamentos.fetchedAgendamentos,
 });
 
 export default connect(mapStateToProps)(WeekCalendar);

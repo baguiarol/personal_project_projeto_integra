@@ -9,6 +9,7 @@ import Moment from "moment/min/moment-with-locales";
 import {extendMoment} from "moment-range";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import Actions from "../../../../../redux/actions/actions";
+import logDAO from "../../../../../DAO/logDAO";
 
 const moment = extendMoment(Moment)
 
@@ -19,6 +20,7 @@ const ModalAgendamento = ({
                               userLogged,
                               salaSelected,
                               profissionalReservas,
+                              salaBloqueios,
                               setAgendamentos,
                               mongoClient,
                               agendamentos,
@@ -35,6 +37,29 @@ const ModalAgendamento = ({
             let two = moment.range(dateOne, dateTwo);
             return one.overlaps(two)
         }
+
+    const OverlappingRanges = (r1_start, r1_finish, r2_start, r2_finish) => {
+            let [arr1, arr2] = [[],[]];
+            for (let i = r1_start; i <= r1_finish; i++) { arr1.push(i) }
+            console.log(arr1);
+            for (let i = r2_start; i < r2_finish; i++) { arr2.push(+i) }
+            console.log(arr2);
+            for (let el of arr1) { if (arr2.includes(el)) { return true; } }
+            return false;
+    }
+
+    const checkIfBlocked = () => {
+        if (Array.isArray(salaBloqueios) && salaSelected) {
+            for (let bloqueio of salaBloqueios) {
+                if (bloqueio.sala && salaSelected._id) {
+                    if (bloqueio.sala.toString() === salaSelected._id.toString()
+                        && moment(new Date(bloqueio.dia)).add(1, 'day').isSame(dateSelected, 'day'))
+                        return bloqueio
+                }
+            }
+        }
+        return null;
+    }
 
         const prepareData = form => {
             let data = {
@@ -85,7 +110,7 @@ const ModalAgendamento = ({
                     for (let reserva of profissionalReservas) {
                         let thisDateBegin = new Date(getStringDate(reserva.data, reserva.hora_inicio));
                         let thisDateEnd = new Date(getStringDate(reserva.data, reserva.hora_fim));
-                        if (moment(data.data).isSame(new Date(reserva.data), 'day') &&
+                        if ((moment(data.data).isSame(new Date(reserva.data), 'day') && !reserva.cancelado) &&
                             checkIfIsBetween(actualDateBegin, actualDateEnd, thisDateBegin, thisDateEnd)) {
                             alert("O horário selecionado já se encontra reservado " +
                                 "por você em outra sala. Por favor, cancele a anterior para fazer " +
@@ -94,6 +119,17 @@ const ModalAgendamento = ({
                             return;
                         }
                     }
+
+                    const bloqueio = checkIfBlocked()
+                    if (OverlappingRanges(data.hora_inicio, data.hora_fim, bloqueio.horaInicio, bloqueio.horaFim)) {
+                        alert("O horário se encontra indisponível pois a sala está bloqueada nesse horário.");
+                        setLoading(false);
+                        return;
+                    }
+
+                    await logDAO.create({usuario: userLogged,
+                        log: `Nova reserva ${userLogged.nome} ${moment(dateSelected).format('DD-MM-YYYY')} ${data.hora_inicio}h-${data.hora_fim}h ${salaSelected.nome}`,
+                        data_hora: new Date()})
                     await reservaDAO.create(data, userLogged);
                     let novasReservas = await reservaDAO.findAll(mongoClient);
                     setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, novasReservas))
@@ -196,6 +232,7 @@ const mapStateToProps = state => ({
     userLogged: state.general.userLogged,
     profissionalReservas: state.profissionais.profissionalReservas,
     mongoClient: state.general.mongoClient,
+    salaBloqueios: state.salas.bloqueiosSalas,
     agendamentos: state.agendamentos.agendamentos,
 });
 

@@ -104,7 +104,7 @@ const ModalEditAgendamento = props => {
                                 let r1 = moment.range(
                                     new Date(getStringDate(new Date(agendamento.data), agendamento.hora_inicio)),
                                     new Date(getStringDate(new Date(agendamento.data), agendamento.hora_fim)));
-                                if (r1.overlaps(r2)) {
+                                if (r1.overlaps(r2) && !agendamento.cancelado) {
                                     alert("O horário já se encontra reservado na sala requerida.")
                                     setLoading(false)
                                     return;
@@ -179,7 +179,7 @@ const ModalEditAgendamento = props => {
                             onClick={async () => {
                                 if (cancelamentoData.reservaInteira) {
                                     if (window.confirm('Tem certeza que deseja cancelar toda a reserva?')) {
-                                        await reservaDAO.cancelaReserva(props.agendamentoSelected._id, props.userLogged)
+                                        await reservaDAO.cancelaReserva(props.agendamentoSelected, props.userLogged)
                                         props.close()
                                     }
                                 } else {
@@ -189,7 +189,8 @@ const ModalEditAgendamento = props => {
                                             .cancelaParteDaReserva(props.agendamentoSelected._id,
                                                 cancelamentoData.hora_inicio,
                                                 cancelamentoData.hora_fim,
-                                                props.agendamentos);
+                                                props.agendamentos,
+                                                props.userLogged);
                                         props.close()
                                     }
                                 }

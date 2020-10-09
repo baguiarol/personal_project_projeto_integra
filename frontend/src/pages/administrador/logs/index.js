@@ -20,7 +20,7 @@ const LogsPage = props => {
 
     React.useEffect(() => {
         if (props.logs) {
-            setPages(Array.from(Array(Math.ceil(props.logs.length / 25)), (_, i) => i + 1))
+            setPages(Array.from(Array(Math.ceil(props.logs.length / 15)), (_, i) => i + 1))
         }
     }, [props.logs])
 
@@ -39,7 +39,7 @@ const LogsPage = props => {
                 {
                     (props.logs.length === 0) ?
                         (<h2 style={{color: '#888'}}>Ainda não há logs para exibir.</h2>) :
-                        props.logs.reverse().map((log, index) => (
+                        props.logs.map((log, index) => (
                             index < (15 * selectedPage) && (index > (15 * (selectedPage - 1))) ? <CardLog log={log}/> : <></>
                         ))
                 }

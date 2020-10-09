@@ -14,6 +14,7 @@ import moment from 'moment';
 import ForgotPasswordModal from "../../assets/component/modals/login/ForgotPasswordModal";
 import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk";
 import TipoUsuarioModal from "../../assets/component/modals/login/TipoUsuarioModal/TipoUsuarioModal";
+import {useDispatch} from "react-redux";
 
 const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
@@ -27,6 +28,7 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
     const [admArray, setAdmArray] = React.useState(null)
     const [clientesArray, setClientesArray] = React.useState(null)
 
+    const d = useDispatch()
     const story = useHistory()
 
     const saveUserLogged = (email, pwd) => {
@@ -110,18 +112,6 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
 
     const hist = useHistory();
 
-    // React.useEffect(() => {
-    //     if ('nome' in userLogged) {
-    //         setLoading(true);
-    //         if ('ocupacao' in userLogged)
-    //             hist.push('/agendamentos');
-    //         else
-    //             hist.push('/agendamento_adm');
-    //     } else {
-    //         setLoading(false);
-    //     }
-    // }, [userLogged]);
-
     return (
         <div className={'login_container'}>
             <ModoPaisagem/>
@@ -132,7 +122,8 @@ const LoginPage = ({mongoClient, userLogged, setUserLogged}) => {
                     setLoading(false)
                 }}
                 onClickAdm={() => {
-                    setUserLogged(admArray[0])
+                    // setUserLogged(admArray[0])
+                    d(Actions.SetUserLogged(admArray[0]));
                     story.push('/agendamento_adm')
                 }}
                 onClickProfissional={() => {

@@ -16,6 +16,14 @@ const salaDAO = {
     },
     findAll() {
         return this.db.collection(COLLECTION).find({}).toArray();
-    }
+    },
+    getSalaById(id, salas) {
+        for (let sala of salas) {
+            if (sala._id.toString() === id.toString()) {
+                return sala;
+            }
+        }
+        return null;
+    },
 };
 export default salaDAO;

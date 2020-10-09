@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import ClienteTopbar from "../../../assets/component/cliente_topbar/topbar";
 import Sala from "../../../assets/component/sala/sala";
 import "./agenda.sass";
@@ -21,6 +21,7 @@ const ClienteAgendamentos = props => {
     const [selectedTab, selectTab] = React.useState(0);
 
     const story = useHistory();
+    const d = useDispatch();
 
     React.useEffect(() => {
         if (!('nome' in props.userLogged))
@@ -33,6 +34,22 @@ const ClienteAgendamentos = props => {
         if (+first[1] < +second[1]) { return -1 }
         else return 0
     }
+
+    const watcher = async () => {
+        const stream = await props.database.collection('reservas').watch()
+
+        stream.onNext(() => {
+            reservaDAO.findAll(props.client).then(res => {
+                props.setAgendamentos(res);
+            });
+        });
+    }
+
+    React.useEffect(() => {
+        if (props.database) {
+            watcher().then(() => console.log('connection established'))
+        }
+    }, [props.database])
 
     React.useEffect(() => {
         if (clienteDAO.db && 'nome' in props.userLogged) {
@@ -56,12 +73,15 @@ const ClienteAgendamentos = props => {
             sala_bloqueioDAO.findAll().then(res => {
                 props.setBloqueiosSalas(res)
             })
-            reservaDAO.findAll(props.client).then(res => {
+            console.log("fetching reservas");
+            reservaDAO.findThisMonth(props.client).then(res => {
+                d({type: Actions.setFetchedAgendamentos, payload: true});
+                console.log("Fetched")
                 props.setAgendamentos(res);
                 props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, res));
             });
         }
-    }, [props.client, props.userLogged]);
+    }, [props.userLogged]);
 
     return (
         <div>
@@ -114,6 +134,7 @@ const mapStateToProps = state => ({
     showModal: state.general.showModal,
     modalType: state.general.modalType,
     salas: state.salas.salas,
+    database: state.general.database,
     client: state.general.mongoClient,
     userLogged: state.general.userLogged,
     agendamentos: state.agendamentos.agendamentos,

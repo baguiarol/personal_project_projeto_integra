@@ -62,7 +62,7 @@ const MinhasReservasPage = props => {
                      "realizar esse cancelamento, por favor, fale com nossos administradores.")
             } else {
                 try {
-                    await reservaDAO.cancelaMuitasReservas(selectedReservas);
+                    await reservaDAO.cancelaMuitasReservas(selectedReservas, props.userLogged);
                     const reservas = await reservaDAO.findAll(props.mongoClient);
                     props.setAgendamentos(reservas);
                     props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, reservas));

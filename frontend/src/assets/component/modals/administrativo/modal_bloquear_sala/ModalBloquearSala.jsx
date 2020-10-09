@@ -68,6 +68,7 @@ const ModalBloquearSala = props => {
                             <div className={'flex_content'}>
                                 <div className={'select_container'}>
                                     <Select
+                                        required={!props.wholeDay}
                                         classNamePrefix={'select'}
                                         name={'hora_inicio'}
                                         options={horaInicio}/>
@@ -75,6 +76,7 @@ const ModalBloquearSala = props => {
                                 <p>até</p>
                                 <div className={'select_container'}>
                                     <Select
+                                        required={!props.wholeDay}
                                         classNamePrefix={'select'}
                                         name={'hora_fim'}
                                         options={horaInicio}/>

@@ -19,10 +19,7 @@ const reservaDAO = {
     setDb(db) {
         this.db = db;
     },
-    create(reserva, userLogged = null) {
-        if (userLogged) {
-            logDAO.create({usuario: userLogged, log: 'Adicionou uma reserva', data_hora: new Date()})
-        }
+    create(reserva) {
         return this.db.collection(COLLECTION).insertOne(reserva);
     },
     delete(agendamentoId) {
@@ -34,14 +31,17 @@ const reservaDAO = {
         }
         return this.db.collection(COLLECTION).updateMany(query, {$set: changes});
     },
-    cancelaReserva(id_reserva, userLogged) {
-        if (userLogged) { logDAO.create({usuario: userLogged, log: 'Cancelou uma reserva', data_hora: new Date()}) }
-        return this.update({_id: id_reserva}, {cancelado: true});
+    async cancelaReserva(reserva, userLogged) {
+        if (userLogged) {
+            await logDAO.create({usuario: userLogged,
+            log: `Cancelou reserva ${reserva.profissional.nome} ${moment(reserva.data).format("DD-MM-YYYY")} COMPLETA ${reserva.sala.nome}`,
+            data_hora: new Date()}) }
+        return this.update({_id: reserva._id}, {cancelado: true});
     },
-    cancelaMuitasReservas(reservas) {
+    cancelaMuitasReservas(reservas, userLogged) {
         const promises = [];
         for (let i = 0; i < reservas.length; i++) {
-            promises.push(this.cancelaReserva(reservas[i]._id));
+            promises.push(this.cancelaReserva(reservas[i], userLogged));
         }
         return Promise.all(promises);
     },
@@ -78,6 +78,9 @@ const reservaDAO = {
         console.log('Find All de Cliente');
         return client.callFunction('getAgendamentos');
     },
+    findThisMonth(client) {
+        return client.callFunction('getAgendamentosCliente');
+    },
     getAgendamentosById(agendamentos, agendamento_id) {
         let agendamentoSelected = null;
         agendamentos.forEach(agendamento => {
@@ -87,21 +90,33 @@ const reservaDAO = {
         });
         return agendamentoSelected;
     },
-    async cancelaParteDaReserva(reserva_id, horaInicio, horaFim, reservas) {
+    async cancelaParteDaReserva(reserva_id, horaInicio, horaFim, reservas, userLogged) {
         let auxReserva = reservaDAO.getAgendamentosById(reservas, reserva_id);
-        delete auxReserva.profissional;
-        delete auxReserva.sala;
         if (horaInicio  === auxReserva.hora_inicio && horaFim === auxReserva.hora_fim) {
             reservaDAO.editaReserva(reserva_id, {cancelado: true});
+            await logDAO.create({usuario: userLogged,
+                log: `Cancelou reserva ${auxReserva.profissional.nome} ${moment(auxReserva.data).format("DD-MM-YYYY")} COMPLETA ${auxReserva.sala.nome}`,
+                data_hora: new Date()})
         } else {
-            console.log(auxReserva._id.toString())
             await reservaDAO.delete({_id: auxReserva._id})
+            await logDAO.create({usuario: userLogged,
+                log: `Cancelou reserva ${auxReserva.profissional.nome} ${moment(auxReserva.data).format("DD-MM-YYYY")} ${horaInicio}h-${horaFim}h ${auxReserva.sala.nome}`,
+                data_hora: new Date()})
             delete auxReserva._id;
-            await reservaDAO.create({...auxReserva, hora_fim: horaInicio});
-            await reservaDAO.create({...auxReserva, hora_inicio: horaInicio, hora_fim: horaFim, cancelado: true})
-            await reservaDAO.create({...auxReserva, hora_inicio: horaFim});
+            delete auxReserva.profissional;
+            delete auxReserva.sala;
+            if (horaFim === auxReserva.hora_fim) {
+                await reservaDAO.create({...auxReserva, hora_fim: horaInicio});
+                await reservaDAO.create({...auxReserva, hora_inicio: horaInicio, hora_fim: horaFim, cancelado: true})
+            } else if (horaInicio === auxReserva.hora_inicio) {
+                await reservaDAO.create({...auxReserva, hora_inicio: horaInicio, hora_fim: horaFim, cancelado: true})
+                await reservaDAO.create({...auxReserva, hora_inicio: horaFim});
+            } else {
+                await reservaDAO.create({...auxReserva, hora_fim: horaInicio});
+                await reservaDAO.create({...auxReserva, hora_inicio: horaInicio, hora_fim: horaFim, cancelado: true})
+                await reservaDAO.create({...auxReserva, hora_inicio: horaFim});
+            }
         }
-        // await reservaDAO.editaReserva(reserva_id, {horasCanceladas: [horaInicio, horaFim]})
     },
     async createHoraAvulsa(data, agendamentos, dateSelected, successCallback, failCallback) {
             let dateBegin = new Date(getStringDate(dateSelected, data.hora_inicio))

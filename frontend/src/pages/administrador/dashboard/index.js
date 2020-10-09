@@ -8,9 +8,13 @@ import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar
 import moment from "moment";
 import Chart from "./components/Chart";
 import Indicators from "./components/Indicators";
+import {useDispatch} from "react-redux";
+import Actions from "../../../redux/actions/actions";
 
 const DashboardPage = props => {
     const [agendamentosPendentes, setAgendamentosPendentes] = React.useState([]);
+
+    const dispatch = useDispatch()
 
     return (('nome' in props.userLogged) ? (
         <div>

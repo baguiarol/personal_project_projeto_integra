@@ -2,6 +2,7 @@ const Actions = {
     setDatabase: 'SET_DATABASE',
     setMongoClient: 'SET_MONGO_CLIENT',
     setUserLogged: 'SET_USER_LOGGED',
+    SetUserLogged: (user) => ({type: Actions.setUserLogged, payload: user}),
     showModal: 'SHOW_MODAL',
     closeModal: 'CLOSE_MODAL',
     setProfissionais: 'SET_PROFISSIONAIS',
@@ -16,6 +17,7 @@ const Actions = {
     setLogs: 'SET_LOGS',
     setProfissionalReservas: 'SET_PROF_RESERVAS',
     setBloqueiosSalas: 'SET_BLOQ_SALAS',
+    setFetchedAgendamentos: 'SET_FETCH',
 }
 
 export default Actions;

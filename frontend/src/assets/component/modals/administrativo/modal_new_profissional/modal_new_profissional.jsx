@@ -43,7 +43,7 @@ const ModalNewProfissional = ({
                     ocupacao: form.ocupacao.value,
                     descricao: form.descricao.value,
                     foto_url: 'https://jsl-online.com/wp-content/uploads/2017/01/placeholder-user.png',
-                    email: form.email.value,
+                    email: form.email.value.toLowerCase(),
                 }, userLogged);
                 setProfissionais(await clienteDAO.findAll());
                 alert('Profissional Adicionado com Sucesso!')
@@ -90,6 +90,9 @@ const ModalNewProfissional = ({
                     alert('Erro! Imagem posta não tem formato correto.');
                     return ;
                 }
+            }
+            if (form.email.value !== profissionalSelected.email) {
+                await clienteDAO.registerAuth(mongoClient, changes.email, '123456');
             }
             await clienteDAO.update({_id: profissionalSelected._id}, changes);
             const profs = await clienteDAO.findAll();

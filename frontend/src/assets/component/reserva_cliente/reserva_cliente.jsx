@@ -9,7 +9,9 @@ const ReservaCliente = props => {
         return <></>
     } else {
         return (
-            <div className={props.executado ? 'container_reserva_cliente executado' : 'container_reserva_cliente'}>
+            <div className={props.executado ? ( props.reserva.pago ?
+                'container_reserva_cliente executado pago' : 'container_reserva_cliente executado')
+                    : 'container_reserva_cliente'}>
                 <div>
                     <h1>{moment(props.reserva.data).format('DD/MM/YYYY')}</h1>
                     <h4>{'mes' in props.reserva ? (<i>Alugado por todo o Mês de {moment(props.reserva.mes).locale('pt-BR').format('MMMM')}</i>) :

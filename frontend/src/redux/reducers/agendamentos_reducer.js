@@ -4,6 +4,7 @@ const initialState = {
     salaSelected: {},
     agendamentos: [],
     agendamentoSelected: {},
+    fetchedAgendamentos: false,
 };
 
 const AgendamentosReducer = (state = initialState, {type, payload}) => {
@@ -14,6 +15,8 @@ const AgendamentosReducer = (state = initialState, {type, payload}) => {
             return {...state, agendamentos: payload};
         case Actions.selectAgendamentos:
             return {...state, agendamentoSelected: payload};
+        case Actions.setFetchedAgendamentos:
+            return {...state, fetchedAgendamentos: payload};
         default:
             return state;
     }
