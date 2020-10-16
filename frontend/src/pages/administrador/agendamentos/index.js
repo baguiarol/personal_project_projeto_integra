@@ -20,47 +20,50 @@ const AgendamentosAdministrador = props => {
 
     const hist = useHistory();
 
-    const watcher = async () => {
-        const stream = await props.database.collection('reservas').watch()
-
-        stream.onNext((change) => {
-            reservaDAO.findAll(props.client).then(res => {
-                props.setAgendamentos(res);
-            });
-        });
+    const watchItems = () => {
+        const streamPromise = props.database.collection('reservas').watch()
+        const getStream = () => streamPromise;
+        const closeStream = () =>  streamPromise.then(stream => stream.close);
+        return [getStream, closeStream];
     }
 
     React.useEffect(() => {
         if (props.database) {
-            watcher().then(() => console.log('connection established'))
+            const [getStream, closeStream] = watchItems();
+            getStream().then(stream => {
+                stream.onNext(() => {
+                    reservaDAO.findAll(props.client).then(res => {
+                        props.setAgendamentos(res);
+                    });
+                })
+            })
+            return closeStream;
         }
-    }, [props.database])
+    }, [props.database]);
 
     React.useEffect(() => {
         if (clienteDAO.db) {
             if ('ocupacao' in props.userLogged) {
                 hist.push('/');
             }
-            clienteDAO.findAll().then(res => {
-                props.setProfissionais(res);
-            });
 
             sala_bloqueioDAO.findAll().then(res => {
                 props.setBloqueiosSalas(res)
             });
+            console.time("Time find All in client")
+           reservaDAO.findAllInClient(props).then(res => {
+               // return [salas, clientsArr, reservasArr];
+               props.setSalas(res[0]);
+               props.setProfissionais(res[1]);
+               props.setAgendamentos(res[2]);
+               console.timeEnd("Time find All in client")
+           });
 
-            salaDAO.findAll().then(res => {
-                let array = res.sort((a,b) => {
-                    let [first, second] = [ a.nome.split(' '), b.nome.split(' ') ]
-                    if (+first[1] > +second[1]) { return 1 }
-                    if (+first[1] < +second[1]) { return -1 }
-                    else return 0
-                })
-                props.setSalas(array);
-            });
-            reservaDAO.findAll(props.client).then(res => {
-                props.setAgendamentos(res);
-            });
+            // console.time("Time Find All");
+            // reservaDAO.findAll(props.client).then(res => {
+            //     props.setAgendamentos(res);
+            //     console.timeEnd("Time Find All");
+            // });
             logDAO.findAll().then(res => {
                 props.setLogs(res);
             })
@@ -106,6 +109,7 @@ const mapDispatchToProps = dispatch => ({
     openModal: open => dispatch({type: Actions.showModal, payload: open}),
     closeModal: () => dispatch({type: Actions.closeModal}),
     setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
+    setProfissionaisHash: hash => dispatch({type: Actions.setProfissionaisHash, payload: hash}),
     setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
     selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),

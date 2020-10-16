@@ -35,21 +35,26 @@ const ClienteAgendamentos = props => {
         else return 0
     }
 
-    const watcher = async () => {
-        const stream = await props.database.collection('reservas').watch()
-
-        stream.onNext(() => {
-            reservaDAO.findAll(props.client).then(res => {
-                props.setAgendamentos(res);
-            });
-        });
+    const watchItems = () => {
+        const streamPromise = props.database.collection('reservas').watch()
+        const getStream = () => streamPromise;
+        const closeStream = () =>  streamPromise.then(stream => stream.close);
+        return [getStream, closeStream];
     }
 
     React.useEffect(() => {
         if (props.database) {
-            watcher().then(() => console.log('connection established'))
+            const [getStream, closeStream] = watchItems();
+            getStream().then(stream => {
+                stream.onNext(() => {
+                    reservaDAO.findThisMonth(props.client).then(res => {
+                        props.setAgendamentos(res);
+                    });
+                })
+            })
+            return closeStream;
         }
-    }, [props.database])
+    }, [props.database]);
 
     React.useEffect(() => {
         if (clienteDAO.db && 'nome' in props.userLogged) {
@@ -67,16 +72,15 @@ const ClienteAgendamentos = props => {
                 } else {
                     res.sort(sortSalas)
                 }
-                console.log(res)
                 props.setSalas(res);
             });
             sala_bloqueioDAO.findAll().then(res => {
                 props.setBloqueiosSalas(res)
             })
-            console.log("fetching reservas");
+            console.time("fetching reservas");
             reservaDAO.findThisMonth(props.client).then(res => {
                 d({type: Actions.setFetchedAgendamentos, payload: true});
-                console.log("Fetched")
+                console.timeEnd("fetching reservas")
                 props.setAgendamentos(res);
                 props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, res));
             });
@@ -119,7 +123,7 @@ const ClienteAgendamentos = props => {
                                 props.openModal(ModalTypes.detalhesSala);
                             }}
                             addReservaListener={date => {
-                                props.selectDate(date.toDate());
+                                props.selectDate(date);
                                 props.selectSala(sala);
                                 props.openModal(ModalTypes.reservaCliente)
                             }}/>

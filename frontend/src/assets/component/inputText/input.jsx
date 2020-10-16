@@ -9,6 +9,8 @@ const InputText = props => {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
                 step={'0.01'}
+                style={props.inputStyle}
+                value={props.value}
                 required={props.required}
                 disabled={props.disabled}
                 defaultValue={props.defaultValue}
@@ -26,6 +28,8 @@ InputText.propTypes = {
     type: PropTypes.string,
     disabled: PropTypes.bool,
     required: PropTypes.bool,
+    value: PropTypes.string,
+    inputStyle: PropTypes.object,
     defaultValue: PropTypes.string,
     style: PropTypes.object,
     onChange: PropTypes.func,

@@ -25,5 +25,14 @@ const salaDAO = {
         }
         return null;
     },
+    setSalasInAgendamentos(salas, agendamentos) {
+        for (let agendamento of agendamentos) {
+            for (let sala of salas) {
+                if (sala._id.toString() === agendamento.sala_id.toString()) {
+                    agendamento["sala"] = sala;
+                }
+            }
+        }
+    }
 };
 export default salaDAO;

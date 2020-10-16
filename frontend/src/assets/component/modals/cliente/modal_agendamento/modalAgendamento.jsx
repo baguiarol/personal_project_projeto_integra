@@ -49,16 +49,17 @@ const ModalAgendamento = ({
     }
 
     const checkIfBlocked = () => {
+        let bloqueios = [];
         if (Array.isArray(salaBloqueios) && salaSelected) {
             for (let bloqueio of salaBloqueios) {
                 if (bloqueio.sala && salaSelected._id) {
                     if (bloqueio.sala.toString() === salaSelected._id.toString()
                         && moment(new Date(bloqueio.dia)).add(1, 'day').isSame(dateSelected, 'day'))
-                        return bloqueio
+                        bloqueios.push(bloqueio);
                 }
             }
         }
-        return null;
+        return (bloqueios.length > 0) ? bloqueios : null ;
     }
 
         const prepareData = form => {
@@ -120,18 +121,23 @@ const ModalAgendamento = ({
                         }
                     }
 
-                    const bloqueio = checkIfBlocked()
-                    if (OverlappingRanges(data.hora_inicio, data.hora_fim, bloqueio.horaInicio, bloqueio.horaFim)) {
-                        alert("O horário se encontra indisponível pois a sala está bloqueada nesse horário.");
-                        setLoading(false);
-                        return;
+                    const bloqueios = checkIfBlocked()
+                    if (bloqueios) {
+                        for (let bloqueio of bloqueios) {
+                            if (OverlappingRanges(data.hora_inicio, data.hora_fim, bloqueio.horaInicio, bloqueio.horaFim)) {
+                                alert("O horário se encontra indisponível pois a sala está bloqueada nesse horário.");
+                                setLoading(false);
+                                return;
+                            }
+                        }
                     }
 
                     await logDAO.create({usuario: userLogged,
                         log: `Nova reserva ${userLogged.nome} ${moment(dateSelected).format('DD-MM-YYYY')} ${data.hora_inicio}h-${data.hora_fim}h ${salaSelected.nome}`,
                         data_hora: new Date()})
                     await reservaDAO.create(data, userLogged);
-                    let novasReservas = await reservaDAO.findAll(mongoClient);
+                    let novasReservas = await reservaDAO.findThisMonth(mongoClient);
+                    console.log("this one");
                     setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, novasReservas))
                     setAgendamentos(novasReservas)
                     setLoading(false);
@@ -179,17 +185,6 @@ const ModalAgendamento = ({
                 close();
             }
         };
-
-        React.useEffect(() => {
-            if (mongoClient) {
-                reservaDAO.findAll(mongoClient).then(res => {
-                    setAgendamentos(res);
-                    if ('nome' in userLogged) {
-                        setProfissionalReservas(reservaDAO.findReservaDeCliente(userLogged._id, res));
-                    }
-                });
-            }
-        }, [mongoClient]);
 
         return (
             <ModalParent show={show}

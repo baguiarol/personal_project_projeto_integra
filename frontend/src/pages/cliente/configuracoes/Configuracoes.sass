@@ -1,3 +1,5 @@
+@import "../../../assets/variables"
+
 .configuracoes_container
   a
     text-decoration: none
@@ -8,3 +10,28 @@
     box-shadow: 0 5px 10px rgba(0,0,0,0.2)
     padding: 45px
     padding-top: 5px
+  .foto_changer
+    width: 100px
+    height: 100px
+    border-radius: 300px
+    background-size: cover
+    background-clip: border-box
+    background-repeat: no-repeat
+    margin-right: 20px
+    cursor: pointer
+    &:hover
+      div
+        transform: scale(1)
+    div
+      position: relative
+      left: 10px
+      color: #FFF
+      background-color: rgba(0,0,0,0.6)
+      top: 42.5px
+      width: 60px
+      text-align: center
+      font-size: 11px
+      padding: 5px 10px
+      border-radius: 3px
+      @include putTransition(.15s)
+      transform: scale(0)

@@ -10,7 +10,17 @@ import moment from "moment/min/moment-with-locales";
 import reservaDAO from "../../../../../DAO/reservaDAO";
 import logDAO from "../../../../../DAO/logDAO";
 
-const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelected, userLogged, agendamentos, setAgendamentos}) => {
+const ModalAgendamentoAdm = ({show,
+                                 close,
+                                 mongoClient,
+                                 dateSelected,
+                                 salaSelected,
+                                 userLogged,
+                                 agendamentos,
+                                 salaBloqueios,
+                                 setProfissionais,
+                                 setSalas,
+                                 setAgendamentos}) => {
 
     const [selectedProfissional, selectProf] = React.useState({});
     const [loading, setLoading] = React.useState(false);
@@ -36,14 +46,51 @@ const ModalAgendamentoAdm = ({show, close, mongoClient, dateSelected, salaSelect
             alert("A hora inicial não pode ser maior ou igual a hora final.");
             return;
         }
+
+        const checkIfBlocked = () => {
+            if (Array.isArray(salaBloqueios) && salaSelected) {
+                for (let bloqueio of salaBloqueios) {
+                    if (bloqueio.sala && salaSelected._id) {
+                        if (bloqueio.sala.toString() === salaSelected._id.toString()
+                            && moment(new Date(bloqueio.dia)).add(1, 'day').isSame(dateSelected, 'day'))
+                            return bloqueio
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        const OverlappingRanges = (r1_start, r1_finish, r2_start, r2_finish) => {
+            let [arr1, arr2] = [[],[]];
+            for (let i = r1_start; i < r1_finish; i++) { arr1.push(i) }
+            console.log(arr1);
+            for (let i = r2_start; i < r2_finish; i++) { arr2.push(+i) }
+            console.log(arr2);
+            for (let el of arr1) { if (arr2.includes(el)) { return true; } }
+            return false;
+        }
+
+        const bloqueio = checkIfBlocked()
+        if (bloqueio) {
+            if (OverlappingRanges(data.hora_inicio, data.hora_fim, bloqueio.horaInicio, bloqueio.horaFim)) {
+                alert("O horário se encontra indisponível pois a sala está bloqueada nesse horário. Caso queira adicionar, " +
+                    "desbloqueie a sala.");
+                setLoading(false);
+                return;
+            }
+        }
+
         if ('_id' in selectedProfissional) {
             await reservaDAO.createHoraAvulsa(data, agendamentos, dateSelected, async () => {
                 await logDAO.create({usuario: userLogged,
                     log: `Nova reserva ${selectedProfissional.nome} ${moment(dateSelected).format('DD-MM-YYYY')} ${data.hora_inicio}h-${data.hora_fim}h ${salaSelected.nome}`,
                     data_hora: new Date()})
                 await reservaDAO.create(data);
-                let novasReservas = await reservaDAO.findAll(mongoClient);
-                setAgendamentos(novasReservas)
+                let novasReservas = await reservaDAO.findAllInClient();
+                setSalas(novasReservas[0])
+                setProfissionais(novasReservas[1])
+                setAgendamentos(novasReservas[2])
                 setLoading(false);
                 alert('Adicionado com sucesso!');
                 close();
@@ -93,10 +140,13 @@ const mapStateToProps = state => ({
     salaSelected: state.agendamentos.salaSelected,
     userLogged: state.general.userLogged,
     agendamentos: state.agendamentos.agendamentos,
+    salaBloqueios: state.salas.bloqueiosSalas,
 });
 
 const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch({type: Actions.closeModal}),
+    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
+    setProfissionais: (profissionais) => dispatch({type: Actions.setProfissionais, payload: profissionais}),
     setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos})
 });
 

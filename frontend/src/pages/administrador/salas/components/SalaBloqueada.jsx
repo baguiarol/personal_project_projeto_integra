@@ -21,10 +21,38 @@ const SalaBloqueada = props => {
 
     const [loading, setLoading] = React.useState(false);
 
+    const getSalaName = () => {
+        let string = "";
+        console.log(props.sala);
+
+        let arr = [...props.sala.salas];
+
+        arr.sort((a, b) => {
+            let nA = a.nome.split(" ")[1];
+            let nB = b.nome.split(" ")[1];
+            console.log(nA, nB);
+            if (+nA > +nB) {
+                return 1;
+            } else if (+nA < +nB){
+                return -1;
+            } else {
+                return 0;
+            }
+        })
+        arr.forEach((sala, index) => {
+            if (index === 0) {
+                string += sala.nome;
+            } else {
+                string += ", "+sala.nome;
+            }
+        })
+        return string;
+    }
+
     return (
         <div className={'sala_bloqueada'}>
             <div className={'data'}>
-                <h2>{props.sala.sala.nome}</h2>
+                <h2>{getSalaName()}</h2>
                 <p>{moment(new Date(props.sala.dia)).locale('pt-BR').add(4, 'hours').format('ll')}, {
                     props.sala.wholeDay ? `Dia Inteiro` : `De ${props.sala.horaInicio}h até às ${props.sala.horaFim}h`}</p>
             </div>

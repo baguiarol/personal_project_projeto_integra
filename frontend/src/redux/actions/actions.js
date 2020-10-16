@@ -6,6 +6,7 @@ const Actions = {
     showModal: 'SHOW_MODAL',
     closeModal: 'CLOSE_MODAL',
     setProfissionais: 'SET_PROFISSIONAIS',
+    setProfissionaisHash: 'SET_PROFISSIONAIS_HASH',
     setAdministrativo: 'SET_ADMS',
     setSalas: 'SET_SALAS',
     selectDate: 'SELECT_DATE',

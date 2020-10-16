@@ -57,5 +57,12 @@ const clienteDAO = {
         }
         return this.db.collection(COLLECTION).updateOne({_id: user._id}, {$set: {sala_fixa: sala._id}});
     },
+    makeProfissionaisAHash(profissionaisArray) {
+        let dict = {}
+        for (let profissional of profissionaisArray) {
+            dict[profissional._id.toString()] = profissional;
+        }
+        return dict;
+    }
 };
 export default clienteDAO;

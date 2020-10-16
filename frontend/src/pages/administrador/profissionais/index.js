@@ -65,11 +65,9 @@ const ProfissionaisPage = props => {
                         <table>
                             <thead>
                             <td> </td>
-                            <td>Nome</td>
-                            <td>Ocupação</td>
-                            <td>Telefone</td>
-                            <td>E-mail</td>
-                            <td></td>
+                            <td>Profissional</td>
+                            <td>Contato</td>
+                            <td>Disponibilidade</td>
                             </thead>
                             {
                                 props.profissionais.map(profissional => <ProfissionalList profissional={profissional}/>)

@@ -25,6 +25,7 @@ import Configuracoes from "./pages/cliente/configuracoes/Configuracoes";
 import tipoUsuario from "./pages/login/tipoUsuario";
 import sala_bloqueioDAO from "./DAO/sala_bloqueioDAO";
 import Cancelamentos from "./pages/administrador/cancelamentos/Cancelamentos";
+import "react-toastify/scss/main.scss"
 
 function App() {
 

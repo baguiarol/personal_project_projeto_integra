@@ -20,11 +20,52 @@ const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const WeekCalendar = props => {
 
     const [agendamentosDaSala, setAgendamentosDaSala] = React.useState([]);
-    const [selectedDate, selectDate] = React.useState(moment());
+    const [selectedDate, selectDate] = React.useState(moment(new Date()));
 
     React.useEffect(() => {
         setAgendamentosDaSala(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
+        organizaAgendamentos(reservaDAO.getAgendamentosFromSala(props.agendamentos, props.sala));
     }, [props.agendamentos]);
+
+    const organizaAgendamentos = (agendamentos) => {
+        const hash = {};
+        agendamentos.forEach(agendamento => {
+            let dataString = moment(new Date(agendamento.data)).format('YYYY-MM-DD');
+            if (dataString in hash) {
+                hash[dataString] = hash[dataString] = [...hash[dataString], agendamento];
+            } else {
+                hash[dataString] = [agendamento];
+            }
+        })
+        console.log(hash);
+        groupReservas(hash);
+    }
+
+    const groupReservas = (hashAgendamentos) => {
+        Object.keys(hashAgendamentos).forEach(key => {
+            let actualArray = hashAgendamentos[key];
+            let newArray = [];
+            let [horaInicio, horaFim] = [0,0];
+            for (let i = 0; i < actualArray.length; i++) {
+                if (i+1 < actualArray.length) {
+                    if (actualArray[i].hora_fim === actualArray[i+1].hora_inicio) {
+                        if (horaInicio === 0) {
+                            horaInicio = actualArray[i].hora_inicio;
+                        }
+                        horaFim = actualArray[i+1].horaFim;
+                    } else {
+                        if (horaInicio === 0 && horaFim === 0) {
+                            [horaInicio, horaFim] = [actualArray[i].hora_inicio, actualArray[i].hora_fim]
+                        }
+                        newArray.push({hora_inicio: horaInicio, horaFim: horaFim});
+                        [horaInicio, horaFim] = [0,0];
+                    }
+                }
+            }
+            hashAgendamentos[key] = newArray;
+        })
+        console.log(hashAgendamentos);
+    }
 
     const verificarBloqueio = (date, sala, bloqueios) => {
         for (let bloqueio of bloqueios) {
@@ -75,7 +116,7 @@ const WeekCalendar = props => {
                                         if (date.isSame(new Date(), 'day')) {
                                             return (
                                                 !props.fetchedAgendamentos ? <p>Carregando...</p> : <div
-                                                    onClick={() => props.addReservaListener(date)}
+                                                    onClick={() => props.addReservaListener(date.toDate())}
                                                     className={'add'}>
                                                     <span>+</span>
                                                 </div>
@@ -96,7 +137,11 @@ const WeekCalendar = props => {
                                 style={{backgroundColor: 'transparent', display: 'flex'}}>
                                     <i style={{color: '#CCC', margin: 'auto'}}>Sala Indisponível</i>
                                 </div> : (!props.fetchedAgendamentos ? <p>Carregando...</p> : <div
-                                    onClick={() => props.addReservaListener(date)}
+                                    onClick={() => {
+                                        let dateF = date.toDate();
+                                        dateF.setHours(12);
+                                        props.addReservaListener(dateF)
+                                    }}
                                     className={'add'}>
                                     <span>+</span>
                                 </div>) : <></>

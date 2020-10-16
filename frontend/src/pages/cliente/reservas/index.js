@@ -63,8 +63,9 @@ const MinhasReservasPage = props => {
             } else {
                 try {
                     await reservaDAO.cancelaMuitasReservas(selectedReservas, props.userLogged);
-                    const reservas = await reservaDAO.findAll(props.mongoClient);
+                    const reservas = await reservaDAO.findThisMonth(props.mongoClient);
                     props.setAgendamentos(reservas);
+                    console.log('this one');
                     props.setProfissionalReservas(reservaDAO.findReservaDeCliente(props.userLogged._id, reservas));
                     alert("Cancelamento realizado com sucesso!");
                 } catch (err) {
@@ -77,8 +78,16 @@ const MinhasReservasPage = props => {
     };
 
     const renderReservas = () => {
+
         let reservasAvailable = props.profissionalReservas.filter(reserva => {
             return (!reserva.executado && !reserva.cancelado)
+        })
+        reservasAvailable.sort((a, b) => {
+            if (moment(new Date(a.data)).isAfter(new Date(b.data), 'day')) {
+                return 1;
+            } else {
+                return -1;
+            }
         })
         console.log(reservasAvailable)
         if (reservasAvailable.length > 0) {

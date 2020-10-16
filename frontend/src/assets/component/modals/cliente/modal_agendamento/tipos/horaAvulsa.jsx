@@ -32,16 +32,31 @@ const HoraAvulsaCliente = props => {
     }, [props.dateSelected, props.salaSelected])
 
     const checkIfBlocked = () => {
+        let bloqueios = [];
         if (Array.isArray(props.salaBloqueios) && props.salaSelected) {
             for (let bloqueio of props.salaBloqueios) {
                 if (bloqueio.sala && props.salaSelected._id) {
                     if (bloqueio.sala.toString() === props.salaSelected._id.toString()
                         && moment(new Date(bloqueio.dia)).add(1, 'day').isSame(props.dateSelected, 'day'))
-                        return bloqueio
+                        bloqueios.push(bloqueio);
                 }
             }
         }
-        return null;
+        return (bloqueios.length > 0) ? bloqueios : null ;
+    }
+
+    const generateText = (bloqueios) => {
+        let string = " a sala está indisponível ";
+        bloqueios.forEach((bloqueio, index) => {
+            if (bloqueios.length === 1 || index === 0) {
+                string += `das ${bloqueio.horaInicio}h até as ${bloqueio.horaFim}h`
+            } else if (index === bloqueios.length - 1) {
+                string += ` e das ${bloqueio.horaInicio}h até as ${bloqueio.horaFim}h`
+            } else {
+                string += `, das ${bloqueio.horaInicio}h até as ${bloqueio.horaFim}h`
+            }
+        })
+        return string;
     }
 
     return (
@@ -77,8 +92,10 @@ const HoraAvulsaCliente = props => {
             </div>
             <div>
                 {bloqueioSelecionado ?
-                    <p style={{textAlign: 'center', color: '#888'}}><b>Atenção</b>, a sala estará indisponível nesse
-                        dia das {bloqueioSelecionado.horaInicio}h às {bloqueioSelecionado.horaFim}h</p> : <></>}
+                    <p style={{textAlign: 'center', color: '#888'}}>
+                        <b>Atenção</b>,
+                        {generateText(bloqueioSelecionado)}
+                    </p> : <></>}
             </div>
             <div className={'resume_container'}>
                 <div>

@@ -17,7 +17,7 @@ const moment = extendMoment(Moment)
 
 const fillHoras = (sabado) => {
     let array = [];
-    let [horaInicial, horaFinal] = [9, 21]
+    let [horaInicial, horaFinal] = [9, 20]
     if (sabado)
         [horaInicial, horaFinal] = [8, 13]
     for (let i = 0; i < horaFinal - horaInicial; i++)
@@ -113,7 +113,7 @@ const CalendarAgendamentos = props => {
                                                 isOccupied = true;
                                                 agnd = agendamento;
                                             }
-                                            //Verificação de aluguéis mensais.
+                                            // Verificação de aluguéis mensais.
                                         } else if ('mes' in agendamento
                                             && moment(agendamento["mes"]).isSame(props.dateSelected, 'month')) {
                                             isMonthly = true;
@@ -151,6 +151,8 @@ const CalendarAgendamentos = props => {
                                                     {agnd ? (agnd.profissional ? agnd.profissional.nome :
                                                         <i>Usuário Excluído</i>) : ''}
                                                 </td>)
+                                            } else if (agnd.cancelado) {
+                                                return (<NovoAgendamento sala={sala}/>)
                                             }
                                             // LEGACY ----------- FAVOR NÃO EXCLUIR, apesar de parecer que precise.
                                             else if ('horasCanceladas' in agnd) {

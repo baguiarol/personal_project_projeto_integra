@@ -41,13 +41,17 @@ const SalasPage = props => {
             let arr = [];
             sala_bloqueioDAO.findAll().then(res => {
                 res.forEach(salaBloqueada => {
-                    arr.push({...salaBloqueada, sala: salaDAO.getSalaById(salaBloqueada.sala[0], props.salas)})
+                    let arrSalas = [];
+                    for (let sala of salaBloqueada.sala) {
+                        arrSalas.push(salaDAO.getSalaById(sala, props.salas));
+                    }
+                    arr.push({...salaBloqueada, salas: arrSalas})
                 })
                 setBloqueiosAtuais(arr.filter((el) => {
                     return moment(new Date(el.dia)).add(4, 'hours').isSameOrAfter(new Date(), 'day');
                 }))
-                setSalasBloqueadas(arr);
                 console.log(arr);
+                setSalasBloqueadas(arr);
             });
         }
     }, [props.bloqueiosSalas]);
