@@ -97,7 +97,18 @@ const ProfissionalList = props => {
                     </tbody>
                 </table>
             </td>
-            <td><Button className={'inside'} text={'Informações'} onClick={ () => {
+            <td>
+                <div className={'creditos_container'}>
+                    <p>Créditos:</p>
+                    <h2>{'creditos' in props.profissional ? props.profissional.creditos : "0"}</h2>
+                    <div onClick={() => {
+                        props.selectProfissional(props.profissional)
+                        props.openModalCreditos() }}>
+                        <p>Adicionar/Remover</p>
+                    </div>
+                </div>
+            </td>
+            <td><Button className={'inside'} text={'+ Info'} onClick={ () => {
                 props.selectProfissional(props.profissional);
                 props.openModal(ModalTypes.adicionarProfissional);
             }}/></td>

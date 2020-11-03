@@ -5,13 +5,16 @@ import Mensal from "./mensal";
 
 const Options = props => {
 
-    const [selectedPage, selectPage] = React.useState('Hora Avulsa');
+
     const renderPage = page => {
         switch (page) {
             case 'Hora Avulsa':
                 return (<HoraAvulsa selectProf={props.selectProf}/>);
             case 'Turno':
-                return (<Turno/>);
+                return (<Turno
+                    setHoraInicial={props.setHoraInicial}
+                    setHoraFinal={props.setHoraFinal}
+                    selectProf={props.selectProf} />);
             case 'Mensal':
                 return (<Mensal />);
             default:
@@ -22,25 +25,25 @@ const Options = props => {
         <div>
             <div className={'options'}>
                 <div
-                    onClick={() => selectPage('Hora Avulsa')}
-                    className={(selectedPage === 'Hora Avulsa')
+                    onClick={() => props.selectPage('Hora Avulsa')}
+                    className={(props.selectedPage === 'Hora Avulsa')
                         ? 'option selected' : 'option'}>
                     <p>Hora Avulsa</p>
                 </div>
                 <div
-                    onClick={() => selectPage('Turno')}
-                    className={(selectedPage === 'Turno') ?
+                    onClick={() => props.selectPage('Turno')}
+                    className={(props.selectedPage === 'Turno') ?
                         'option selected' : 'option'}>
                     <p>Turno</p>
                 </div>
                 <div
-                    onClick={() => selectPage('Mensal')}
-                    className={(selectedPage === 'Mensal') ?
+                    onClick={() => props.selectPage('Mensal')}
+                    className={(props.selectedPage === 'Mensal') ?
                         'option selected' : 'option'}>
                     <p>Mensal</p>
                 </div>
             </div>
-            {renderPage(selectedPage)}
+            {renderPage(props.selectedPage)}
         </div>
     );
 }

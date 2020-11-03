@@ -15,23 +15,25 @@ import ModalBloquearSala from "../../../assets/component/modals/administrativo/m
 import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
 import SalaBloqueada from "./components/SalaBloqueada";
 import moment from "moment";
+import {useDispatch} from "react-redux";
 
 const SalasPage = props => {
 
     const hist = useHistory();
+    const dispatch = useDispatch();
 
     const [loading, setLoading] = React.useState(false)
     const [wholeDay, setWholeDay] = React.useState(false)
-    const [salasBloqueadas, setSalasBloqueadas] = React.useState([]);
     const [bloqueiosAtuais, setBloqueiosAtuais] = React.useState([]);
     if ('ocupacao' in props.userLogged) {
         hist.push('/');
     }
 
+
     React.useEffect(() => {
         if (salaDAO.db) {
             salaDAO.findAll().then(res => {
-                props.setSalas(res);
+                dispatch({type: Actions.setSalas, payload: res});
             });
         }
     }, []);
@@ -50,8 +52,6 @@ const SalasPage = props => {
                 setBloqueiosAtuais(arr.filter((el) => {
                     return moment(new Date(el.dia)).add(4, 'hours').isSameOrAfter(new Date(), 'day');
                 }))
-                console.log(arr);
-                setSalasBloqueadas(arr);
             });
         }
     }, [props.bloqueiosSalas]);

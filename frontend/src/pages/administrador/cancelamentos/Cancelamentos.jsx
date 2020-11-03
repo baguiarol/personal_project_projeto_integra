@@ -49,7 +49,13 @@ const Cancelamentos = props => {
     const getCancelados = agendamentos => {
         let array = [];
         agendamentos.forEach((el) => el.cancelado ? array.push(el) : null)
-        console.log(array)
+        array.filter((a,b) => {
+            if (moment(new Date(a.data)).isBefore(new Date(b.data))) {
+                return 1;
+            } else {
+                return -1;
+            }
+        })
         return array;
     }
 
@@ -71,13 +77,13 @@ const Cancelamentos = props => {
                         })
                     }
                     <div className={'pages'}>
-                        {pages.map(page => <div
+                        {pages.map((page, index) => ((index < selectedPage + 5 && (index > selectedPage - 5)) || index === pages.length - 1) ? <div
                             className={page === selectedPage ? 'page selected': 'page'}
                             onClick={() => {
                                 setPage(page)
                             }}>
                             {page}
-                        </div>)}
+                        </div> : <></>)}
                     </div>
                 </div>
             </div>

@@ -1,120 +1,112 @@
 import React from 'react';
-import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
-import CalendarAgendamentos from "../../../assets/component/calendar_agendamentos/CalendarAgendamentos";
+import AdministradorTopbar from '../../../assets/component/adm_topbar/adm_topbar';
+import CalendarAgendamentos from '../../../assets/component/calendar_agendamentos/CalendarAgendamentos';
 import './agendamentos.sass';
-import ModalTypes from "../../../assets/modal_types";
-import Actions from "../../../redux/actions/actions";
-import {connect} from "react-redux";
-import ModalAgendamentoAdm
-    from "../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm.jsx";
-import clienteDAO from "../../../DAO/clienteDAO";
-import salaDAO from "../../../DAO/salaDAO";
-import reservaDAO from "../../../DAO/reservaDAO";
-import logDAO from "../../../DAO/logDAO";
-import {Redirect, useHistory} from "react-router";
-import ModalEditAgendamento from "../../../assets/component/modals/administrativo/modal_edit_agendamento/EditAgendamento";
-import sala_bloqueioDAO from "../../../DAO/sala_bloqueioDAO";
-import ModalSelectDay from "../../../assets/component/modals/administrativo/modal_select_day/ModalSelectDay";
+import ModalTypes from '../../../assets/modal_types';
+import PropTypes from 'prop-types';
+import { ActionsFn } from '../../../redux/actions/actions';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import ModalAgendamentoAdm from '../../../assets/component/modals/administrativo/modal_new_agendamento_adm/modal_new_agendamento_adm.jsx';
+import clienteDAO from '../../../DAO/clienteDAO';
+import reservaDAO from '../../../DAO/reservaDAO';
+import logDAO from '../../../DAO/logDAO';
+import { Redirect, useHistory } from 'react-router';
+import ModalEditAgendamento from '../../../assets/component/modals/administrativo/modal_edit_agendamento/EditAgendamento';
+import sala_bloqueioDAO from '../../../DAO/sala_bloqueioDAO';
+import ModalSelectDay from '../../../assets/component/modals/administrativo/modal_select_day/ModalSelectDay';
+import salaDAO from '../../../DAO/salaDAO';
 
-const AgendamentosAdministrador = props => {
+const AgendamentosAdministrador = (props) => {
+  const hist = useHistory();
 
-    const hist = useHistory();
+  const { database, userLogged, modalType, showModal } = useSelector(
+    (state) => state.general
+  );
+  const dispatch = useDispatch();
 
-    const watchItems = () => {
-        const streamPromise = props.database.collection('reservas').watch()
-        const getStream = () => streamPromise;
-        const closeStream = () =>  streamPromise.then(stream => stream.close);
-        return [getStream, closeStream];
+  const watchItems = () => {
+    const streamPromise = database.collection('reservas').watch();
+    const getStream = () => streamPromise;
+    const closeStream = () => streamPromise.then((stream) => stream.close);
+    return [getStream, closeStream];
+  };
+
+  const updateAgendamentos = async () => {
+    let agendamentos = await reservaDAO.findAllInClient();
+    dispatch(ActionsFn.setSalas(agendamentos[0]));
+    dispatch(ActionsFn.setProfissionais(agendamentos[1]));
+    dispatch(ActionsFn.setAgendamentos(agendamentos[2]));
+  };
+
+  React.useEffect(() => {
+    if (database) {
+      const [getStream, closeStream] = watchItems();
+      getStream().then((stream) => {
+        stream.onNext(() => {
+          updateAgendamentos().then(() => {
+            console.log('updated');
+          });
+        });
+      });
+      return closeStream;
     }
+  }, [database]);
 
-    React.useEffect(() => {
-        if (props.database) {
-            const [getStream, closeStream] = watchItems();
-            getStream().then(stream => {
-                stream.onNext(() => {
-                    reservaDAO.findAll(props.client).then(res => {
-                        props.setAgendamentos(res);
-                    });
-                })
-            })
-            return closeStream;
-        }
-    }, [props.database]);
+  React.useEffect(() => {
+    if (clienteDAO.db) {
+      if ('ocupacao' in userLogged) {
+        hist.push('/');
+      }
 
-    React.useEffect(() => {
-        if (clienteDAO.db) {
-            if ('ocupacao' in props.userLogged) {
-                hist.push('/');
-            }
+      sala_bloqueioDAO.findAll().then((res) => {
+        dispatch(ActionsFn.setBloqueiosSalas(res));
+      });
+      console.time('Time find All in client');
+      reservaDAO.findAllInClient(props).then((res) => {
+        dispatch(ActionsFn.setSalas(res[0]));
+        dispatch(ActionsFn.setProfissionais(res[1]));
+        dispatch(ActionsFn.setAgendamentos(res[2]));
+        console.timeEnd('Time find All in client');
+      });
+      logDAO.findAll().then((logs) => {
+        dispatch(ActionsFn.setLogs(logs));
+      });
+    }
+  }, []);
 
-            sala_bloqueioDAO.findAll().then(res => {
-                props.setBloqueiosSalas(res)
-            });
-            console.time("Time find All in client")
-           reservaDAO.findAllInClient(props).then(res => {
-               // return [salas, clientsArr, reservasArr];
-               props.setSalas(res[0]);
-               props.setProfissionais(res[1]);
-               props.setAgendamentos(res[2]);
-               console.timeEnd("Time find All in client")
-           });
+  return 'nome' in userLogged ? (
+    <div>
+      <AdministradorTopbar pageSelected={'agendamento_adm'} />
+      <div className={'container_salas'}>
+        <ModalSelectDay
+          show={showModal && modalType === ModalTypes.selectDay}
+          close={() => dispatch(ActionsFn.closeModal())}
+          onChangeDay={(day) => {
+            if (day) dispatch(ActionsFn.selectDate(day));
+          }}
+        />
+        <ModalAgendamentoAdm
+          close={() => dispatch(ActionsFn.closeModal())}
+          show={showModal && modalType === ModalTypes.adicionarAgendamentoAdm}
+        />
+        <ModalEditAgendamento
+          close={() => dispatch(ActionsFn.closeModal())}
+          show={showModal && modalType === ModalTypes.editarAgendamento}
+        />
+        <CalendarAgendamentos />
+      </div>
+    </div>
+  ) : (
+    <Redirect to={'/'} />
+  );
+};
 
-            // console.time("Time Find All");
-            // reservaDAO.findAll(props.client).then(res => {
-            //     props.setAgendamentos(res);
-            //     console.timeEnd("Time Find All");
-            // });
-            logDAO.findAll().then(res => {
-                props.setLogs(res);
-            })
-        }
-    }, []);
+AgendamentosAdministrador.propTypes = {
+  agendamentos: PropTypes.array,
+};
 
-    return ('nome' in props.userLogged) ?
-        <div>
-            <AdministradorTopbar pageSelected={'agendamento_adm'} />
-            <div className={'container_salas'}>
-                <ModalSelectDay
-                    show={props.showModal && props.modalType === ModalTypes.selectDay}
-                    close={() => props.closeModal()}
-                    onChangeDay={(day) =>  {
-                    if (day)
-                        props.selectDate(day)
-                }} />
-                <ModalAgendamentoAdm
-                    close={() => props.closeModal()}
-                    show={props.showModal &&
-                    props.modalType === ModalTypes.adicionarAgendamentoAdm}
-                />
-                <ModalEditAgendamento
-                    close={() => props.closeModal()}
-                    show={props.showModal &&
-                    props.modalType === ModalTypes.editarAgendamento}
-                />
-                <CalendarAgendamentos />
-            </div>
-        </div> : <Redirect to={'/'} />
-
-}
-
-const mapStateToProps = state => ({
-    showModal: state.general.showModal,
-    modalType: state.general.modalType,
-    database: state.general.database,
-    userLogged: state.general.userLogged,
-    client: state.general.mongoClient,
+const mapStateToProps = (state) => ({
+  agendamentos: state.agendamentos.agendamentos,
 });
 
-const mapDispatchToProps = dispatch => ({
-    openModal: open => dispatch({type: Actions.showModal, payload: open}),
-    closeModal: () => dispatch({type: Actions.closeModal}),
-    setProfissionais: prof => dispatch({type: Actions.setProfissionais, payload: prof}),
-    setProfissionaisHash: hash => dispatch({type: Actions.setProfissionaisHash, payload: hash}),
-    setSalas: salas => dispatch({type: Actions.setSalas, payload: salas}),
-    selectDate: date => dispatch({type: Actions.selectDate, payload: date}),
-    setAgendamentos: agendamentos => dispatch({type: Actions.setAgendamentos, payload: agendamentos}),
-    setLogs: logs => dispatch({type: Actions.setLogs, payload: logs}),
-    setBloqueiosSalas: bloqueios => dispatch({type: Actions.setBloqueiosSalas, payload: bloqueios})
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AgendamentosAdministrador);
+export default connect(mapStateToProps)(AgendamentosAdministrador);

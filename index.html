@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+</head>
+<style>
+    .full_container {
+        display: flex;
+        font-family: sans-serif
+    }
+    .full_container > img {
+        padding-top: 65px
+    }
+    .full_container > img, .full_container > div {
+        margin: auto;
+    }
+    button {
+        cursor: pointer;
+        padding: 10px 25px;
+        font-size: 16px;
+        background-color: #1BC2F5;
+        color: #FFF;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        border: none;
+    }
+
+    @media (orientation: portrait) {
+        .full_container {
+            text-align: center;
+            flex-direction: column;
+            margin: 10px 50px;
+        }
+        .full_container > img {
+            padding-top: 250px
+        }
+        h1 {
+            font-size: 3.5em;
+        }
+        p {
+            font-size: 1.8em;
+        }
+        button {
+            font-size: 3em;
+            margin: 10px 0;
+            padding: .5em 3em;
+        }
+    }
+</style>
+<body>
+<div class="full_container">
+    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/bd1927b8-3edf-4a2d-ad51-bc4eaddb52c3/d6v9h2e-9da99f63-6f17-4771-9be5-dc9a5d0c18ea.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvYmQxOTI3YjgtM2VkZi00YTJkLWFkNTEtYmM0ZWFkZGI1MmMzXC9kNnY5aDJlLTlkYTk5ZjYzLTZmMTctNDc3MS05YmU1LWRjOWE1ZDBjMThlYS5qcGcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.RM99VYNarYwKo5E51tFPhpZLTuMYKYhk-I2r1SodnHA">
+    <div>
+        <h1>Olá, nossa página se mudou!</h1>
+        <p>Esta página não está mais disponível aqui, pois nos mudamos para <a href="https://app.integracps.com.br">app.integracps.com.br</a>
+        </p>
+        <button id="btn">Ir para a página</button>
+        <p>Você será redirecionado em <span id="counter"></span> segundos</p>
+    </div>
+</div>
+<script>
+    window.onload = () => {
+        let counter = document.getElementById("counter");
+        let button = document.getElementById("btn");
+
+        let x = 10;
+
+        const goToPage = () => { location.href = "https://app.integracps.com.br" }
+
+        button.onclick = goToPage
+
+        setInterval(() => {
+            counter.innerHTML = ""+x;
+            x--;
+            if (x === 0) { goToPage() }
+        }, 1000);
+
+    }
+</script>
+</body>
+</html>

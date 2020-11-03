@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ModalParent from "../modal_parent/modal";
 import InputText from "../../inputText/input";

@@ -57,13 +57,13 @@ const LogsPage = props => {
                                 ))
                         }
                         <div className={'pages'}>
-                            {pages.map(page => <div
+                            {pages.map((page, index) => ((index < selectedPage + 5 && (index > selectedPage - 5)) || index === pages.length - 1) ? <div
                                 className={page === selectedPage ? 'page selected': 'page'}
                                 onClick={() => {
                                     setPage(page)
                                 }}>
                                 {page}
-                            </div>)}
+                            </div> : <></>)}
                         </div>
                     </div>
 

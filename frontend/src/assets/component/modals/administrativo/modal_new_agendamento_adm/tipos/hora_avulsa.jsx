@@ -23,7 +23,6 @@ const HoraAvulsa = ({profissionais, selectProf, salaSelected, dateSelected}) => 
     const [horaInicial, setHoraInicial] = React.useState(0);
     const [horaFinal, setHoraFinal] = React.useState(0);
     const [horasFinais, setHorasFinais] = React.useState(selectOptions(9, true));
-    let selectedOption = null;
 
     React.useEffect(() => {
         let array = [];

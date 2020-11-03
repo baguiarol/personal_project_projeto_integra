@@ -9,9 +9,13 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/moment": "^2.13.0",
+    "@types/react": "^16.9.53",
+    "@types/react-redux": "^7.1.9",
+    "@types/redux": "^3.6.0",
     "axios": "^0.19.2",
+    "detect-browser": "^5.2.0",
     "form-data": "^3.0.0",
-    "husky": "^4.2.1",
     "moment": "^2.27.0",
     "moment-range": "^4.0.2",
     "mongodb-stitch-browser-sdk": "^4.8.0",
@@ -31,21 +35,13 @@
     "react-tooltip": "^4.1.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^5.0.0",
-    "yarnhook": "^0.4.3"
+    "typescript": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "husky": {
-    "hooks": {
-      "post-checkout": "yarnhook",
-      "post-merge": "yarnhook",
-      "post-rewrite": "yarnhook"
-    }
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -61,5 +57,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "eslint-config-prettier": "^6.13.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "prettier": "^2.1.2"
   }
 }

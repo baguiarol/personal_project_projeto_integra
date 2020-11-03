@@ -27,7 +27,7 @@ const ModalNewProfissional = ({
     const [fileURL, setFileURL] = React.useState('');
 
     const fileUpload = async (file) => {
-        const url = 'https://teste.integracps.com.br/imageUpload.php';
+        const url = 'https://app.integracps.com.br/imageUpload.php';
         const formData = new FormData();
         formData.append('userfile', file);
         const config = {headers: {'content-type': 'multipart/form-data'}};
@@ -115,6 +115,10 @@ const ModalNewProfissional = ({
         }
     }
 
+    React.useEffect(() => {
+        console.log("Profissional Selecionado", profissionalSelected);
+    }, [profissionalSelected])
+
     const onSubmit = async e => {
         e.preventDefault();
         setLoading(true);
@@ -150,7 +154,7 @@ const ModalNewProfissional = ({
                          </div>
                          <div className={'close_container'} onClick={() => {
                              close();
-                             selectProfissional();
+                             selectProfissional({});
                              setEditing(false);
                          }}>
                              <i className={'fa fa-times'}/>
@@ -166,18 +170,21 @@ const ModalNewProfissional = ({
                              urlName={'foto_url'}
                              fileName={'userfile'}/>
                          <InputText
+                             key={profissionalSelected.nome}
                              disabled={'nome' in profissionalSelected && !editing}
                              defaultValue={profissionalSelected.nome}
                              required={true}
                              name={'nome'} label={'Nome'}/>
                          <div className={'flex'}>
                              <InputText
+                                 key={profissionalSelected.telefone}
                                  disabled={'nome' in profissionalSelected && !editing}
                                  defaultValue={profissionalSelected.telefone}
                                  required={true}
                                  name={'telefone'}
                                  label={'Telefone'}/>
                              <InputText
+                                 key={profissionalSelected.ocupacao}
                                  disabled={'nome' in profissionalSelected && !editing}
                                  defaultValue={profissionalSelected.ocupacao}
                                  name={'ocupacao'}
@@ -185,11 +192,13 @@ const ModalNewProfissional = ({
                          </div>
                          <InputText
                              required={true}
+                             key={profissionalSelected.descricao}
                              disabled={'nome' in profissionalSelected && !editing}
                              defaultValue={profissionalSelected.descricao}
                              name={'descricao'} label={'Descrição'}/>
                          <InputText name={'email'}
                                     required={true}
+                                    key={profissionalSelected.email}
                                     disabled={'nome' in profissionalSelected && !editing}
                                     defaultValue={profissionalSelected.email}
                                     label={'Email'}

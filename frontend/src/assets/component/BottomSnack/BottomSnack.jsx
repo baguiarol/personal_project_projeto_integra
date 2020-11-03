@@ -37,7 +37,7 @@ const BottomSnack = props => {
             <div className={showing ? 'snackbar' : 'snackbar shown'}>
                 <p>
                 <span className={decideClassName(props.tipo)}>
-                    {props.tipo.toUpperCase()} ->
+                    {props.tipo.toUpperCase()} -{'>'}
                 </span>
                     <span>
                     {props.texto}

@@ -1,65 +1,56 @@
 import React from 'react';
 import './admin.sass';
-import AdministradorTopbar from "../../../assets/component/adm_topbar/adm_topbar";
-import CardAdministrativo from "../../../assets/component/card_administrativo/cardAdministrativo";
-import Fab from "../../../assets/component/Fab/Fab";
-import Actions from "../../../redux/actions/actions";
-import ModalTypes from "../../../assets/modal_types";
-import ModalNewAdministrativo
-    from "../../../assets/component/modals/administrativo/modal_new_administrativo/modal_new_administrativo";
-import {connect} from "react-redux";
-import administradorDAO from "../../../DAO/administradorDAO";
-import {Redirect, useHistory} from "react-router";
+import AdministradorTopbar from '../../../assets/component/adm_topbar/adm_topbar';
+import CardAdministrativo from '../../../assets/component/card_administrativo/cardAdministrativo';
+import Fab from '../../../assets/component/Fab/Fab';
+import { ActionsFn } from '../../../redux/actions/actions';
+import ModalTypes from '../../../assets/modal_types';
+import ModalNewAdministrativo from '../../../assets/component/modals/administrativo/modal_new_administrativo/modal_new_administrativo';
+import { useDispatch, useSelector } from 'react-redux';
+import administradorDAO from '../../../DAO/administradorDAO';
+import { Redirect, useHistory } from 'react-router';
 
-const AdministrativoPage = props => {
+const AdministrativoPage = () => {
+  const hist = useHistory();
 
-    const hist = useHistory();
+  const { mongoClient, userLogged, modalType, showModal } = useSelector(
+    (state) => state.general
+  );
+  const { administradores } = useSelector((state) => state.administradores);
+  const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        if (administradorDAO.db) {
-            administradorDAO.findAll().then(adms => {
-                props.setAdministrativo(adms);
-            });
-        }
-        if ('ocupacao' in props.userLogged) {
-            hist.push('/');
-        }
-    }, [props.client]);
+  React.useEffect(() => {
+    if (administradorDAO.db) {
+      administradorDAO.findAll().then((adms) => {
+        dispatch(ActionsFn.setAdministrativo(adms));
+      });
+    }
+    if ('ocupacao' in userLogged) {
+      hist.push('/');
+    }
+  }, [mongoClient, hist]);
 
-    return ('nome' in props.userLogged) ? (
-        <div>
-            <ModalNewAdministrativo
-                close={() => props.closeModal()}
-                show={props.showModal &&
-                props.modalType === ModalTypes.adicionarAdministrador}
-            />
-            <AdministradorTopbar pageSelected={'administrativo'}/>
-            <div className={'container_adms'}>
-                {
-                    props.administradores.map((adm, index) => (
-                        <CardAdministrativo key={index}  administrador={adm} />
-                    ))
-                }
-            </div>
-            <Fab onClick={() => {
-                props.openModal(ModalTypes.adicionarAdministrador);
-            }} />
-        </div>
-    ) : <Redirect to={'/'} />
-}
+  return 'nome' in userLogged ? (
+    <div>
+      <ModalNewAdministrativo
+        close={() => dispatch(ActionsFn.closeModal())}
+        show={showModal && modalType === ModalTypes.adicionarAdministrador}
+      />
+      <AdministradorTopbar pageSelected={'administrativo'} />
+      <div className={'container_adms'}>
+        {administradores.map((adm, index) => (
+          <CardAdministrativo key={index} administrador={adm} />
+        ))}
+      </div>
+      <Fab
+        onClick={() => {
+          dispatch(ActionsFn.openModal(ModalTypes.adicionarAdministrador));
+        }}
+      />
+    </div>
+  ) : (
+    <Redirect to={'/'} />
+  );
+};
 
-const mapStateToProps = state => ({
-    showModal: state.general.showModal,
-    modalType: state.general.modalType,
-    client: state.general.mongoClient,
-    userLogged: state.general.userLogged,
-    administradores: state.administradores.administradores,
-});
-
-const mapDispatchToProps = dispatch => ({
-    openModal: open => dispatch({type: Actions.showModal, payload: open}),
-    closeModal: () => dispatch({type: Actions.closeModal}),
-    setAdministrativo: adms => dispatch({type: Actions.setAdministrativo, payload: adms})
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdministrativoPage);
+export default AdministrativoPage;

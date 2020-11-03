@@ -15,13 +15,13 @@ const Turno = props => {
     }, [props.profissionais]);
 
     const optionsTurno = [{
-        label: '08:00h às 13:00h', value: '08:00h às 13:00h',
+        label: '09:00h às 13:00h', value: '09:00h às 13:00h', horaInicial: 9, horaFinal: 13,
     }, {
-        label: '14:00h às 18:00h', value: '14:00h às 18:00h',
+        label: '14:00h às 18:00h', value: '14:00h às 18:00h', horaInicial: 14, horaFinal: 18,
     }, {
-        label: '15:00h às 19:00h', value: '15:00h às 19:00h',
+        label: '15:00h às 19:00h', value: '15:00h às 19:00h', horaInicial: 15, horaFinal: 19,
     }, {
-        label: '16:00h às 20:00h', value: '16:00h às 20:00h',
+        label: '16:00h às 20:00h', value: '16:00h às 20:00h', horaInicial: 16, horaFinal: 20,
     }];
 
     return (
@@ -29,12 +29,30 @@ const Turno = props => {
             <div className={'select_profissionais_container'}>
                 <Select
                     placeholder={'Profissional'}
+                    onChange={e => props.selectProf(e.value)}
                     classNamePrefix={'Select'}
                     options={profissionaisOptions}/>
                 <h2>Duração do Turno</h2>
                 <Select
+                    onChange={e => {
+                        props.setHoraFinal(e.horaFinal);
+                        props.setHoraInicial(e.horaInicial);
+                    }}
                     placeholder={'Selecione o Horário do Turno'}
                     options={optionsTurno}/>
+                <Select name={'sit_pagamento'}
+                        classNamePrefix={'Select'}
+                        options={
+                            [{
+                                label: 'Pago',
+                                value: 0,
+                            }, {
+                                label: 'Pendente',
+                                value: 1,
+                            }, {
+                                label: 'Em aberto',
+                                value: 2,
+                            }]}/>
                 <div className={'resume_container'}>
                     <div>
                         <h2>Valor/Hora</h2>

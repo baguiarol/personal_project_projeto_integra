@@ -1,70 +1,111 @@
 import React from 'react';
-import "./styles.sass";
+import './styles.sass';
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import Button from "../button/button";
-import Actions from "../../../redux/actions/actions";
-import {useHistory} from "react-router";
-import Menu from "./Menu/Menu";
+import { connect, useDispatch, useSelector } from 'react-redux';
+import Button from '../button/button';
+import Actions, { ActionsFn } from '../../../redux/actions/actions';
+import Menu from './Menu/Menu';
 
-const ClienteTopbar = props => {
+const ClienteTopbar = (props) => {
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
-    const hist = useHistory();
+  const { salas, salaSelected } = useSelector((state) => state.salas);
+  const dispatch = useDispatch();
 
-    const logout = () => {
-        props.setUserLogged({});
-        localStorage.removeItem('email');
-        localStorage.removeItem('pwd');
-        hist.push('/');
-    };
+  React.useEffect(() => {
+    if (salas.length > 0) {
+      dispatch(ActionsFn.selectSala(salas[0]));
+      console.log(salas[0]);
+    }
+  }, [salas]);
 
-    const [menuOpen, setMenuOpen] = React.useState(false)
-
-    return (
-        <div className={'topbar_container'}>
-            <div className={'img_container'}>
-                <img
-                    alt={'logo'}
-                    src={require('../../integra_logo.png')} />
-            </div>
-            <div className={'titulo'}>
-                <h2>Portal da Equipe</h2>
-                <h4>Agendamentos</h4>
-            </div>
-            <div className={'user_data'}>
-                <div>
-                    <h2>{props.userLogged ? props.userLogged.nome : 'Catherine Torres'}</h2>
-                    <h4>{props.userLogged ? props.userLogged.ocupacao : 'Fisioterapeuta'}</h4>
-                </div>
-            </div>
-            <img
-                alt={'profile_pic'}
-                className={'profile_pic'} src={
-                    props.userLogged ?
-                        props.userLogged.foto_url : 'https://randomuser.me/api/portraits/women/43.jpg'} />
-                        <Button
-                            onClick={() => {
-                                // logout();
-                                setMenuOpen(!menuOpen)
-                            }}
-                            width={'5%'}
-                            text={<i className={'fas ' + (menuOpen ? 'fa-chevron-up' : 'fa-chevron-down')}/>}
-                            className={'log-off'}/>
-                            <Menu menuOpen={menuOpen} />
+  return (
+    <div className={'topbar_container'}>
+      <div className={'content'}>
+        <div className={'img_container'}>
+          <img
+            alt={'logo'}
+            src={
+              window.innerWidth > 641
+                ? require('../../integra_logo.png')
+                : require('../../integra_g.png')
+            }
+          />
         </div>
-    )
-}
+        <div className={'titulo'}>
+          <h2>Portal da Equipe</h2>
+          <h4>Agendamentos</h4>
+        </div>
+        <div className={'user_data'}>
+          <div>
+            <h2>
+              {props.userLogged ? props.userLogged.nome : 'Catherine Torres'}
+            </h2>
+            <h4>
+              {props.userLogged ? props.userLogged.ocupacao : 'Fisioterapeuta'}
+            </h4>
+          </div>
+        </div>
+        <img
+          alt={'profile_pic'}
+          className={'profile_pic'}
+          src={
+            props.userLogged
+              ? props.userLogged.foto_url
+              : 'https://randomuser.me/api/portraits/women/43.jpg'
+          }
+        />
+        <Button
+          onClick={() => {
+            setMenuOpen(!menuOpen);
+          }}
+          width={'5%'}
+          text={
+            <i
+              className={
+                'fas ' + (menuOpen ? 'fa-chevron-up' : 'fa-chevron-down')
+              }
+            />
+          }
+          className={'log-off'}
+        />
+      </div>
+      <div>
+        <div className={'salas_container'}>
+          {salas.map((sala) => (
+            <div
+              className={
+                'nome' in salaSelected
+                  ? salaSelected._id.toString() === sala._id.toString()
+                    ? 'selected'
+                    : ''
+                  : ''
+              }
+              onClick={() => {
+                dispatch(ActionsFn.selectSala(sala));
+              }}
+            >
+              <p>{sala.nome}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Menu menuOpen={menuOpen} />
+    </div>
+  );
+};
 
 ClienteTopbar.propTypes = {
-    usuario: PropTypes.object,
-}
+  usuario: PropTypes.object,
+};
 
-const mapStateToProps = state => ({
-    userLogged: state.general.userLogged,
+const mapStateToProps = (state) => ({
+  userLogged: state.general.userLogged,
 });
 
-const mapDispatchToProps = dispatch => ({
-    setUserLogged: user => dispatch({type: Actions.setUserLogged, payload: user}),
+const mapDispatchToProps = (dispatch) => ({
+  setUserLogged: (user) =>
+    dispatch({ type: Actions.setUserLogged, payload: user }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClienteTopbar);

@@ -1,8 +1,9 @@
 @import "../../../assets/variables.sass"
 
 .topbar_container
-  display: flex
   box-shadow: 0 5px 6px rgba(0,0,0,0.1)
+  & > div
+    display: flex
   .titulo
     padding-left: 20px
     flex-grow: 1
@@ -30,7 +31,7 @@
     border-radius: 0 500px 500px 0
     img
       margin: auto
-      width: 75%
+      width: 70%
   .user_data, .profile_pic
     margin: auto 0
   .profile_pic
@@ -43,12 +44,33 @@
     padding-right: 25px
     h3, h4
       text-align: right
+  .salas_container
+    display: none
 
 //Para celulares
 @media (max-width: 641px)
   .topbar_container
-    background-color: $primaryBlue
+    background-color: #FFF
     margin-bottom: 5%
+    .content
+      padding: 10px 0
+    .salas_container
+      position: relative
+      overflow: paged-x
+      overflow-x: auto
+      margin: 0
+      width: 100%
+      display: flex
+      & > div
+        width: 200px
+        @include putTransition(.3s)
+        border-bottom: 5px solid #FFF
+        &.selected
+          border-bottom: 5px solid $primaryBlue
+      p
+        padding: 4px 0
+        text-align: center
+        width: 100px
     .titulo
       display: none
     .user_data, .profile_pic
@@ -56,6 +78,14 @@
     .img_container
       margin: auto
       padding: 0
+      background-color: transparent
+    .log-off
+      margin: 0
+      margin-right: 15px
+      position: static
+      i
+        color: $primaryBlue
       img
+        margin-right: -15px
         padding: 20% 5%
-        width: 150px
+        width: 100%

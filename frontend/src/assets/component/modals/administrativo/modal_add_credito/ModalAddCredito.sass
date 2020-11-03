@@ -1,0 +1,20 @@
+@import "../../../../variables"
+
+.subtitle
+  margin: 3px
+  color: #999
+  font-size: 18px
+.add_credito_body
+  display: flex
+  flex-direction: column
+  .counter
+    display: flex
+    margin: 0 auto
+    h1, h2
+      margin: auto 10px
+      i
+        color: #999
+        cursor: pointer
+        @include putTransition()
+        &:hover
+          color: #333

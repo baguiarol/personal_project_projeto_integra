@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 
 const FileInput = props => {
 
-    const url = 'https://teste.integracps.com.br/uploads/';
+    const url = 'https://app.integracps.com.br/uploads/';
 
     let realUploadButton = React.createRef();
     const [fileName, setFileName] = React.useState('Nenhum arquivo selecionado.');

@@ -30,7 +30,7 @@ const ModalNewAdministrativo = ({
     }, []);
 
     const fileUpload = async (file) => {
-        const url = 'https://teste.integracps.com.br/imageUpload.php';
+        const url = 'https://app.integracps.com.br/imageUpload.php';
         const formData = new FormData();
         formData.append('userfile', file);
         const config = {headers: {'content-type': 'multipart/form-data'}};

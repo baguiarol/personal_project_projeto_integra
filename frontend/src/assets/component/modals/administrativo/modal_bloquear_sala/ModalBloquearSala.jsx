@@ -17,7 +17,7 @@ const ModalBloquearSala = props => {
     }
 
     const [salasOpcoes, setSalasOpcoes] = React.useState([])
-    const [horaInicio, setHoraInicio] = React.useState(fillHours())
+    const [horaInicio] = React.useState(fillHours())
 
     React.useEffect(() => {
         let array = []
@@ -25,7 +25,7 @@ const ModalBloquearSala = props => {
             array.push({label: sala.nome, value: sala._id.toString()})
         })
         setSalasOpcoes(array)
-    }, [])
+    }, [props.salas])
 
     return (
         <ModalParent

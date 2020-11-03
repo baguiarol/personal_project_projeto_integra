@@ -1,3 +1,5 @@
+@import "../../../../assets/variables"
+
 .profissional_list_obj
     box-shadow: 0 3px 5px rgba(0,0,0,.2)
     border-radius: 10px
@@ -18,3 +20,14 @@
     .cep
       font-size: 12px
       color: #888
+    .creditos_container
+      p
+        font-size: 14px
+      *
+        margin: 0
+      p:last-child
+        @include putTransition()
+        color: #999
+        cursor: pointer
+        &:hover
+          color: #333

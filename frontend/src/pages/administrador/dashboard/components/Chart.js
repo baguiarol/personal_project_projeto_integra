@@ -1,17 +1,16 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import PropTypes from 'prop-types'
 import moment from "moment";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
 const Chart = props => {
 
-    const [agendamentosNaoCancelados, setAgendamentosNaoCancelados] = React.useState([]);
+    // const [agendamentosNaoCancelados, setAgendamentosNaoCancelados] = React.useState([]);
 
     React.useEffect(() => {
 
-        setAgendamentosNaoCancelados(props.agendamentos.filter(value => !value.cancelado));
+        // setAgendamentosNaoCancelados(props.agendamentos.filter(value => !value.cancelado));
         //Cria array com datas
         let array = [];
         let date = moment("2020/08/01", "YYYY/MM/DD");
@@ -63,7 +62,7 @@ const Chart = props => {
         let scrollbarX = new am4charts.XYChartScrollbar();
         scrollbarX.series.push(series);
         chart.scrollbarX = scrollbarX;
-    }, []);
+    }, [props.agendamentos]);
 
     return (
         <div className={'agendamentos_chart_container'}>
@@ -78,6 +77,4 @@ const mapStateToProps = state => ({
 
 })
 
-const mapDispatchToProps = dispatch => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chart)
+export default connect(mapStateToProps)(Chart)

@@ -10,10 +10,10 @@ const TipoUsuario = props => {
 
     const [loading, setLoading] = React.useState(true)
 
-    const checkAdm = async () => {
-        setLoading(true)
-        return administradorDAO.find({email: props.userLogged.email})
-    }
+    const checkAdm = React.useCallback(async () => {
+            setLoading(true)
+            return administradorDAO.find({email: props.userLogged.email})
+        }, [props.userLogged]);
 
     React.useEffect(() => {
         checkAdm().then(res => {
@@ -22,7 +22,7 @@ const TipoUsuario = props => {
             }
             setLoading(false)
         })
-    }, [])
+    }, [checkAdm, story])
 
     if (loading) {
         return (<div>
