@@ -9,6 +9,7 @@ const LabelSelect = (props) => {
       <h3 className={'label'}>{props.label}</h3>
       <Select
         name={props.name}
+        onChange={props.onChange}
         isMulti={props.isMulti}
         key={''}
         options={props.options}
@@ -20,6 +21,7 @@ const LabelSelect = (props) => {
 LabelSelect.propTypes = {
   label: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
+  onChange: PropTypes.func,
   isMulti: PropTypes.bool,
   name: PropTypes.string,
 };

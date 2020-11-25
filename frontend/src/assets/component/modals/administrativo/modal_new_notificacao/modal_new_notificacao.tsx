@@ -12,6 +12,7 @@ import './modal_new_notificacao.sass';
 import LabelSelect from '../../../LabelSelect/LabelSelect';
 import { useSelector } from 'react-redux';
 import NotificacaoDAO from '../../../../../DAO/NotificacaoDAO';
+import { ActionsFn } from '../../../../../redux/actions/actions';
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 
@@ -207,7 +208,6 @@ const Toolbar = React.forwardRef(
 );
 
 const ModalNewNotificacao = (props: { show; close }) => {
-
   const [loading, setLoading] = React.useState(false);
 
   const onSubmit = async (e) => {
@@ -227,11 +227,13 @@ const ModalNewNotificacao = (props: { show; close }) => {
     console.log(notification);
     try {
       await NotificacaoDAO.insert(notification);
-    } catch(e) {
+      const notificacoes = await NotificacaoDAO.findAll();
+      dispatch(ActionsFn.setNotifications(notificacoes));
+    } catch (e) {
       alert(e);
       console.log(e);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   const editor: any = React.useMemo(() => withReact(createEditor()), []);
@@ -258,6 +260,7 @@ const ModalNewNotificacao = (props: { show; close }) => {
   };
 
   const [profissionaisSelect, setProfissionaisSelect] = React.useState([]);
+  const [profissionaisSelected, setProfissionaisSelected] = React.useState([]);
 
   React.useEffect(() => {
     setProfissionaisSelect(optionsProfissionais());
@@ -310,6 +313,15 @@ const ModalNewNotificacao = (props: { show; close }) => {
             isMulti={true}
             style={{ marginBottom: 25 }}
             label={'Enviar Para:'}
+            onChange={(e) => {
+              let all = false;
+              e.forEach(({ value }) => {
+                if (value === 'all') {
+                  all = true;
+                }
+              });
+              console.log(e);
+            }}
             name={'enviar_para'}
             options={profissionaisSelect}
           />

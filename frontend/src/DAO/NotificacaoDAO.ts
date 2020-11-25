@@ -20,6 +20,7 @@ interface NotificacaoDAO {
   update: (query: any, changes: any) => any;
   insert: (notification: any) => any;
   ciente: (notification_id: any, user_id: any) => any;
+  filterNotificationsByUser: (notification: Array<Notificacao>, userLogged: any) => Array<Notificacao>
 }
 
 const NotificacaoDAO: NotificacaoDAO = {
@@ -51,6 +52,20 @@ const NotificacaoDAO: NotificacaoDAO = {
         .updateOne({ _id: notification_id }, { $push: { visto_por: user_id } });
     }
   },
+  filterNotificationsByUser(
+      notifications,
+      userLogged
+  ): Array<Notificacao> {
+    return notifications.filter((notification: Notificacao) => {
+      let visto = false;
+      notification.visto_por.forEach((usuario_id: any) => {
+        if (usuario_id.toString() === userLogged._id.toString()) {
+          visto = true;
+        }
+      });
+      return !visto;
+    });
+  }
 };
 
 export default NotificacaoDAO;

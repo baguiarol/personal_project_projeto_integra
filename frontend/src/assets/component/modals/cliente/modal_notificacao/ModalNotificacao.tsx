@@ -1,11 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ModalParent from '../../modal_parent/modal';
 import { Slate, Editable, withReact } from 'slate-react';
 import { createEditor } from 'slate';
 import NotificacaoDAO, { Notificacao } from '../../../../../DAO/NotificacaoDAO';
 import Button from '../../../button/button';
 import { RootState } from '../../../../../redux/storeTypes';
+import {ActionsFn} from "../../../../../redux/actions/actions";
 
 const ModalNotificacao = ({
   open,
@@ -52,6 +53,7 @@ const ModalNotificacao = ({
   );
 
   const { userLogged } = useSelector((state: RootState) => state.general);
+  const dispatch = useDispatch()
 
   return (
     <ModalParent
@@ -93,6 +95,8 @@ const ModalNotificacao = ({
                 notificationSelected._id,
                 userLogged._id
               );
+              const notificacoes = await NotificacaoDAO.findAll();
+              dispatch(ActionsFn.setNotifications(notificacoes));
               setLoading(false);
             }}
             loading={loading}

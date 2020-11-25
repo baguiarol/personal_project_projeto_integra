@@ -8,6 +8,7 @@ import Menu from './Menu/Menu';
 import NotificationsMenu from './NotificationsMenu/NotificationsMenu';
 import ModalNotificacao from '../modals/cliente/modal_notificacao/ModalNotificacao';
 import ModalTypes from '../../modal_types';
+import NotificacaoDAO from '../../../DAO/NotificacaoDAO';
 
 const ClienteTopbar = (props) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -16,7 +17,7 @@ const ClienteTopbar = (props) => {
   );
 
   const { salas, salaSelected } = useSelector((state) => state.salas);
-  const { modalType } = useSelector((state) => state.general);
+  const { modalType, userLogged } = useSelector((state) => state.general);
   const dispatch = useDispatch();
   const { notifications } = useSelector((state) => state.notifications);
   React.useEffect(() => {
@@ -45,20 +46,16 @@ const ClienteTopbar = (props) => {
         </div>
         <div className={'user_data'}>
           <div>
-            <h2>
-              {props.userLogged ? props.userLogged.nome : 'Catherine Torres'}
-            </h2>
-            <h4>
-              {props.userLogged ? props.userLogged.ocupacao : 'Fisioterapeuta'}
-            </h4>
+            <h2>{userLogged ? userLogged.nome : 'Catherine Torres'}</h2>
+            <h4>{userLogged ? userLogged.ocupacao : 'Fisioterapeuta'}</h4>
           </div>
         </div>
         <img
           alt={'profile_pic'}
           className={'profile_pic'}
           src={
-            props.userLogged
-              ? props.userLogged.foto_url
+            userLogged
+              ? userLogged.foto_url
               : 'https://randomuser.me/api/portraits/women/43.jpg'
           }
         />
@@ -69,12 +66,20 @@ const ClienteTopbar = (props) => {
             <React.Fragment>
               <div
                 className={
-                  notifications.length > 0
+                  NotificacaoDAO.filterNotificationsByUser(
+                    notifications,
+                    userLogged
+                  ).length > 0
                     ? 'notifications'
                     : 'notifications hidden'
                 }
               >
-                {notifications.length}
+                {
+                  NotificacaoDAO.filterNotificationsByUser(
+                    notifications,
+                    userLogged
+                  ).length
+                }
               </div>
               <i className={'fas fa-bell'} />
             </React.Fragment>
@@ -98,8 +103,9 @@ const ClienteTopbar = (props) => {
       </div>
       <div>
         <div className={'salas_container'}>
-          {salas.map((sala) => (
+          {salas.map((sala, index) => (
             <div
+              key={'sala_' + index}
               className={
                 'nome' in salaSelected
                   ? salaSelected._id.toString() === sala._id.toString()
@@ -131,13 +137,4 @@ ClienteTopbar.propTypes = {
   usuario: PropTypes.object,
 };
 
-const mapStateToProps = (state) => ({
-  userLogged: state.general.userLogged,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setUserLogged: (user) =>
-    dispatch({ type: Actions.setUserLogged, payload: user }),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClienteTopbar);
+export default ClienteTopbar;

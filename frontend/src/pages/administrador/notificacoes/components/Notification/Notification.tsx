@@ -34,7 +34,22 @@ const Notification = (props: { data: Notificacao }) => {
         </div>
         <div className={'left_side'}>
           <h3>Enviado a:</h3>
-          <p>{props.data.enviar_para === 'all' ? 'Todos' : <></>}</p>
+          <p>
+            {props.data.enviar_para === 'all' ? (
+              'Todos'
+            ) : props.data.enviar_para.length > 0 ? (
+              props.data.enviar_para.map((user_id) => (
+                <ProfissionalSnack
+                  profissional={clienteDAO.getProfissionalById(
+                    profissionais,
+                    user_id
+                  )}
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </p>
         </div>
         <div
           className={open ? 'indicator opened' : 'indicator'}
