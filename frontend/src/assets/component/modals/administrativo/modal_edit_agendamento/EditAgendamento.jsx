@@ -5,14 +5,14 @@ import { connect, useDispatch } from 'react-redux';
 import CheckBox from '../../../checkbox/checkbox';
 import Moment from 'moment/min/moment-with-locales.min';
 import './EditAgendamento.sass';
-import reservaDAO, { getStringDate } from '../../../../../DAO/reservaDAO';
+import reservaDAO from '../../../../../DAO/reservaDAO';
 import Actions from '../../../../../redux/actions/actions';
 import Select from 'react-select';
 import { extendMoment } from 'moment-range';
 import logDAO from '../../../../../DAO/logDAO';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import {EditCredito} from "../modal_add_credito/ModalAddCredito";
+import { EditCredito } from '../modal_add_credito/ModalAddCredito';
 
 const moment = extendMoment(Moment);
 
@@ -161,77 +161,26 @@ const ModalEditAgendamento = (props) => {
                 type={'button'}
                 text={'Trocar Sala'}
                 onClick={async () => {
-                  if (editarSala) {
-                    let agendamentos = reservaDAO.getAgendamentosFromSala(
-                      props.agendamentos,
-                      { nome: editarSala.label }
-                    );
-                    let r2 = moment.range(
-                      new Date(
-                        getStringDate(
-                          new Date(props.agendamentoSelected.data),
-                          props.agendamentoSelected.hora_inicio
-                        )
-                      ),
-                      new Date(
-                        getStringDate(
-                          new Date(props.agendamentoSelected.data),
-                          props.agendamentoSelected.hora_fim
-                        )
-                      )
-                    );
-                    console.log('Range ', r2);
-                    for (let agendamento of agendamentos) {
-                      let r1 = moment.range(
-                        new Date(
-                          getStringDate(
-                            new Date(agendamento.data),
-                            agendamento.hora_inicio
-                          )
-                        ),
-                        new Date(
-                          getStringDate(
-                            new Date(agendamento.data),
-                            agendamento.hora_fim
-                          )
-                        )
+                  await reservaDAO.trocaSala(
+                    props.agendamentos,
+                    props.agendamentoSelected,
+                    props.userLogged,
+                    editarSala,
+                    () => {
+                      showToastLoading(
+                        'Carregando: Trocando ' +
+                          props.agendamentoSelected.profissional.nome +
+                          ' de sala'
                       );
-                      if (r1.overlaps(r2) && !agendamento.cancelado) {
-                        alert(
-                          'O horário já se encontra reservado na sala requerida.'
-                        );
-                        setLoading(false);
-                        return;
-                      }
+                    },
+                    () => {
+                      showToastSuccess(
+                        'Sucesso na troca da ' +
+                          props.agendamentoSelected.profissional.nome +
+                          ' de sala'
+                      );
                     }
-                    showToastLoading(
-                      'Carregando: Trocando ' +
-                        props.agendamentoSelected.profissional.nome +
-                        ' de sala'
-                    );
-                    await logDAO.create({
-                      usuario: props.userLogged,
-                      log: `Trocou sala da reserva ${
-                        props.agendamentoSelected.profissional.nome
-                      } ${moment(props.agendamentoSelected.data).format(
-                        'DD-MM-YYYY'
-                      )} ${props.agendamentoSelected.hora_inicio}h-${
-                        props.agendamentoSelected.hora_fim
-                      }h ${props.agendamentoSelected.sala.nome} para sala ${
-                        editarSala.label
-                      }`,
-                      data_hora: new Date(),
-                    });
-                    await reservaDAO.editaReserva(
-                      props.agendamentoSelected._id,
-                      { sala_id: editarSala.id }
-                    );
-                    showToastSuccess(
-                      'Sucesso na troca da ' +
-                        props.agendamentoSelected.profissional.nome +
-                        ' de sala'
-                    );
-                  }
+                  );
                 }}
               />
               <h2>Execução</h2>
@@ -538,7 +487,7 @@ const ModalEditAgendamento = (props) => {
               />
             </div>
           }
-          footer={<div className={'footer footer_edit_agendamento'}/>}
+          footer={<div className={'footer footer_edit_agendamento'} />}
         />
         <ToastContainer />
       </React.Fragment>

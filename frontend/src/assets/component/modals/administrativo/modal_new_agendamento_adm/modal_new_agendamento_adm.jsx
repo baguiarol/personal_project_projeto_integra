@@ -33,9 +33,11 @@ const ModalAgendamentoAdm = (props) => {
       sala_id: salaSelected._id,
       data: moment(dateSelected).toDate(),
       cancelado: false,
-      pago: form.sit_pagamento.value === 0,
+      pago: form.sit_pagamento.value === '0',
       executado: false,
     };
+
+    console.log(data);
 
     if (selectedPage === 'Hora Avulsa') {
       data = {

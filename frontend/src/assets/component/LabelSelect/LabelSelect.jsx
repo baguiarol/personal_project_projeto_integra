@@ -7,7 +7,12 @@ const LabelSelect = (props) => {
   return (
     <div className={'labelSelect'} style={props.style}>
       <h3 className={'label'}>{props.label}</h3>
-      <Select key={''} options={props.options} />
+      <Select
+        name={props.name}
+        isMulti={props.isMulti}
+        key={''}
+        options={props.options}
+      />
     </div>
   );
 };
@@ -15,6 +20,8 @@ const LabelSelect = (props) => {
 LabelSelect.propTypes = {
   label: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
+  isMulti: PropTypes.bool,
+  name: PropTypes.string,
 };
 
 export default LabelSelect;

@@ -1,0 +1,21 @@
+@import "../../../../variables"
+
+.notification_container
+  display: flex
+  flex-direction: column
+  padding: 5px 35px 10px 10px
+  @include putTransition()
+  cursor: pointer
+  &:hover
+    background-color: #F8F8F8
+  p
+    margin: 0 0 5px 0
+    color: #CCC
+    font-size: 11px
+  .text
+    font-size: 16px
+    max-width: 220px
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    color: #666

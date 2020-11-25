@@ -1,11 +1,15 @@
+// eslint-disable-this-file @typescript-eslint/ban-ts-comment
+
 import logDAO from './logDAO';
-import Moment from 'moment/min/moment-with-locales';
-import { extendMoment } from 'moment-range';
+import Moment from 'moment';
 import salaDAO, { Sala } from './salaDAO';
 import clienteDAO, { Profissional } from './clienteDAO';
 import { RemoteMongoDatabase } from 'mongodb-stitch-browser-sdk';
-
+import { extendMoment } from 'moment-range';
 const COLLECTION = 'reservas';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const moment = extendMoment(Moment);
 
 export const getStringDate = (date, hour) =>
@@ -24,17 +28,6 @@ export interface Reserva {
   sala?: Sala;
 }
 
-export const checkIfIsBetween = (
-  actualDateBegin,
-  actualDateEnds,
-  dateOne,
-  dateTwo
-) => {
-  const one = moment.range(actualDateBegin, actualDateEnds);
-  const two = moment.range(dateOne, dateTwo);
-  return one.overlaps(two);
-};
-
 const OverlappingRanges = (r1_start, r1_finish, r2_start, r2_finish) => {
   const [arr1, arr2] = [[], []];
   for (let i = r1_start; i < r1_finish; i++) {
@@ -45,9 +38,9 @@ const OverlappingRanges = (r1_start, r1_finish, r2_start, r2_finish) => {
     // @ts-ignore
     arr2.push(+i);
   }
-    console.log(arr1, arr2);
+  console.log(arr1, arr2);
 
-    for (const el of arr1) {
+  for (const el of arr1) {
     if (arr2.includes(el)) {
       return true;
     }
@@ -55,35 +48,7 @@ const OverlappingRanges = (r1_start, r1_finish, r2_start, r2_finish) => {
   return false;
 };
 
-interface reservaInterface {
-  db: null | RemoteMongoDatabase;
-  setDb: any;
-  create: any;
-  createHoraAvulsa: any;
-  delete: any;
-  find: any;
-  findAll: any;
-  findThisMonth: any;
-  findAllInClient: any;
-  update: any;
-  cancelaReserva: any;
-  cancelaMuitasReservas: any;
-  cancelaParteDaReserva: any;
-  getAgendamentosFromSala: (
-    agendamentos: Array<Reserva>,
-    sala: Sala
-  ) => Array<Reserva>;
-  pagaReserva: any;
-  editaReserva: any;
-  getAgendamentosById: any;
-  putProfissional: any;
-  executaReserva: any;
-  prepareReservaWithAllData: any;
-  comecaReserva: any;
-  findReservaDeCliente: any;
-}
-
-const reservaDAO: reservaInterface = {
+const reservaDAO: any = {
   db: null,
   setDb(db: RemoteMongoDatabase) {
     this.db = db;
@@ -224,11 +189,118 @@ const reservaDAO: reservaInterface = {
     reservaDAO.putProfissional(arr, hash);
     return arr[0];
   },
+  async trocaSala(
+    allAgendamentos: Array<Reserva>,
+    agendamentoSelected: Reserva,
+    userLogged: any,
+    editarSala: { id: any; label: string },
+    loadingCallback: () => void,
+    successCallback: () => void
+  ) {
+    if (editarSala) {
+      const agendamentos = reservaDAO.getAgendamentosFromSala(allAgendamentos, {
+        nome: editarSala.label,
+      });
+      const r2 = moment.range(
+        new Date(
+          getStringDate(
+            new Date(agendamentoSelected.data),
+            agendamentoSelected.hora_inicio
+          )
+        ),
+        new Date(
+          getStringDate(
+            new Date(agendamentoSelected.data),
+            agendamentoSelected.hora_fim
+          )
+        )
+      );
+      for (const agendamento of agendamentos) {
+        const r1 = moment.range(
+          new Date(
+            getStringDate(new Date(agendamento.data), agendamento.hora_inicio)
+          ),
+          new Date(
+            getStringDate(new Date(agendamento.data), agendamento.hora_fim)
+          )
+        );
+        if (r1.overlaps(r2) && !agendamento.cancelado) {
+          if (
+            window.confirm(
+              'O horário já se encontra reservado na sala requerida. Deseja realizar uma troca?'
+            )
+          ) {
+            if (
+              agendamentoSelected.hora_fim - agendamentoSelected.hora_inicio ===
+              agendamento.hora_fim - agendamento.hora_inicio
+            ) {
+              const logString = `Trocou de sala da reserva ${
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                agendamentoSelected.profissional.nome
+              } ${moment(agendamentoSelected.data).format('DD-MM-YYYY')} ${
+                agendamentoSelected.hora_inicio
+              }h-${agendamentoSelected.hora_fim}h ${
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                agendamentoSelected.sala.nome
+                //@ts-ignore
+              } para sala ${editarSala.label} com ${
+                agendamento.profissional.nome
+              }.`;
+              loadingCallback();
+              await reservaDAO.editaReserva(agendamentoSelected._id, {
+                sala_id: editarSala.id,
+              });
+              await reservaDAO.editaReserva(agendamento._id, {
+                sala_id: agendamentoSelected.sala_id,
+              });
+              await logDAO.create({
+                usuario: userLogged,
+                log: logString,
+                data_hora: new Date(),
+              });
+              successCallback();
+            } else {
+              alert(
+                'As duas reservas precisam ser dos mesmos horários para realizar este tipo de troca.'
+              );
+            }
+            return;
+          } else {
+            return;
+          }
+        }
+      }
+      loadingCallback();
+      if ('profissional' in agendamentoSelected) {
+        await logDAO.create({
+          usuario: userLogged,
+          log: `Trocou sala da reserva ${
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            agendamentoSelected.profissional.nome
+          } ${moment(agendamentoSelected.data).format('DD-MM-YYYY')} ${
+            agendamentoSelected.hora_inicio
+          }h-${agendamentoSelected.hora_fim}h ${
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            agendamentoSelected.sala.nome
+          } para sala ${editarSala.label}`,
+          data_hora: new Date(),
+        });
+      }
+      await reservaDAO.editaReserva(agendamentoSelected._id, {
+        sala_id: editarSala.id,
+      });
+      successCallback();
+    }
+  },
   async findThisMonth(client) {
     return await client.callFunction('getAgendamentosCliente');
   },
   getAgendamentosById(agendamentos, agendamento_id): Reserva | {} {
-    let agendamentoSelected: Reserva | {} = {};
+    let agendamentoSelected: Reserva | any;
     agendamentos.forEach((agendamento) => {
       if (agendamento._id.toString() === agendamento_id.toString()) {
         agendamentoSelected = agendamento;
@@ -244,7 +316,10 @@ const reservaDAO: reservaInterface = {
     userLogged
   ) {
     try {
-      const auxReserva = reservaDAO.getAgendamentosById(reservas, reserva_id);
+      const auxReserva: Reserva = reservaDAO.getAgendamentosById(
+        reservas,
+        reserva_id
+      );
       if ('hora_inicio' in auxReserva && 'profissional' in auxReserva) {
         if (
           horaInicio === auxReserva.hora_inicio &&
@@ -253,8 +328,10 @@ const reservaDAO: reservaInterface = {
           reservaDAO.editaReserva(reserva_id, { cancelado: true });
           await logDAO.create({
             usuario: userLogged,
+            // @ts-ignore
             log: `Cancelou reserva ${auxReserva.profissional.nome} ${moment(
               auxReserva.data
+              // @ts-ignore
             ).format('DD-MM-YYYY')} COMPLETA ${auxReserva.sala.nome}`,
             data_hora: new Date(),
           });
@@ -265,9 +342,11 @@ const reservaDAO: reservaInterface = {
           }
           await logDAO.create({
             usuario: userLogged,
+            //@ts-ignore
             log: `Cancelou reserva ${auxReserva.profissional.nome} ${moment(
               auxReserva.data
             ).format('DD-MM-YYYY')} ${horaInicio}h-${horaFim}h ${
+              //@ts-ignore
               auxReserva.sala.nome
             }`,
             data_hora: new Date(),
@@ -323,13 +402,6 @@ const reservaDAO: reservaInterface = {
         failCallback();
       } else {
         for (const agendamento of agendamentos) {
-          // Checagem de ERRO
-          const dateInicioAgendamento = new Date(
-              getStringDate(new Date(agendamento.data), agendamento.hora_inicio)
-            ),
-            dateFimAgendamento = new Date(
-              getStringDate(new Date(agendamento.data), agendamento.hora_fim)
-            );
           if (
             !agendamento.cancelado &&
             agendamento.sala_id.toString() === data.sala_id.toString()

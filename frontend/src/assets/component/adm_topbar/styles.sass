@@ -5,7 +5,6 @@
     object-fit: cover
   .tabs
     flex-grow: 1
-    display: flex
     justify-content: center
     .tab
       display: flex
@@ -22,6 +21,9 @@
       &:hover:not(.selected)
         border-bottom: 2px solid $grey
 .topbar_container_adm
+  display: flex
+  .responsive_menu
+    display: none
   .sidebar_adm
     position: fixed
     top: 0
@@ -30,6 +32,7 @@
     padding-top: 80px
     width: 350px
     background-color: #FFFFFF
+    display: block
     z-index: 1000
     box-shadow: 2px 3px 6px rgba(0,0,0,0.1)
     @include putTransition(.3s)
@@ -84,11 +87,14 @@
       width: 24px
       margin: auto 0
 
-@media (max-width: 655px)
+@media (max-width: 641px)
   .topbar_container_adm
     margin-bottom: 20px
+    background-color: $primaryBlue
     .sidebar_adm
       display: none
+    .responsive_menu
+      display: block
     .img_container
       display: none
     .img_container_resp
@@ -106,12 +112,12 @@
       left: 230px
     .user_data
       font-size: 7.5pt
-  .log-off
-    position: absolute
-    top: 13px
-    right: 30px
-    i
-      color: #FFF
+    .log-off
+      position: absolute
+      top: 13px
+      right: 30px
+      i
+        color: #FFF
   .profissionais_container
     display: inline-block
     margin-left: 10%

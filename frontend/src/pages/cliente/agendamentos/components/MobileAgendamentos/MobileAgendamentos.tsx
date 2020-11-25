@@ -1,4 +1,5 @@
-import moment from 'moment/min/moment-with-locales.min';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -28,17 +29,11 @@ const MobileAgendamentos = () => {
   const [selectedDate, selectDate] = React.useState(moment(new Date()));
 
   const dispatch = useDispatch();
-  const {
-    userLogged,
-    showModal,
-    database,
-    mongoClient,
-    modalType,
-  } = useSelector((state: { general }) => state.general);
-  const { agendamentos } = useSelector(
+  const { userLogged } = useSelector((state: { general }) => state.general);
+  const { agendamentos, fetchedAgendamentos } = useSelector(
     (state: { agendamentos }) => state.agendamentos
   );
-  const { salas, salaBloqueios, salaSelected } = useSelector(
+  const { salaSelected } = useSelector(
     (state: { salas; salaBloqueios }) => state.salas
   );
 
@@ -56,26 +51,68 @@ const MobileAgendamentos = () => {
         {agendamentosDaSalaEDia.map((agendamento) => (
           <Reserva reserva={agendamento} />
         ))}
-        <div
-          onClick={() => {
-            const dateF = dateSelected.toDate();
-            dateF.setHours(12);
-            dispatch(ActionsFn.selectDate(dateF));
-            dispatch(ActionsFn.openModal(ModalTypes.reservaCliente));
-          }}
-          className={'add'}
-        >
-          <i className={'fas fa-plus'} />
-        </div>
+        {moment(dateSelected).isBefore(new Date(), 'day') ||
+        !fetchedAgendamentos ? (
+          <></>
+        ) : (
+          <div
+            onClick={() => {
+              const dateF = dateSelected.toDate();
+              dateF.setHours(12);
+              dispatch(ActionsFn.selectDate(dateF));
+              dispatch(ActionsFn.openModal(ModalTypes.reservaCliente));
+            }}
+            className={'add'}
+          >
+            <i className={'fas fa-plus'} />
+          </div>
+        )}
       </React.Fragment>
     );
   };
+
+  const [counterDate, setCounterDate] = React.useState(0);
 
   if (!userLogged) {
     return <Redirect to={'/'} />;
   } else {
     return (
       <div className={'mobile_agendamentos'}>
+        <h3 className={'week'}>
+          {counterDate > 0 ? (
+            <span
+              onClick={() => {
+                setCounterDate(counterDate - 1);
+                selectDate(moment(selectedDate).subtract(1, 'week'));
+              }}
+            >
+              <i className={'fas fa-chevron-left'} />
+            </span>
+          ) : (
+            <span/>
+          )}
+
+          {moment(selectedDate)
+            .locale('pt-BR')
+            .startOf('week')
+            .add(1, 'day')
+            .format('DD/MMM')}
+          {' ~ '}
+          {moment(selectedDate).locale('pt-BR').endOf('week').format('DD/MMM')}
+
+          {counterDate < 2 ? (
+            <span
+              onClick={() => {
+                setCounterDate(counterDate + 1);
+                selectDate(moment(selectedDate).add(1, 'week'));
+              }}
+            >
+              <i className={'fas fa-chevron-right'} />
+            </span>
+          ) : (
+            <span/>
+          )}
+        </h3>
         {days.map((day, index) => {
           const date = moment(selectedDate.toDate())
             .locale('pt-BR')
@@ -83,11 +120,11 @@ const MobileAgendamentos = () => {
             .add(index, 'days');
 
           if (index === 0) {
-            return <></>
+            return <></>;
           }
           return (
             <div>
-              <h2>{day}</h2>
+              <h2>{day} <span className={'date_side'}>{date.format('DD/MM')}</span></h2>
               <div className={'reservas_container'}>
                 {renderReservas(date, agendamentos)}
               </div>

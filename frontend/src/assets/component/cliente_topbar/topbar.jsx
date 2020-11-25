@@ -5,13 +5,17 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import Button from '../button/button';
 import Actions, { ActionsFn } from '../../../redux/actions/actions';
 import Menu from './Menu/Menu';
+import NotificationsMenu from './NotificationsMenu/NotificationsMenu';
 
 const ClienteTopbar = (props) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuNotificationsOpen, setMenuNotificationsOpen] = React.useState(
+    false
+  );
 
   const { salas, salaSelected } = useSelector((state) => state.salas);
   const dispatch = useDispatch();
-
+  const { notifications } = useSelector((state) => state.notifications);
   React.useEffect(() => {
     if (salas.length > 0) {
       dispatch(ActionsFn.selectSala(salas[0]));
@@ -56,6 +60,25 @@ const ClienteTopbar = (props) => {
           }
         />
         <Button
+          onClick={() => setMenuNotificationsOpen(!menuNotificationsOpen)}
+          width={'5%'}
+          text={
+            <React.Fragment>
+              <div
+                className={
+                  notifications.length > 0
+                    ? 'notifications'
+                    : 'notifications hidden'
+                }
+              >
+                {notifications.length}
+              </div>
+              <i className={'fas fa-bell'} />
+            </React.Fragment>
+          }
+          className={'log-off'}
+        />
+        <Button
           onClick={() => {
             setMenuOpen(!menuOpen);
           }}
@@ -90,7 +113,9 @@ const ClienteTopbar = (props) => {
           ))}
         </div>
       </div>
+      <NotificationsMenu menuOpen={menuNotificationsOpen} />
       <Menu menuOpen={menuOpen} />
+      <Menu />
     </div>
   );
 };

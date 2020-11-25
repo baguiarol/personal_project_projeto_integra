@@ -1,35 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import '../MenuParent/Menu.sass';
+import './Menu.sass';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import Actions from '../../../../redux/actions/actions';
-import MenuParent from '../MenuParent/MenuParent';
 
 const Menu = (props) => {
   const hist = useHistory();
 
-  const logout = () => {
-    props.setUserLogged({});
-    localStorage.removeItem('email');
-    localStorage.removeItem('pwd');
-    hist.push('/');
-  };
-
   return (
-    <MenuParent menuOpen={props.menuOpen}>
-      <ul>
-        <li onClick={() => hist.push('/configuracoes')}>
-          Configurações de Perfil
-        </li>
-        <li onClick={() => logout()}>Sair</li>
-      </ul>
-    </MenuParent>
+    <div
+      {...props}
+      className={props.menuOpen ? 'menu_container open' : 'menu_container'}
+    >
+      {props.children}
+    </div>
   );
 };
 
 Menu.propTypes = {
   menuOpen: PropTypes.bool.isRequired,
+  children: PropTypes.element,
 };
 
 const mapStateToProps = (state) => ({});

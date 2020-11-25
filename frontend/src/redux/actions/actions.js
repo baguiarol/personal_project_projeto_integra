@@ -5,6 +5,7 @@ const Actions = {
   showModal: 'SHOW_MODAL',
   closeModal: 'CLOSE_MODAL',
   setProfissionais: 'SET_PROFISSIONAIS',
+  setNotifications: 'SET_NOTIFICATIONS',
   setProfissionaisHash: 'SET_PROFISSIONAIS_HASH',
   setAdministrativo: 'SET_ADMS',
   setSalas: 'SET_SALAS',
@@ -56,6 +57,10 @@ export const ActionsFn = {
   addAgendamento: (agnd) => ({
     type: Actions.addAgendamento,
     payload: agnd,
+  }),
+  setNotifications: (notifications) => ({
+    type: Actions.setNotifications,
+    payload: notifications,
   }),
 };
 

@@ -4,7 +4,7 @@ import ClienteTopbar from '../../../assets/component/cliente_topbar/topbar';
 import Sala from '../../../assets/component/sala/sala';
 import './agenda.sass';
 import ModalAgendamento from '../../../assets/component/modals/cliente/modal_agendamento/modalAgendamento';
-import Actions from '../../../redux/actions/actions';
+import Actions, { ActionsFn } from '../../../redux/actions/actions';
 import ModalTypes from '../../../assets/modal_types';
 import ModalDetalhesSala from '../../../assets/component/modals/cliente/modal_detalhes_sala/detalhesSala';
 import AlternatingTab from '../../../assets/component/alternating_tab/alt_tab';
@@ -15,7 +15,8 @@ import salaDAO from '../../../DAO/salaDAO';
 import reservaDAO from '../../../DAO/reservaDAO';
 import { useHistory } from 'react-router';
 import sala_bloqueioDAO from '../../../DAO/sala_bloqueioDAO';
-import MobileAgendamentos from "./components/MobileAgendamentos/MobileAgendamentos";
+import MobileAgendamentos from './components/MobileAgendamentos/MobileAgendamentos';
+import NotificacaoDAO from '../../../DAO/NotificacaoDAO';
 
 const ClienteAgendamentos = (props) => {
   const [selectedTab, selectTab] = React.useState(0);
@@ -93,11 +94,19 @@ const ClienteAgendamentos = (props) => {
         .catch((e) => {
           alert(e);
         });
+
+      NotificacaoDAO.findAll()
+        .then((res) => {
+          d(ActionsFn.setNotifications(res));
+        })
+        .catch((e) => {
+          alert(e);
+        });
     }
   }, [props.userLogged]);
 
   return (
-    <div>
+    <div className={'agendamentos_cliente'}>
       <ModoPaisagem />
       <ModalAgendamento
         close={() => props.closeModal()}
