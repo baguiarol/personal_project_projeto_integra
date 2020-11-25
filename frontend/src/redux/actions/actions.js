@@ -19,6 +19,7 @@ const Actions = {
   setLogs: 'SET_LOGS',
   setProfissionalReservas: 'SET_PROF_RESERVAS',
   setBloqueiosSalas: 'SET_BLOQ_SALAS',
+  selectNotification: 'SELECT_NOTIFICATION',
   setFetchedAgendamentos: 'SET_FETCH',
 };
 
@@ -61,6 +62,14 @@ export const ActionsFn = {
   setNotifications: (notifications) => ({
     type: Actions.setNotifications,
     payload: notifications,
+  }),
+  selectNotification: (notification) => ({
+    type: Actions.selectNotification,
+    payload: notification,
+  }),
+  setModalType: (modalType) => ({
+    type: Actions.showModal,
+    payload: modalType,
   }),
 };
 

@@ -1,16 +1,19 @@
 import React from 'react';
-import "./ProfissionalSnack.sass"
+import './ProfissionalSnack.sass';
+import { Profissional } from '../../../../../DAO/clienteDAO';
 
-const ProfissionalSnack = () => {
+const ProfissionalSnack = ({
+  profissional,
+}: {
+  profissional: Profissional;
+}) => {
   return (
     <div className={'profissional_snack'}>
       <img
-        src={
-          'https://api.time.com/wp-content/uploads/2017/12/terry-crews-person-of-year-2017-time-magazine-2.jpg'
-        }
+        src={'foto_url' in profissional ? profissional.foto_url : ''}
         alt={''}
       />
-      <p>Terry Crews</p>
+      <p>{profissional.nome}</p>
     </div>
   );
 };

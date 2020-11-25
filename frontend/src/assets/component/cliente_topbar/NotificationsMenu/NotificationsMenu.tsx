@@ -11,7 +11,7 @@ const NotificationsMenu = (props) => {
 
   return (
     <MenuParent
-      style={{ flexDirection: 'column', right: '75px'}}
+      style={{ flexDirection: 'column', right: '75px', zIndex: 1005}}
       key={'notification_menu'}
       menuOpen={props.menuOpen}
     >

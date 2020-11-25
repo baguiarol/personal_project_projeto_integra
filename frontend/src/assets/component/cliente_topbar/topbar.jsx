@@ -6,6 +6,8 @@ import Button from '../button/button';
 import Actions, { ActionsFn } from '../../../redux/actions/actions';
 import Menu from './Menu/Menu';
 import NotificationsMenu from './NotificationsMenu/NotificationsMenu';
+import ModalNotificacao from '../modals/cliente/modal_notificacao/ModalNotificacao';
+import ModalTypes from '../../modal_types';
 
 const ClienteTopbar = (props) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -14,6 +16,7 @@ const ClienteTopbar = (props) => {
   );
 
   const { salas, salaSelected } = useSelector((state) => state.salas);
+  const { modalType } = useSelector((state) => state.general);
   const dispatch = useDispatch();
   const { notifications } = useSelector((state) => state.notifications);
   React.useEffect(() => {
@@ -114,6 +117,10 @@ const ClienteTopbar = (props) => {
         </div>
       </div>
       <NotificationsMenu menuOpen={menuNotificationsOpen} />
+      <ModalNotificacao
+        open={modalType === ModalTypes.verNotificacao}
+        close={() => dispatch(ActionsFn.setModalType(''))}
+      />
       <Menu menuOpen={menuOpen} />
       <Menu />
     </div>

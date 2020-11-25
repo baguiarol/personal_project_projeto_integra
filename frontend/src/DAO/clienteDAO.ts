@@ -4,6 +4,7 @@ import {
   RemoteMongoDatabase,
 } from 'mongodb-stitch-browser-sdk';
 import logDAO from './logDAO';
+import { Reserva } from './reservaDAO';
 
 const COLLECTION = 'clientes';
 
@@ -11,6 +12,7 @@ export interface Profissional {
   nome: string;
   _id?: object;
   email: string;
+  foto_url?: string;
   creditos: number;
 }
 
@@ -28,8 +30,13 @@ interface clienteDAO {
   find: any;
   fixarSalaNoTopo: any;
   makeProfissionaisAHash: any;
+  getProfissionalById: (
+    profissionais: Array<Profissional>,
+    profissional_id: unknown
+  ) => Profissional;
 }
 
+// @ts-ignore
 const clienteDAO: clienteDAO = {
   db: null,
   setDb(db) {
@@ -122,6 +129,20 @@ const clienteDAO: clienteDAO = {
     }
     return dict;
   },
+  getProfissionalById(
+    profissionais: Array<Profissional>,
+    profissional_id: any
+  ): Profissional {
+    let profissionalSelected: Profissional | any;
+    profissionais.forEach((profissional) => {
+      if (profissional._id) {
+        if (profissional._id.toString() === profissional_id.toString()) {
+          profissionalSelected = profissional;
+        }
+      }
+    });
+    return profissionalSelected;
+  },
 };
-// @ts-ignore
+
 export default clienteDAO;

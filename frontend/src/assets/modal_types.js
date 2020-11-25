@@ -5,6 +5,7 @@ const ModalTypes = {
     adicionarProfissional: 'ADD_PROF',
     adicionarAgendamentoAdm: 'ADD_TASK_ADM',
     adicionarSalas: 'ADD_SALAS',
+    verNotificacao: 'VER_NOT',
     adicionarAgendamento: 'ADD_AGENDAMENTO',
     selectDay: 'MODAL_SELECT_DAY',
     bloquearSalas: 'BLOCK_SALA',
